@@ -7,6 +7,8 @@
 from __future__ import annotations
 
 import json
+import os
+import uuid
 from pathlib import Path
 
 from ..schemas.decision import DecisionRecord
@@ -23,8 +25,15 @@ def save(record: DecisionRecord) -> DecisionRecord:
     RUNS.mkdir(parents=True, exist_ok=True)
     path = _path(record.decision_id)
     if path.exists():  # 不可变：已存在即返回原记录
-        return DecisionRecord.model_validate_json(path.read_text(encoding="utf-8"))
-    path.write_text(record.model_dump_json(indent=2), encoding="utf-8")
+        try:
+            return DecisionRecord.model_validate_json(path.read_text(encoding="utf-8"))
+        except Exception:
+            pass  # 并发半写残留：用本次（确定性相同的）记录原子覆盖
+    # 原子写（唯一临时名 + os.replace）：并发请求写同一决策时，
+    # 读者永远只能看到完整文件，不会读到半写状态（CI 并发曾暴露此竞态）
+    tmp = path.with_name(f"{path.name}.{os.getpid()}.{uuid.uuid4().hex[:6]}.tmp")
+    tmp.write_text(record.model_dump_json(indent=2), encoding="utf-8")
+    os.replace(tmp, path)
     return record
 
 
@@ -61,5 +70,7 @@ def cache_json(name: str, payload: dict | None = None) -> dict | None:
         if path.exists():
             return json.loads(path.read_text(encoding="utf-8"))
         return None
-    path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    tmp = path.with_name(f"{path.name}.{os.getpid()}.{uuid.uuid4().hex[:6]}.tmp")
+    tmp.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    os.replace(tmp, path)
     return payload

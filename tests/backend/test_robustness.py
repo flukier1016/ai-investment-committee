@@ -90,3 +90,28 @@ def test_decision_record_json_roundtrip_with_new_fields():
     payload.pop("degraded_inputs")
     legacy = DecisionRecord.model_validate(payload)
     assert legacy.degraded_inputs == []
+
+
+def test_store_save_concurrent_no_partial_reads(tmp_path, monkeypatch):
+    """并发保存同一决策：读者绝不读到半写 JSON（CI 竞态回归，store 原子写）。"""
+    import threading
+
+    monkeypatch.setattr(store, "RUNS", tmp_path)
+    record = run_decision("concurrent", "2026-07-09", AllocationConfig())
+    errors: list[Exception] = []
+
+    def worker():
+        try:
+            for _ in range(20):
+                got = store.save(record)
+                assert got.decision_id == record.decision_id
+        except Exception as exc:  # noqa: BLE001
+            errors.append(exc)
+
+    threads = [threading.Thread(target=worker) for _ in range(8)]
+    for th in threads:
+        th.start()
+    for th in threads:
+        th.join()
+    assert not errors, f"并发保存出现异常: {errors[:2]}"
+    assert store.get(record.decision_id).target_weights == record.target_weights
