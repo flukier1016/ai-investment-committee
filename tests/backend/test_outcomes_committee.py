@@ -93,3 +93,26 @@ def test_committee_counts_match_record(config):
     assert score["views_total"] == len(views)
     assert score["views_adopted"] == sum(1 for v in views if v.get("lambda", 0.0) != 0.0)
     assert score["guardrails_triggered"] == sum(1 for a in record.guardrail_actions if a.triggered)
+
+
+def test_outcomes_concurrent_writes(isolated_outcomes, config):
+    """并发写结果账本不互抢临时文件（CI 竞态回归）。"""
+    import threading
+
+    record = run_decision("stagflation_2022", "2022-10-14", config)
+    errors: list[Exception] = []
+
+    def worker():
+        try:
+            for _ in range(10):
+                outcomes.store_pending(record)
+                outcomes.resolve_pending()
+        except Exception as exc:  # noqa: BLE001
+            errors.append(exc)
+
+    threads = [threading.Thread(target=worker) for _ in range(6)]
+    for th in threads:
+        th.start()
+    for th in threads:
+        th.join()
+    assert not errors, f"并发写账本异常: {errors[:2]}"
