@@ -1,0 +1,3401 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI投委会 · 三层溯源总览样例</title>
+  <style>
+    :root {
+      --bg: #f5f7f3;
+      --paper: #ffffff;
+      --ink: #17211f;
+      --muted: #66706c;
+      --line: #dde4db;
+      --line-strong: #c3cec2;
+      --teal: #0b7668;
+      --green: #247a54;
+      --amber: #8a5b06;
+      --rose: #a33f64;
+      --violet: #6f63c8;
+      --cyan: #176f9d;
+      --red: #b84c48;
+      --slate: #59666f;
+      --cash: #4f5964;
+      --method-risk-parity: #16806b;
+      --method-cta: #247da8;
+      --method-clock: #9f6500;
+      --method-erp: #aa4168;
+      --bl: #405d88;
+      --shadow: 0 14px 34px rgba(29, 41, 37, .10);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(21, 154, 136, .08), transparent 270px),
+        var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      letter-spacing: 0;
+      overflow-x: hidden;
+    }
+
+    button { font: inherit; }
+
+    .shell {
+      width: min(1880px, calc(100vw - 40px));
+      margin: 0 auto;
+      padding: 20px 0 42px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(320px, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+      padding: 14px 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 760;
+      line-height: 1.12;
+    }
+
+    .brand .tag {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .badge {
+      border: 1px solid var(--line-strong);
+      background: rgba(255, 255, 255, .72);
+      border-radius: 999px;
+      padding: 6px 10px;
+      color: var(--muted);
+      font-size: .76rem;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: .82rem;
+      line-height: 1.55;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      align-items: start;
+      margin: 18px 0 14px;
+    }
+
+    .panel,
+    .summary-cell,
+    .section {
+      min-width: 0;
+      background: rgba(255, 255, 255, .88);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-cell {
+      min-height: 116px;
+      padding: 14px;
+    }
+
+    .status-card {
+      min-height: 104px;
+    }
+
+    .final-result,
+    .path-panel {
+      grid-column: 1 / -1;
+    }
+
+    .result-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .result-head h2 {
+      margin: 4px 0 0;
+      font-size: 1.18rem;
+      line-height: 1.2;
+    }
+
+    .result-badge {
+      border: 1px solid rgba(21, 154, 136, .28);
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: rgba(21, 154, 136, .07);
+      color: var(--green);
+      font-size: .76rem;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    .final-grid {
+      display: grid;
+      grid-template-columns: minmax(520px, 1.35fr) minmax(300px, .65fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .final-copy {
+      display: grid;
+      align-content: start;
+      gap: 8px;
+      border: 1px solid rgba(21, 154, 136, .22);
+      border-left: 4px solid var(--teal);
+      border-radius: 8px;
+      background: rgba(21, 154, 136, .06);
+      padding: 12px;
+    }
+
+    .final-copy b {
+      color: var(--green);
+      font-size: .9rem;
+    }
+
+    .final-copy p {
+      margin: 0;
+      color: var(--ink);
+      font-size: .88rem;
+      line-height: 1.65;
+      text-wrap: pretty;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .big {
+      margin-top: 10px;
+      font-size: 2rem;
+      font-weight: 780;
+      line-height: 1;
+    }
+
+    .status-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0 7px;
+      min-height: 30px;
+      border: 1px solid var(--status-border, rgba(36, 122, 84, .24));
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: var(--status-bg, rgba(36, 122, 84, .07));
+      color: var(--status-color, var(--green));
+      font-size: .9rem;
+      font-weight: 780;
+      line-height: 1.2;
+    }
+
+    .status-line.warn {
+      --status-color: var(--red);
+      --status-bg: rgba(184, 76, 72, .07);
+      --status-border: rgba(184, 76, 72, .25);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .target-bar {
+      display: flex;
+      height: 18px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 14px 0 10px;
+      background: #e8ece5;
+    }
+
+    .target-bar div { min-width: 4px; }
+
+    .target-bar.labeled {
+      height: 42px;
+      margin-bottom: 12px;
+    }
+
+    .target-segment {
+      display: grid;
+      place-items: center;
+      min-width: 0;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .target-segment-label {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+      text-align: center;
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+
+    .target-segment-label span {
+      font-size: .66rem;
+      font-weight: 720;
+    }
+
+    .target-segment-label b {
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-weight: 780;
+    }
+
+    .allocation-stack {
+      display: grid;
+      gap: 9px;
+      margin-top: 10px;
+    }
+
+    .path-panel .allocation-stack {
+      grid-template-columns: minmax(520px, 1.35fr) minmax(300px, .65fr);
+      align-items: stretch;
+    }
+
+    .allocation-layer {
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--layer-color, var(--teal));
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .74);
+      padding: 9px 10px;
+    }
+
+    .allocation-layer.strategic {
+      --layer-color: var(--method-risk-parity);
+      background: #f8faf6;
+    }
+
+    .allocation-layer.tactical {
+      --layer-color: var(--amber);
+      background: #fffdf8;
+    }
+
+    .allocation-layer.final {
+      --layer-color: var(--teal);
+      background: rgba(21, 154, 136, .06);
+    }
+
+    .layer-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+
+    .layer-title {
+      font-size: .86rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .layer-index {
+      color: var(--layer-color);
+      font-size: .72rem;
+      font-weight: 780;
+      white-space: nowrap;
+    }
+
+    .layer-note {
+      color: var(--muted);
+      font-size: .72rem;
+      line-height: 1.45;
+      text-wrap: pretty;
+    }
+
+    .target-bar.subtle {
+      height: 14px;
+      margin: 8px 0 7px;
+      background: #edf0ea;
+    }
+
+    .target-bar.subtle div {
+      opacity: .62;
+    }
+
+    .path-panel .target-bar.labeled {
+      height: 34px;
+      margin: 8px 0;
+    }
+
+    .path-panel .class-breakdown {
+      gap: 6px;
+      margin-top: 7px;
+    }
+
+    .path-panel .class-row {
+      min-height: 94px;
+      gap: 6px;
+      padding: 7px;
+    }
+
+    .path-panel .class-sub {
+      grid-template-rows: repeat(2, minmax(24px, 1fr));
+    }
+
+    .path-method-line {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 8px;
+    }
+
+    .method-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      width: fit-content;
+      max-width: 100%;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      padding: 3px 7px;
+      background: #fff;
+      color: var(--method-color, var(--teal));
+      font-size: .7rem;
+      font-weight: 780;
+      line-height: 1.2;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .method-badge::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .method-badge.compact {
+      border-radius: 4px;
+      padding: 2px 5px;
+      font-size: .66rem;
+    }
+
+    .tactical-methods {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-bottom: 9px;
+    }
+
+    .tactical-method {
+      display: grid;
+      align-content: start;
+      gap: 5px;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--method-color, var(--amber));
+      border-radius: 6px;
+      padding: 7px;
+      background: var(--paper);
+    }
+
+    .tactical-method b {
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: .7rem;
+      white-space: nowrap;
+    }
+
+    .tilt-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .tilt-chip {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 7px;
+      background: var(--paper);
+      color: var(--muted);
+      font-size: .72rem;
+      line-height: 1.25;
+    }
+
+    .tilt-chip b {
+      color: var(--tilt-color, var(--ink));
+      font-family: var(--mono);
+      font-size: .76rem;
+      white-space: nowrap;
+    }
+
+    .tilt-chip.positive { --tilt-color: var(--green); }
+    .tilt-chip.negative { --tilt-color: var(--red); }
+    .tilt-chip.flat { --tilt-color: var(--muted); }
+
+    .class-breakdown {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      align-items: stretch;
+      margin-top: 8px;
+    }
+
+    .class-row {
+      display: grid;
+      grid-template-rows: auto 7px 1fr;
+      gap: 8px;
+      min-width: 0;
+      min-height: 112px;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--asset-color, var(--teal));
+      border-radius: 6px;
+      padding: 9px;
+      background: rgba(255, 255, 255, .74);
+      font-size: .76rem;
+    }
+
+    .class-row-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .class-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--asset-color, var(--teal));
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    .class-total {
+      color: var(--asset-color, var(--teal));
+      font-family: var(--mono);
+      font-size: .76rem;
+      font-weight: 780;
+      white-space: nowrap;
+    }
+
+    .class-mini-bar {
+      display: flex;
+      min-width: 0;
+      height: 7px;
+      border-radius: 3px;
+      overflow: hidden;
+      background: #edf0ea;
+    }
+
+    .class-mini-bar span {
+      min-width: 3px;
+      background: var(--bucket-color, var(--asset-color, var(--teal)));
+    }
+
+    .class-sub {
+      display: grid;
+      grid-template-rows: repeat(2, minmax(28px, 1fr));
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .class-sub.single .class-sub-box {
+      grid-row: 1 / -1;
+    }
+
+    .class-sub-box {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      align-items: center;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--bucket-color, var(--asset-color, var(--teal)));
+      border-radius: 4px;
+      padding: 5px 6px;
+      background: #fbfcfa;
+      line-height: 1.2;
+    }
+
+    .class-sub-box b {
+      min-width: 0;
+      color: var(--bucket-color, var(--asset-color, var(--teal)));
+      font-size: .7rem;
+      font-weight: 720;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .class-sub-box span {
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: .7rem;
+      font-weight: 720;
+      white-space: nowrap;
+    }
+
+    .chips,
+    .attrib-parts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .conclusion {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
+      margin: 0 0 14px;
+      padding: 12px 14px;
+      border: 1px solid rgba(21, 154, 136, .28);
+      border-radius: 8px;
+      background: rgba(21, 154, 136, .07);
+    }
+
+    .conclusion b {
+      color: var(--green);
+    }
+
+    .conclusion[hidden] {
+      display: none;
+    }
+
+    .step-rail {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0 0 14px;
+    }
+
+    .step {
+      min-height: 74px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--accent);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .76);
+    }
+
+    .step .num {
+      font-family: var(--mono);
+      color: var(--accent);
+      font-size: .74rem;
+      font-weight: 760;
+    }
+
+    .step h3 {
+      margin: 5px 0 3px;
+      font-size: .98rem;
+    }
+
+    .process {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
+      min-width: 0;
+    }
+
+    .process > .section {
+      height: 100%;
+    }
+
+    .section {
+      min-height: 440px;
+      padding: 16px;
+      position: relative;
+    }
+
+    .section::before {
+      content: attr(data-step);
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 700;
+    }
+
+    .section h2 {
+      margin: 0 0 4px;
+      font-size: 1.1rem;
+      line-height: 1.2;
+    }
+
+    .section-sub {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: .82rem;
+      line-height: 1.5;
+      text-wrap: pretty;
+    }
+
+    .group-title {
+      margin: 14px 0 8px;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 740;
+    }
+
+    .signal-layer {
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--layer-color, var(--teal));
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .68);
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .signal-layer:first-child {
+      margin-top: 0;
+    }
+
+    .signal-layer-head {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px 10px;
+      align-items: baseline;
+      margin-bottom: 9px;
+    }
+
+    .signal-layer-head .layer-note {
+      grid-column: 1 / -1;
+    }
+
+    .signal-grid,
+    .row-stack {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .signal-card {
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent, var(--teal));
+      border-radius: 8px;
+      background: var(--paper);
+      padding: 12px;
+      cursor: pointer;
+      transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+    }
+
+    .signal-card:hover,
+    .signal-card.selected {
+      border-color: var(--accent, var(--teal));
+      box-shadow: 0 10px 22px rgba(31, 45, 40, .12);
+      transform: translateY(-1px);
+    }
+
+    .signal-card:focus-visible,
+    .signal-flow-row:focus-visible,
+    .view-card:focus-visible,
+    .text-btn:focus-visible,
+    .icon-btn:focus-visible,
+    .tab-btn:focus-visible,
+    .matrix-trace-link:focus-visible,
+    .part:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid rgba(21, 154, 136, .28);
+      outline-offset: 2px;
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .method {
+      color: var(--accent, var(--teal));
+      font-weight: 760;
+      line-height: 1.2;
+    }
+
+    .sid {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .68rem;
+      overflow-wrap: break-word;
+      word-break: normal;
+    }
+
+    .card-subline {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: .72rem;
+      line-height: 1.35;
+    }
+
+    .confidence {
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 3px 5px;
+      align-items: baseline;
+      min-width: 98px;
+      text-align: right;
+      color: var(--muted);
+      font-size: .7rem;
+      white-space: nowrap;
+    }
+
+    .confidence b {
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: .74rem;
+      font-weight: 740;
+    }
+
+    .mini-track {
+      grid-column: 1 / -1;
+      height: 5px;
+      margin-top: 2px;
+      border-radius: 999px;
+      background: #edf0ea;
+      overflow: hidden;
+    }
+
+    .mini-track span {
+      display: block;
+      height: 100%;
+      background: var(--accent, var(--teal));
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 3px 6px;
+      background: #fbfcfa;
+      font-size: .74rem;
+      color: var(--muted);
+    }
+
+    .chip.up { color: var(--green); border-color: rgba(36, 122, 84, .28); }
+    .chip.down { color: var(--red); border-color: rgba(184, 76, 72, .28); }
+    .chip.neutral { color: var(--muted); }
+    .chip.abstain { border-style: dashed; color: #7a6653; }
+
+    .rationale {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.55;
+      text-wrap: pretty;
+    }
+
+    .signal-output {
+      display: grid;
+      gap: 7px;
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .68);
+      padding: 10px;
+    }
+
+    .signal-flow-row {
+      display: grid;
+      grid-template-columns: minmax(130px, .72fr) minmax(0, 1.28fr) auto;
+      gap: 8px;
+      align-items: center;
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent, var(--teal));
+      border-radius: 7px;
+      background: #fbfcfa;
+      padding: 7px 8px;
+      cursor: pointer;
+    }
+
+    .signal-flow-row:hover {
+      border-color: var(--accent, var(--teal));
+      box-shadow: 0 8px 18px rgba(31, 45, 40, .08);
+    }
+
+    .flow-method {
+      min-width: 0;
+      font-size: .78rem;
+      font-weight: 760;
+      color: var(--accent, var(--teal));
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .flow-path {
+      min-width: 0;
+      color: var(--muted);
+      font-size: .74rem;
+      line-height: 1.35;
+    }
+
+    .flow-path b {
+      color: var(--ink);
+      font-weight: 740;
+    }
+
+    .flow-impact {
+      font-family: var(--mono);
+      font-size: .74rem;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .78rem;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 8px 7px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 720;
+      background: #f8faf6;
+    }
+
+    td.num, th.num {
+      text-align: right;
+      font-family: var(--mono);
+      white-space: nowrap;
+    }
+
+    tr.clickable {
+      cursor: pointer;
+      transition: background .15s ease;
+    }
+
+    tr.clickable:hover,
+    tr.selected {
+      background: rgba(21, 154, 136, .08);
+    }
+
+    .matrix-chip {
+      display: inline-block;
+      margin: 0 4px 4px 0;
+      padding: 2px 5px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      color: #42504c;
+      background: #fbfcfa;
+      font-family: var(--mono);
+      font-size: .72rem;
+      white-space: nowrap;
+    }
+
+    .view-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .view-bucket-list {
+      display: grid;
+      gap: 8px;
+      padding: 0 9px 9px;
+    }
+
+    .view-bucket-group {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+      overflow: hidden;
+    }
+
+    .view-bucket-group > summary {
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr) auto;
+      gap: 7px;
+      align-items: center;
+      min-height: 36px;
+      padding: 8px 9px;
+      cursor: pointer;
+      list-style: none;
+      font-size: .76rem;
+      font-weight: 760;
+    }
+
+    .view-bucket-group > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .view-bucket-group > summary::before {
+      content: "+";
+      display: inline-grid;
+      place-items: center;
+      width: 16px;
+      height: 16px;
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .68rem;
+    }
+
+    .view-bucket-group[open] > summary::before {
+      content: "-";
+      color: var(--asset-color, var(--teal));
+    }
+
+    .view-bucket-title {
+      color: var(--asset-color, var(--teal));
+    }
+
+    .view-bucket-meta {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .68rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .view-card {
+      display: grid;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent, var(--amber));
+      border-radius: 8px;
+      background: #fbfcfa;
+      padding: 10px;
+      cursor: pointer;
+      transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+    }
+
+    .view-card:hover,
+    .view-card.selected {
+      border-color: var(--accent, var(--amber));
+      box-shadow: 0 10px 22px rgba(31, 45, 40, .10);
+      transform: translateY(-1px);
+    }
+
+    .view-card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .view-title {
+      margin-top: 6px;
+      font-weight: 760;
+      line-height: 1.25;
+    }
+
+    .bl-assembly {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) 18px minmax(0, 1fr) 18px minmax(0, .75fr);
+      gap: 4px;
+      align-items: stretch;
+      margin-bottom: 12px;
+    }
+
+    .bl-input-stack {
+      display: grid;
+      gap: 6px;
+    }
+
+    .bl-node,
+    .bl-engine {
+      display: grid;
+      align-content: start;
+      gap: 5px;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--node-color, var(--slate));
+      border-radius: 8px;
+      padding: 9px;
+      background: #fbfcfa;
+    }
+
+    .bl-node.prior { --node-color: var(--method-risk-parity); }
+    .bl-node.views { --node-color: var(--method-cta); }
+    .bl-node.output { --node-color: var(--green); }
+
+    .bl-node-kicker {
+      color: var(--muted);
+      font-size: .66rem;
+      font-weight: 740;
+    }
+
+    .bl-node strong,
+    .bl-engine strong {
+      font-size: .8rem;
+      line-height: 1.25;
+    }
+
+    .bl-node p,
+    .bl-engine p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .69rem;
+      line-height: 1.45;
+      text-wrap: pretty;
+    }
+
+    .bl-method-row,
+    .bl-field-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .bl-field {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 2px 5px;
+      background: #fff;
+      color: var(--muted);
+      font-size: .64rem;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+    .bl-engine {
+      --node-color: var(--bl);
+      align-content: start;
+      text-align: left;
+      background: #f5f7fb;
+      border-color: #cbd5e2;
+      border-left-width: 4px;
+    }
+
+    .bl-engine .engine-name {
+      color: var(--bl);
+      font-size: .72rem;
+      font-weight: 820;
+      line-height: 1.2;
+    }
+
+    .engine-formula {
+      border: 1px solid #cbd5e2;
+      border-radius: 5px;
+      padding: 5px 6px;
+      background: #fff;
+      color: #31496c;
+      font-family: var(--mono);
+      font-size: .64rem;
+      font-weight: 720;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+
+    .bl-tech-btn {
+      width: 100%;
+      margin-top: 2px;
+      border-color: #9fb0c8;
+      color: var(--bl);
+      background: #fff;
+    }
+
+    .bl-operator {
+      display: grid;
+      place-items: center;
+      color: var(--bl);
+      font-family: var(--mono);
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .view-impact {
+      min-width: 94px;
+      text-align: right;
+      color: var(--green);
+      font-family: var(--mono);
+      font-size: .78rem;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+      padding: 6px 7px;
+      min-width: 0;
+    }
+
+    .metric .k {
+      display: block;
+      color: var(--muted);
+      font-size: .72rem;
+      margin-bottom: 2px;
+    }
+
+    .metric .v {
+      font-family: var(--mono);
+      font-size: .78rem;
+      font-weight: 740;
+      white-space: nowrap;
+    }
+
+    .view-assets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .table-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .text-btn {
+      min-height: 30px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: #fbfcfa;
+      color: var(--ink);
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: .78rem;
+    }
+
+    .text-btn:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+    }
+
+    .prior-row {
+      display: grid;
+      grid-template-columns: 94px 1fr 92px;
+      gap: 10px;
+      align-items: center;
+      min-height: 30px;
+      font-size: .82rem;
+    }
+
+    .weight-row {
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr);
+      gap: 6px 10px;
+      align-items: center;
+      min-height: 44px;
+      font-size: .82rem;
+    }
+
+    .weight-row > b {
+      grid-row: 1 / span 2;
+    }
+
+    .barline {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .bar {
+      height: 10px;
+      border-radius: 3px;
+      background: #eef1ec;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: var(--asset-color, var(--teal));
+    }
+
+    .weight-meta {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .73rem;
+      text-align: right;
+    }
+
+    .weight-numbers {
+      grid-column: 2;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 5px;
+      color: var(--muted);
+      font-size: .72rem;
+      line-height: 1.25;
+      text-align: center;
+    }
+
+    .weight-numbers span {
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+    .weight-numbers b {
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-weight: 760;
+    }
+
+    .detail-table {
+      max-height: 266px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .detail-table table {
+      min-width: 560px;
+    }
+
+    .bottom-appendix {
+      display: grid;
+      grid-template-columns: minmax(640px, 1.45fr) minmax(360px, .55fr);
+      gap: 14px;
+      align-items: stretch;
+      margin-top: 14px;
+    }
+
+    .appendix-panel {
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .appendix-panel h2 {
+      margin: 0 0 4px;
+      font-size: 1.08rem;
+      line-height: 1.2;
+    }
+
+    .appendix-panel .section-sub {
+      margin-bottom: 12px;
+    }
+
+    .bottom-appendix .detail-table {
+      max-height: 320px;
+    }
+
+    .bucket-drilldown {
+      display: grid;
+      gap: 7px;
+    }
+
+    .asset-drill {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+      overflow: hidden;
+    }
+
+    .asset-drill summary {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 34px;
+      padding: 8px 10px;
+      cursor: pointer;
+      list-style: none;
+      font-size: .8rem;
+      font-weight: 740;
+    }
+
+    .asset-drill summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .asset-drill summary::before {
+      content: "+";
+      display: inline-grid;
+      place-items: center;
+      width: 16px;
+      height: 16px;
+      margin-right: 6px;
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .72rem;
+    }
+
+    .drill-title {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .asset-drill[open] summary::before {
+      content: "-";
+      color: var(--asset-color, var(--teal));
+    }
+
+    .underlying-list {
+      display: grid;
+      gap: 1px;
+      border-top: 1px solid var(--line);
+      background: var(--line);
+    }
+
+    .underlying-head,
+    .underlying-row {
+      display: grid;
+      grid-template-columns: minmax(128px, 1fr) 52px 52px 92px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .underlying-head {
+      min-height: 26px;
+      padding: 5px 10px;
+      background: #f8faf6;
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 720;
+      text-align: right;
+    }
+
+    .underlying-head span:first-child {
+      text-align: left;
+    }
+
+    .underlying-row {
+      min-height: 30px;
+      padding: 6px 10px;
+      background: var(--paper);
+      font-size: .75rem;
+    }
+
+    .underlying-row .asset-name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .underlying-row .num {
+      font-family: var(--mono);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .attrib-drill {
+      border-top: 1px solid var(--line);
+    }
+
+    .attrib-drill summary {
+      display: grid;
+      grid-template-columns: 18px minmax(74px, 1fr) auto auto;
+      gap: 8px;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px 0;
+      cursor: pointer;
+      list-style: none;
+      font-size: .8rem;
+      font-weight: 740;
+    }
+
+    .attrib-drill summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .attrib-drill summary::before {
+      content: "+";
+      display: inline-grid;
+      place-items: center;
+      width: 16px;
+      height: 16px;
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .72rem;
+    }
+
+    .attrib-drill[open] summary::before {
+      content: "-";
+      color: var(--asset-color, var(--teal));
+    }
+
+    .attrib-drill .attrib-parts {
+      padding: 1px 0 10px 26px;
+    }
+
+    .attrib-delta {
+      font-family: var(--mono);
+      font-size: .72rem;
+      white-space: nowrap;
+    }
+
+    .part {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 5px 7px;
+      background: #fbfcfa;
+      color: var(--muted);
+      font-size: .74rem;
+      cursor: pointer;
+    }
+
+    .part:hover,
+    .part.selected {
+      border-color: var(--teal);
+      background: rgba(21, 154, 136, .08);
+      color: var(--ink);
+    }
+
+    .part.positive { color: var(--green); }
+    .part.negative { color: var(--red); }
+    .part.prior { cursor: default; color: var(--ink); }
+
+    .part:not(.prior) {
+      border-left: 3px solid var(--method-color, var(--teal));
+    }
+
+    .part-method {
+      color: var(--method-color, var(--teal));
+      font-weight: 760;
+    }
+
+    .checks {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .guardrail-panel .checks {
+      flex: 1;
+      grid-template-rows: repeat(4, minmax(58px, 1fr));
+    }
+
+    .check {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+      padding: 9px;
+      font-size: .78rem;
+    }
+
+    .check b { color: var(--green); }
+    .check.warn b { color: var(--red); }
+
+    .check-name {
+      color: var(--ink);
+      font-weight: 740;
+    }
+
+    .drawer {
+      position: fixed;
+      inset: 0 0 0 auto;
+      width: min(500px, calc(100vw - 20px));
+      background: var(--paper);
+      border-left: 1px solid var(--line-strong);
+      box-shadow: -22px 0 40px rgba(19, 31, 28, .16);
+      transform: translateX(104%);
+      transition: transform .18s ease;
+      z-index: 30;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .drawer-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .drawer-title {
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.25;
+    }
+
+    .icon-btn {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: #fbfcfa;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .drawer-body {
+      overflow: auto;
+      padding: 18px;
+    }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 8px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: .8rem;
+    }
+
+    .kv .k {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .codebox {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8faf6;
+      color: #31423e;
+      font-family: var(--mono);
+      font-size: .72rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(22, 32, 30, .42);
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-card {
+      width: min(1320px, calc(100vw - 44px));
+      max-height: calc(100vh - 44px);
+      overflow: auto;
+      background: var(--paper);
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      box-shadow: 0 28px 70px rgba(11, 20, 18, .26);
+    }
+
+    .modal-head {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .modal-head-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-tabs {
+      display: inline-flex;
+      gap: 3px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 3px;
+      background: #f8faf6;
+    }
+
+    .tab-btn {
+      min-height: 28px;
+      border: 0;
+      border-radius: 4px;
+      padding: 4px 9px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: .74rem;
+      font-weight: 720;
+    }
+
+    .tab-btn.active {
+      background: var(--paper);
+      color: var(--bl);
+      box-shadow: 0 2px 7px rgba(40, 58, 84, .12);
+    }
+
+    .modal-body {
+      padding: 14px 16px 18px;
+      overflow-x: auto;
+    }
+
+    .wide-matrix {
+      min-width: 2800px;
+      font-family: var(--mono);
+      font-size: .68rem;
+    }
+
+    .wide-matrix td,
+    .wide-matrix th {
+      text-align: center;
+      padding: 6px 5px;
+      white-space: nowrap;
+    }
+
+    .matrix-intro {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: .72rem;
+      line-height: 1.5;
+    }
+
+    .matrix-intro b {
+      color: var(--ink);
+    }
+
+    .matrix-bucket-head {
+      color: var(--asset-color, var(--muted));
+      font-family: var(--sans);
+      font-size: .7rem;
+      font-weight: 780;
+      background: #f8faf6;
+    }
+
+    .wide-matrix .matrix-asset-head {
+      min-width: 92px;
+      white-space: normal;
+      vertical-align: top;
+    }
+
+    .wide-matrix .matrix-row-label {
+      position: sticky;
+      left: 0;
+      background: #f8faf6;
+      text-align: left;
+      z-index: 1;
+      width: 230px;
+      min-width: 230px;
+      max-width: 230px;
+      white-space: normal;
+    }
+
+    .matrix-asset-name,
+    .matrix-asset-code,
+    .matrix-asset-category {
+      display: block;
+      line-height: 1.25;
+      text-align: center;
+    }
+
+    .matrix-asset-name {
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: .72rem;
+      font-weight: 760;
+    }
+
+    .matrix-asset-code {
+      margin-top: 3px;
+      color: #41504b;
+      font-size: .64rem;
+      font-weight: 720;
+    }
+
+    .matrix-asset-category {
+      margin-top: 2px;
+      color: var(--asset-color, var(--muted));
+      font-family: var(--sans);
+      font-size: .62rem;
+    }
+
+    .matrix-trace-link {
+      margin-top: 6px;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: var(--bl);
+      cursor: pointer;
+      font-size: .66rem;
+      font-weight: 720;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .formula-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .formula-card {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--formula-color, var(--bl));
+      border-radius: 7px;
+      padding: 10px;
+      background: #fbfcfa;
+    }
+
+    .formula-card .label {
+      color: var(--formula-color, var(--bl));
+    }
+
+    .formula-card b {
+      display: block;
+      margin: 5px 0;
+      font-size: .8rem;
+    }
+
+    .formula-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .7rem;
+      line-height: 1.45;
+    }
+
+    .formula-code {
+      margin-top: 7px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 6px;
+      background: #fff;
+      color: #31496c;
+      font-family: var(--mono);
+      font-size: .66rem;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .trace-view-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .trace-view-card {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--method-color, var(--bl));
+      border-radius: 7px;
+      padding: 10px;
+      background: #fbfcfa;
+    }
+
+    .trace-view-card.focused {
+      border-color: var(--method-color, var(--bl));
+      box-shadow: 0 0 0 3px rgba(64, 93, 136, .12);
+    }
+
+    .trace-note {
+      margin: 0 0 12px;
+      border: 1px solid #cbd5e2;
+      border-left: 4px solid var(--bl);
+      border-radius: 7px;
+      padding: 9px 10px;
+      background: #f5f7fb;
+      color: #42506a;
+      font-size: .72rem;
+      line-height: 1.55;
+    }
+
+    .trace-view-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+
+    .trace-view-title {
+      margin-top: 5px;
+      font-size: .78rem;
+      font-weight: 760;
+      line-height: 1.3;
+    }
+
+    .trace-line {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 7px;
+      padding: 6px 0;
+      border-top: 1px solid var(--line);
+      font-size: .7rem;
+      line-height: 1.45;
+    }
+
+    .trace-line b {
+      color: var(--muted);
+    }
+
+    .trace-line code {
+      color: #31496c;
+      font-family: var(--mono);
+      overflow-wrap: anywhere;
+    }
+
+    .footnote {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: .76rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1400px) {
+      .process { grid-template-columns: 1fr; }
+      .section { min-height: 0; }
+    }
+
+    @media (max-width: 1220px) {
+      .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .final-grid { grid-template-columns: 1fr; }
+      .path-panel .allocation-stack { grid-template-columns: 1fr; }
+      .bottom-appendix { grid-template-columns: 1fr; }
+      .step-rail { grid-template-columns: 1fr; }
+      .bl-assembly { grid-template-columns: minmax(0, 1.25fr) 18px minmax(0, 1fr) 18px minmax(0, .75fr); }
+      .formula-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .shell { width: calc(100vw - 20px); padding-top: 10px; }
+      .topbar { grid-template-columns: 1fr; }
+      .brand h1 { font-size: 1.55rem; }
+      .meta { justify-content: flex-start; }
+      .summary { grid-template-columns: 1fr; }
+      .status-card {
+        display: grid;
+        grid-template-columns: minmax(74px, auto) 1fr;
+        gap: 6px 10px;
+        align-items: center;
+        min-height: 0;
+        padding: 10px 12px;
+      }
+      .status-card .status-line { margin: 0; justify-self: start; }
+      .status-card .small { grid-column: 1 / -1; }
+      .result-head { display: grid; }
+      .result-badge { justify-self: start; white-space: normal; }
+      .class-breakdown { grid-template-columns: 1fr; }
+      .target-bar.labeled { height: 18px; }
+      .target-bar.labeled .target-segment-label { display: none; }
+      .tilt-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tactical-methods { grid-template-columns: 1fr; }
+      .bl-assembly { grid-template-columns: 1fr; }
+      .bl-operator { transform: rotate(90deg); min-height: 22px; }
+      .modal-head { align-items: start; }
+      .modal-head-actions { align-items: end; flex-direction: column-reverse; }
+      .modal-tabs { flex-wrap: wrap; }
+      .formula-grid,
+      .trace-view-list { grid-template-columns: 1fr; }
+      .signal-flow-row { grid-template-columns: minmax(0, 1fr) auto; }
+      .signal-flow-row .flow-path { grid-column: 1 / -1; }
+      .view-card-head,
+      .trace-view-head { display: grid; grid-template-columns: 1fr; }
+      .view-impact { min-width: 0; text-align: left; }
+      .matrix-intro { flex-direction: column; }
+      .metric-row { grid-template-columns: 1fr; }
+      .prior-row { grid-template-columns: 82px 1fr; }
+      .weight-row { grid-template-columns: 1fr; }
+      .weight-row > b { grid-row: auto; }
+      .weight-row .barline,
+      .weight-numbers { grid-column: 1; }
+      .weight-meta { grid-column: 2; text-align: left; }
+      .weight-numbers { font-size: .7rem; gap: 3px; }
+      .weight-numbers span { white-space: normal; }
+      .underlying-head,
+      .underlying-row {
+        grid-template-columns: minmax(76px, 1fr) 40px 40px 76px;
+        gap: 4px;
+        padding: 6px 8px;
+      }
+      .underlying-row {
+        font-size: .7rem;
+      }
+      .step-rail { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+      .step { min-height: 0; padding: 10px 8px; border-left-width: 3px; }
+      .step h3 { font-size: .82rem; }
+      .step .small { display: none; }
+      .attrib-drill summary { grid-template-columns: 18px minmax(68px, 1fr) auto; }
+      .attrib-drill summary .weight-meta { display: none; }
+      th, td { padding: 7px 5px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <div class="brand">
+          <h1>智策 AI投委会</h1>
+          <span class="tag">中国投资者视角 · 明细资产扩展版</span>
+        </div>
+        <p class="small" id="subtitle"></p>
+      </div>
+      <div class="meta" id="meta"></div>
+    </header>
+
+    <section class="summary" id="summary"></section>
+    <section class="conclusion" id="conclusion"></section>
+    <section class="step-rail" id="stepRail"></section>
+
+    <section class="process">
+      <section class="section" data-step="第一层" id="signals">
+        <h2>四方法信号</h2>
+        <p class="section-sub">Risk Parity 独立生成战略底仓；Time Series Momentum、Merrill Lynch Investment Clock、Equity Risk Premium 形成战术观点。</p>
+        <div id="signalGroups"></div>
+      </section>
+
+      <section class="section" data-step="第二层" id="bl">
+        <h2>战术观点与 Black-Litterman Model 装配</h2>
+        <p class="section-sub">直观看见战略先验与战术观点如何经贝叶斯融合，形成后验收益并推动目标权重。</p>
+        <div class="row-stack" id="blContent"></div>
+      </section>
+
+      <section class="section" data-step="第三层" id="weights">
+        <h2>最终权重与归因</h2>
+        <p class="section-sub">先看中国投资者视角汇总，再下钻到 27 个明细资产。</p>
+        <div id="weightContent"></div>
+      </section>
+    </section>
+
+    <section class="bottom-appendix" id="bottomAppendix"></section>
+
+    <p class="footnote">本页面为交接样例，所有数字为虚构演示；真实系统应由后端确定性代码提供决策追踪数据包。</p>
+  </main>
+
+  <aside class="drawer" id="drawer" aria-live="polite">
+    <div class="drawer-head">
+      <div>
+        <p class="label" id="drawerKind">溯源</p>
+        <h3 class="drawer-title" id="drawerTitle">血缘详情</h3>
+      </div>
+      <button class="icon-btn" id="closeDrawer" title="关闭" aria-label="关闭">×</button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </aside>
+
+  <div class="modal" id="matrixModal" role="dialog" aria-modal="true" aria-label="Black-Litterman Model 技术细节">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <div class="label">Black-Litterman Model 技术工作台</div>
+          <b>观点矩阵、计算过程与完整血缘</b>
+        </div>
+        <div class="modal-head-actions">
+          <div class="modal-tabs" role="tablist" aria-label="技术细节视图">
+            <button class="tab-btn active" id="matrixViewTab" role="tab" aria-selected="true">观点矩阵</button>
+            <button class="tab-btn" id="traceViewTab" role="tab" aria-selected="false">计算过程与溯源</button>
+          </div>
+          <button class="icon-btn" id="closeMatrix" title="关闭" aria-label="关闭">×</button>
+        </div>
+      </div>
+      <div class="modal-body" id="matrixModalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const bundle = {
+      decision_id: "dec_20260709_0930",
+      asof: "2026-07-09T09:30:00+08:00",
+      mode: "demo",
+      conclusion: "中国股票维持核心超配，海外股票保持参与；中国债券降到中性偏低，海外债券小幅低配；商品保留黄金与铜的结构性仓位，外汇与现金用于缓冲。",
+      display_buckets: [
+        { id: "cn_equity", label: "中国股票", color: "var(--teal)", note: "A股 + 港股" },
+        { id: "foreign_equity", label: "外国股票", color: "var(--cyan)", note: "美/欧/日/韩" },
+        { id: "cn_bond", label: "中国债券", color: "var(--amber)", note: "国债/信用债" },
+        { id: "foreign_bond", label: "外国债券", color: "var(--slate)", note: "美债/美元IG" },
+        { id: "commodity", label: "商品", color: "var(--rose)", note: "黑色/有色/能源/贵金属" },
+        { id: "fx", label: "外汇", color: "var(--violet)", note: "主要货币对" },
+        { id: "cash", label: "现金", color: "var(--cash)", note: "流动性缓冲" }
+      ],
+      asset_classes: [
+        { id: "equity", label: "权益", color: "var(--teal)", bucket_ids: ["cn_equity", "foreign_equity"] },
+        { id: "bond", label: "债券", color: "var(--amber)", bucket_ids: ["cn_bond", "foreign_bond"] },
+        { id: "commodity", label: "商品", color: "var(--rose)", bucket_ids: ["commodity"] },
+        { id: "fx", label: "外汇", color: "var(--violet)", bucket_ids: ["fx"] },
+        { id: "cash", label: "现金", color: "var(--cash)", bucket_ids: ["cash"] }
+      ],
+      assets: [
+        { id: "cash", name: "现金", bucket: "cash", target: 0.060, prior: 0.050 },
+        { id: "csi300", name: "沪深300指数", bucket: "cn_equity", target: 0.100, prior: 0.085 },
+        { id: "csi500", name: "中证500指数", bucket: "cn_equity", target: 0.070, prior: 0.060 },
+        { id: "dividend_510880", name: "上证红利ETF（510880）", bucket: "cn_equity", target: 0.060, prior: 0.052 },
+        { id: "hsi_2800", name: "恒生指数（盈富基金2800.HK）", bucket: "cn_equity", target: 0.050, prior: 0.043 },
+        { id: "spy", name: "标普500指数（SPY ETF）", bucket: "foreign_equity", target: 0.070, prior: 0.066 },
+        { id: "qqq", name: "纳斯达克100指数（QQQ ETF）", bucket: "foreign_equity", target: 0.050, prior: 0.048 },
+        { id: "fez", name: "欧洲斯托克50指数（FEZ ETF）", bucket: "foreign_equity", target: 0.030, prior: 0.029 },
+        { id: "ewj", name: "日本股票（iShares MSCI日本ETF·EWJ）", bucket: "foreign_equity", target: 0.025, prior: 0.024 },
+        { id: "ewy", name: "韩国股票（iShares MSCI韩国ETF·EWY）", bucket: "foreign_equity", target: 0.025, prior: 0.023 },
+        { id: "cgb10y_fut", name: "10年期国债期货（主力连续）", bucket: "cn_bond", target: 0.060, prior: 0.071 },
+        { id: "cgb_1_3", name: "中债1-3年期国债（合成总回报）", bucket: "cn_bond", target: 0.070, prior: 0.079 },
+        { id: "aaa_cp_3y", name: "中债AAA级中短期票据·3年（合成总回报）", bucket: "cn_bond", target: 0.040, prior: 0.050 },
+        { id: "us10y_zn", name: "美国10年期国债期货（ZN）", bucket: "foreign_bond", target: 0.050, prior: 0.057 },
+        { id: "lqd", name: "美元投资级公司债（LQD ETF）", bucket: "foreign_bond", target: 0.050, prior: 0.053 },
+        { id: "rebar", name: "螺纹钢期货（主力连续）", bucket: "commodity", target: 0.015, prior: 0.018 },
+        { id: "copper", name: "沪铜期货（上期所主力连续）", bucket: "commodity", target: 0.020, prior: 0.020 },
+        { id: "wti", name: "WTI原油期货（CL）", bucket: "commodity", target: 0.020, prior: 0.023 },
+        { id: "brent", name: "布伦特原油期货（BZ）", bucket: "commodity", target: 0.015, prior: 0.019 },
+        { id: "gold", name: "CME黄金期货（GC）", bucket: "commodity", target: 0.025, prior: 0.025 },
+        { id: "silver", name: "CME白银期货（SI）", bucket: "commodity", target: 0.015, prior: 0.015 },
+        { id: "usdcny", name: "美元兑人民币（在岸CNY代理）", bucket: "fx", target: 0.020, prior: 0.023 },
+        { id: "eurusd", name: "欧元兑美元", bucket: "fx", target: 0.015, prior: 0.017 },
+        { id: "usdjpy", name: "美元兑日元", bucket: "fx", target: 0.015, prior: 0.017 },
+        { id: "gbpusd", name: "英镑兑美元", bucket: "fx", target: 0.010, prior: 0.011 },
+        { id: "audusd", name: "澳元兑美元", bucket: "fx", target: 0.010, prior: 0.011 },
+        { id: "usdcad", name: "美元兑加元", bucket: "fx", target: 0.010, prior: 0.011 }
+      ],
+      input_signals: [
+        "sig_20260709_rp_001",
+        "sig_20260709_tsmom_001",
+        "sig_20260709_clock_001",
+        "sig_20260709_erp_001"
+      ],
+      bl_inputs: {
+        views: [
+          {
+            view_id: "view_clock_cn_equity",
+            label: "中国股票复苏受益",
+            source_signal_ids: ["sig_20260709_clock_001"],
+            P: { csi300: 0.35, csi500: 0.25, dividend_510880: 0.20, hsi_2800: 0.20 },
+            P_derivation: "限定中国股票桶，按流动性与战略风险预算映射为 35/25/20/20，再归一为多头腿。",
+            Q: 0.006,
+            Q_derivation: "演示校准：(复苏概率 72% - 中性阈值 50%) × 2.7% = 0.594%，四舍五入为 0.60%。",
+            confidence: 0.72,
+            view_variance: 0.00046286,
+            Omega: 0.00018,
+            lambda: 0.020,
+            derivation: "复苏象限概率 72% → A股和港股合计超配 2.0 个百分点"
+          },
+          {
+            view_id: "view_erp_cn_equity_bond",
+            label: "中国股票相对中国债券更具性价比",
+            source_signal_ids: ["sig_20260709_erp_001"],
+            P: { csi300: 0.35, csi500: 0.25, dividend_510880: 0.20, hsi_2800: 0.20, cgb10y_fut: -0.35, cgb_1_3: -0.40, aaa_cp_3y: -0.25 },
+            P_derivation: "相对观点分成两腿：中国股票多头 35/25/20/20，中国债券空头 35/40/25；多空两腿分别归一。",
+            Q: 0.005,
+            Q_derivation: "演示校准：(股债利差分位 85% - 中性分位 50%) × 1.43% = 0.5005%，记为 0.50%。",
+            confidence: 0.60,
+            view_variance: 0.00048,
+            Omega: 0.00032,
+            lambda: 0.015,
+            derivation: "沪深300 E/P - 10Y 国债收益率处于 85 分位 → 中国股相对中国债超配"
+          },
+          {
+            view_id: "view_tsmom_cn_equity",
+            label: "中国权益趋势为正",
+            source_signal_ids: ["sig_20260709_tsmom_001"],
+            P: { csi300: 0.40, csi500: 0.25, dividend_510880: 0.20, hsi_2800: 0.15 },
+            P_derivation: "中国股票候选按 12-1 动量除以 60 日波动率打分，正分截面归一为 40/25/20/15。",
+            Q: 0.003,
+            Q_derivation: "演示校准：桶内标准化动量均值 0.60 × 0.50% 收益尺度 = 0.30%。",
+            confidence: 0.55,
+            view_variance: 0.00051333,
+            Omega: 0.00042,
+            lambda: 0.005,
+            derivation: "A股/港股 12-1 动量边际转强 → 中国股票小幅加仓"
+          },
+          {
+            view_id: "view_tsmom_foreign_equity",
+            label: "海外股票趋势维持",
+            source_signal_ids: ["sig_20260709_tsmom_001"],
+            P: { spy: 0.35, qqq: 0.25, fez: 0.15, ewj: 0.125, ewy: 0.125 },
+            P_derivation: "外国股票按 12-1 动量/波动率和流动性约束打分，截面归一为 35/25/15/12.5/12.5。",
+            Q: 0.002,
+            Q_derivation: "演示校准：桶内标准化动量均值 0.50 × 0.40% 收益尺度 = 0.20%。",
+            confidence: 0.58,
+            view_variance: 0.00053857,
+            Omega: 0.00039,
+            lambda: 0.010,
+            derivation: "美股动量强，欧日韩中性偏正 → 外国股票合计增加 1.0 个百分点"
+          },
+          {
+            view_id: "view_clock_cn_bond",
+            label: "中国债券复苏低配",
+            source_signal_ids: ["sig_20260709_clock_001"],
+            P: { cgb10y_fut: 0.35, cgb_1_3: 0.40, aaa_cp_3y: 0.25 },
+            P_derivation: "中国债券桶按久期风险贡献与流动性映射为 35/40/25，再归一为观点腿。Q 的负号表达低配。",
+            Q: -0.003,
+            Q_derivation: "演示校准：-(复苏概率 72% - 中性阈值 50%) × 1.36% = -0.299%，记为 -0.30%。",
+            confidence: 0.72,
+            view_variance: 0.00056571,
+            Omega: 0.00022,
+            lambda: -0.015,
+            derivation: "复苏象限对久期资产偏弱 → 中国债券减少 1.5 个百分点"
+          },
+          {
+            view_id: "view_tsmom_foreign_bond",
+            label: "海外债券趋势偏弱",
+            source_signal_ids: ["sig_20260709_tsmom_001"],
+            P: { us10y_zn: 0.55, lqd: 0.45 },
+            P_derivation: "美国 10 年国债期货与美元投资级债按波动率倒数分配为 55/45，再归一为观点腿。",
+            Q: -0.002,
+            Q_derivation: "演示校准：桶内标准化动量均值 -0.40 × 0.50% 收益尺度 = -0.20%。",
+            confidence: 0.54,
+            view_variance: 0.00042261,
+            Omega: 0.00036,
+            lambda: -0.010,
+            derivation: "美债与美元投资级债券趋势偏弱 → 外国债券减少 1.0 个百分点"
+          },
+          {
+            view_id: "view_clock_commodity",
+            label: "复苏支撑商品",
+            source_signal_ids: ["sig_20260709_clock_001"],
+            P: { rebar: 0.12, copper: 0.25, wti: 0.18, brent: 0.15, gold: 0.20, silver: 0.10 },
+            P_derivation: "商品按复苏敏感度、流动性与贵金属缓冲约束打分，归一为 12/25/18/15/20/10。",
+            Q: 0.003,
+            Q_derivation: "演示校准：(商品受益置信度 64% - 中性阈值 50%) × 2.14% = 0.300%，记为 0.30%。",
+            confidence: 0.64,
+            view_variance: 0.00049778,
+            Omega: 0.00028,
+            lambda: 0.015,
+            derivation: "增长修复支撑有色与能源，黄金保留避险权重 → 商品增加 1.5 个百分点"
+          },
+          {
+            view_id: "view_tsmom_commodity",
+            label: "商品趋势分化偏弱",
+            source_signal_ids: ["sig_20260709_tsmom_001"],
+            P: { rebar: 0.15, copper: 0.20, wti: 0.20, brent: 0.15, gold: 0.20, silver: 0.10 },
+            P_derivation: "商品按各合约 12-1 动量/波动率绝对分数分配，观点腿归一为 15/20/20/15/20/10。",
+            Q: -0.005,
+            Q_derivation: "演示校准：桶内标准化动量均值 -0.80 × 0.625% 收益尺度 = -0.50%。",
+            confidence: 0.55,
+            view_variance: 0.00057444,
+            Omega: 0.00047,
+            lambda: -0.025,
+            derivation: "黑色与能源动量回落，黄金相对稳定 → 商品合计减少 2.5 个百分点"
+          },
+          {
+            view_id: "view_tsmom_fx",
+            label: "外汇篮子趋势转弱",
+            source_signal_ids: ["sig_20260709_tsmom_001"],
+            P: { usdcny: 0.25, eurusd: 0.19, usdjpy: 0.19, gbpusd: 0.12, audusd: 0.125, usdcad: 0.125 },
+            P_derivation: "外汇按主要货币对的动量/波动率绝对分数分配，归一为 25/19/19/12/12.5/12.5。",
+            Q: -0.004,
+            Q_derivation: "演示校准：货币篮子标准化趋势 -0.80 × 0.50% 收益尺度 = -0.40%。",
+            confidence: 0.55,
+            view_variance: 0.00047667,
+            Omega: 0.00039,
+            lambda: -0.010,
+            derivation: "主要货币对趋势贡献下降 → 外汇篮子减少 1.0 个百分点"
+          },
+          {
+            view_id: "view_clock_cash",
+            label: "留出现金缓冲",
+            source_signal_ids: ["sig_20260709_clock_001"],
+            P: { cash: 1 },
+            P_derivation: "现金是单一资产观点，观点腿直接设 P=1，无需截面分配。",
+            Q: 0.001,
+            Q_derivation: "演示校准：跨资产分歧分数 0.20 × 0.50% 缓冲尺度 = 0.10%。",
+            confidence: 0.50,
+            view_variance: 0.00021,
+            Omega: 0.00021,
+            lambda: 0.010,
+            derivation: "复苏确认但资产分歧仍高 → 现金缓冲增加 1.0 个百分点"
+          }
+        ]
+      },
+      posterior_ER: {
+        cn_equity: 0.052,
+        foreign_equity: 0.045,
+        cn_bond: 0.018,
+        foreign_bond: 0.016,
+        commodity: 0.027,
+        fx: 0.010,
+        cash: 0.007
+      },
+      attribution: {
+        cn_equity: { prior: 0.240, view_clock_cn_equity: 0.020, view_erp_cn_equity_bond: 0.015, view_tsmom_cn_equity: 0.005 },
+        foreign_equity: { prior: 0.190, view_tsmom_foreign_equity: 0.010 },
+        cn_bond: { prior: 0.200, view_clock_cn_bond: -0.015, view_erp_cn_equity_bond: -0.015 },
+        foreign_bond: { prior: 0.110, view_tsmom_foreign_bond: -0.010 },
+        commodity: { prior: 0.120, view_clock_commodity: 0.015, view_tsmom_commodity: -0.025 },
+        fx: { prior: 0.090, view_tsmom_fx: -0.010 },
+        cash: { prior: 0.050, view_clock_cash: 0.010 }
+      },
+      signals_by_id: {
+        sig_20260709_rp_001: {
+          signal_id: "sig_20260709_rp_001",
+          method: "risk_parity",
+          method_name: "Risk Parity",
+          layer: "strategic",
+          view_type: "risk_budget",
+          values: { cn_equity: 0.240, foreign_equity: 0.190, cn_bond: 0.200, foreign_bond: 0.110, commodity: 0.120, fx: 0.090, cash: 0.050 },
+          confidence: 0.85,
+          rationale: "估计 27 个明细资产协方差，汇总成 7 个展示桶，形成战略先验。",
+          abstain: [],
+          agent_id: "risk_parity_expert",
+          agent_version: "v0.3.0",
+          code_version: "git:mock-expanded-assets",
+          params: { cov_window_days: 756, shrinkage: "ledoit_wolf_linear", aggregation: "cn_investor_buckets" },
+          inputs: [
+            { data_id: "px:all_27_assets", source: "mock", asof: "2026-07-09", hash: "hash_all_27_px" }
+          ],
+          derivation: "明细资产 Risk Parity 汇总成底仓先验；先验收益由风险厌恶系数、协方差和战略权重反推",
+          source_refs: ["px:all_27_assets"]
+        },
+        sig_20260709_tsmom_001: {
+          signal_id: "sig_20260709_tsmom_001",
+          method: "tsmom",
+          method_name: "Time Series Momentum",
+          layer: "tactical",
+          view_type: "direction",
+          values: { cn_equity: 1, foreign_equity: 1, cn_bond: 0, foreign_bond: -1, commodity: -1, fx: -1 },
+          confidence: 0.56,
+          rationale: "中国和海外股票趋势偏强；海外债、商品、外汇偏弱；现金无趋势。",
+          abstain: ["cash"],
+          agent_id: "tsmom_expert",
+          agent_version: "v0.3.0",
+          code_version: "git:mock-expanded-assets",
+          params: { lookback_months: 12, skip_months: 1, vol_window_days: 60 },
+          inputs: [
+            { data_id: "px:all_27_assets_total_return", source: "mock", asof: "2026-07-09", hash: "hash_all_27_tr" }
+          ],
+          derivation: "对 26 个非现金资产分别计算 12-1 动量，再按桶聚合方向",
+          source_refs: ["px:all_27_assets_total_return"]
+        },
+        sig_20260709_clock_001: {
+          signal_id: "sig_20260709_clock_001",
+          method: "clock",
+          method_name: "Merrill Lynch Investment Clock",
+          layer: "tactical",
+          view_type: "regime",
+          values: { regime: "复苏", probability: 0.72, cn_equity: 1, cn_bond: -1, commodity: 1, cash: 1 },
+          confidence: 0.72,
+          rationale: "增长上行、通胀回落，复苏概率最高；权益和部分商品受益，债券低配。",
+          abstain: ["fx"],
+          agent_id: "clock_expert",
+          agent_version: "v0.3.0",
+          code_version: "git:mock-expanded-assets",
+          params: { growth_axis: "PMI surprise + credit impulse", inflation_axis: "CPI/PPI surprise", llm_used: false },
+          inputs: [
+            { data_id: "macro:PMI_CN", source: "mock", asof: "2026-07-09", hash: "hash_pmi_cn" },
+            { data_id: "macro:CPI_CN", source: "mock", asof: "2026-07-09", hash: "hash_cpi_cn" }
+          ],
+          derivation: "P(recovery)=0.72, P(overheat)=0.13, P(stagflation)=0.05, P(recession)=0.10",
+          source_refs: ["macro:PMI_CN", "macro:CPI_CN"]
+        },
+        sig_20260709_erp_001: {
+          signal_id: "sig_20260709_erp_001",
+          method: "erp",
+          method_name: "Equity Risk Premium",
+          layer: "tactical",
+          view_type: "percentile",
+          values: { cn_equity_vs_cn_bond: 1, percentile: 0.85, gap: 0.031 },
+          confidence: 0.60,
+          rationale: "股债利差处于近三年 85 分位，仅形成中国股债相对观点；其他资产弃权。",
+          abstain: ["foreign_equity", "foreign_bond", "commodity", "fx", "cash"],
+          agent_id: "erp_expert",
+          agent_version: "v0.3.0",
+          code_version: "git:mock-expanded-assets",
+          params: { equity_yield: "CSI300_E/P", bond_yield: "CGB10Y", percentile_window_days: 756 },
+          inputs: [
+            { data_id: "fundamental:CSI300_EP", source: "mock", asof: "2026-07-09", hash: "hash_csi300_ep" },
+            { data_id: "yield:CGB10Y", source: "mock", asof: "2026-07-09", hash: "hash_cgb10y_yield" }
+          ],
+          derivation: "gap=3.1%; percentile_3y=85%; maps to P=[中国股票 +1, 中国债券 -1]",
+          source_refs: ["fundamental:CSI300_EP", "yield:CGB10Y"]
+        }
+      },
+      guardrail_actions: [
+        { rule: "max_cn_equity_35pct", triggered: false, detail: "中国股票 28%，低于 35% 上限" },
+        { rule: "single_asset_cap_10pct", triggered: false, detail: "沪深300 目标 10%，达到单一资产上限" },
+        { rule: "long_only", triggered: false, detail: "所有明细资产目标权重均不低于 0" },
+        { rule: "weight_sum", triggered: false, detail: "明细与汇总目标权重均为 100%" }
+      ]
+    };
+
+    const methodMeta = {
+      risk_parity: { name: "Risk Parity", color: "var(--method-risk-parity)" },
+      tsmom: { name: "Time Series Momentum", color: "var(--method-cta)" },
+      clock: { name: "Merrill Lynch Investment Clock", color: "var(--method-clock)" },
+      erp: { name: "Equity Risk Premium", color: "var(--method-erp)" }
+    };
+    const methodColors = Object.fromEntries(Object.entries(methodMeta).map(([id, meta]) => [id, meta.color]));
+
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+    const fmtPct = value => `${(value * 100).toFixed(1)}%`;
+    const fmtPp = value => `${value >= 0 ? "+" : ""}${(value * 100).toFixed(1)}个百分点`;
+    const fmtBp = value => `${(value * 10000).toFixed(0)}基点`;
+    const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[ch]);
+    const codeWithBreaks = value => esc(value).replace(/_/g, "_<wbr>");
+
+    function methodInfo(methodId) {
+      return methodMeta[methodId] || { name: methodId, color: "var(--teal)" };
+    }
+
+    function methodBadge(methodId, extraClass = "") {
+      const method = methodInfo(methodId);
+      return `<span class="method-badge ${extraClass}" style="--method-color:${method.color}">${esc(method.name)}</span>`;
+    }
+
+    function viewSourceSignal(view) {
+      return bundle.signals_by_id[view.source_signal_ids[0]];
+    }
+
+    function viewMethodId(view) {
+      return viewSourceSignal(view)?.method || "";
+    }
+
+    const bucketById = Object.fromEntries(bundle.display_buckets.map(bucket => [bucket.id, bucket]));
+    const assetById = Object.fromEntries(bundle.assets.map(asset => [asset.id, asset]));
+    const assetDisplayMeta = {
+      cash: { short: "现金", code: "CASH" },
+      csi300: { short: "沪深300", code: "000300.SH" },
+      csi500: { short: "中证500", code: "000905.SH" },
+      dividend_510880: { short: "上证红利ETF", code: "510880.SH" },
+      hsi_2800: { short: "恒生指数ETF", code: "2800.HK" },
+      spy: { short: "标普500", code: "SPY" },
+      qqq: { short: "纳指100", code: "QQQ" },
+      fez: { short: "欧洲50", code: "FEZ" },
+      ewj: { short: "日本股票", code: "EWJ" },
+      ewy: { short: "韩国股票", code: "EWY" },
+      cgb10y_fut: { short: "10年国债期货", code: "CGB10Y.CFE" },
+      cgb_1_3: { short: "中债1-3年国债", code: "CGB1-3Y" },
+      aaa_cp_3y: { short: "AAA中短票", code: "AAA-CP-3Y" },
+      us10y_zn: { short: "美国10年国债", code: "ZN" },
+      lqd: { short: "美元投资级债", code: "LQD" },
+      rebar: { short: "螺纹钢", code: "RB" },
+      copper: { short: "沪铜", code: "CU" },
+      wti: { short: "WTI原油", code: "CL" },
+      brent: { short: "布伦特原油", code: "BZ" },
+      gold: { short: "黄金", code: "GC" },
+      silver: { short: "白银", code: "SI" },
+      usdcny: { short: "美元兑人民币", code: "USDCNY" },
+      eurusd: { short: "欧元兑美元", code: "EURUSD" },
+      usdjpy: { short: "美元兑日元", code: "USDJPY" },
+      gbpusd: { short: "英镑兑美元", code: "GBPUSD" },
+      audusd: { short: "澳元兑美元", code: "AUDUSD" },
+      usdcad: { short: "美元兑加元", code: "USDCAD" }
+    };
+    const assetOrder = bundle.display_buckets.flatMap(bucket =>
+      bundle.assets.filter(asset => asset.bucket === bucket.id).map(asset => asset.id)
+    );
+
+    function viewBucketIds(view) {
+      const affected = new Set(Object.keys(view.P).map(assetId => assetById[assetId]?.bucket).filter(Boolean));
+      return bundle.display_buckets.filter(bucket => affected.has(bucket.id)).map(bucket => bucket.id);
+    }
+
+    function viewContributionForBucket(bucketId, viewId) {
+      return bundle.attribution[bucketId]?.[viewId] || 0;
+    }
+
+    const signalValueLabels = {
+      regime: "宏观象限",
+      probability: "概率",
+      percentile: "分位",
+      gap: "股债利差",
+      cn_equity_vs_cn_bond: "中国股票相对中国债券"
+    };
+    const layerLabels = { strategic: "战略底仓", tactical: "战术偏离" };
+    const viewTypeLabels = {
+      risk_budget: "风险预算",
+      direction: "方向观点",
+      regime: "宏观象限",
+      percentile: "分位观点"
+    };
+    const ruleLabels = {
+      max_cn_equity_35pct: "中国股票上限",
+      single_asset_cap_10pct: "单一资产上限",
+      long_only: "禁止做空",
+      weight_sum: "权重闭合"
+    };
+    let matrixExpanded = false;
+    let detailExpanded = false;
+    let matrixTab = "matrix";
+    let traceFocusViewId = "";
+
+    function formatAsOf(value) {
+      const match = String(value).match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+      if (!match) return value;
+      return `${match[1]}年${Number(match[2])}月${Number(match[3])}日 ${match[4]}:${match[5]}`;
+    }
+
+    function formatDecisionBatch(value) {
+      const match = String(value).match(/^dec_(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})$/);
+      if (!match) return value;
+      return `${match[1]}${match[2]}${match[3]}-${match[4]}${match[5]}`;
+    }
+
+    function bindActivation(selector, handler) {
+      $$(selector).forEach(node => {
+        node.addEventListener("click", () => handler(node));
+        node.addEventListener("keydown", event => {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          handler(node);
+        });
+      });
+    }
+
+    function bucketTargetWeights() {
+      return Object.fromEntries(bundle.display_buckets.map(bucket => [
+        bucket.id,
+        bundle.assets.filter(asset => asset.bucket === bucket.id).reduce((sum, asset) => sum + asset.target, 0)
+      ]));
+    }
+
+    function bucketPriorWeights() {
+      return Object.fromEntries(bundle.display_buckets.map(bucket => [
+        bucket.id,
+        bundle.assets.filter(asset => asset.bucket === bucket.id).reduce((sum, asset) => sum + asset.prior, 0)
+      ]));
+    }
+
+    function viewById(viewId) {
+      return bundle.bl_inputs.views.find(view => view.view_id === viewId);
+    }
+
+    function sumValues(object) {
+      return Object.values(object).reduce((sum, value) => sum + value, 0);
+    }
+
+    function compactP(view, limit = Infinity, bucketId = "") {
+      const entries = Object.entries(view.P).filter(([assetId]) => !bucketId || assetById[assetId]?.bucket === bucketId);
+      const shown = entries.slice(0, limit).map(([assetId, exposure]) => {
+          const asset = assetById[assetId];
+          const sign = exposure > 0 ? "+" : "";
+          return `<span class="matrix-chip">${esc(asset?.name || assetId)} ${sign}${exposure}</span>`;
+        })
+        .join("");
+      const hidden = entries.length - Math.min(entries.length, limit);
+      return hidden > 0 ? `${shown}<span class="matrix-chip">+${hidden} 项</span>` : shown;
+    }
+
+    function signalValueLabel(key) {
+      return signalValueLabels[key] || bucketById[key]?.label || key;
+    }
+
+    function signalValueText(signal, key, value) {
+      if (key === "regime") return value;
+      if (typeof value !== "number") return value;
+      if (signal.view_type === "risk_budget" || ["probability", "percentile", "gap"].includes(key)) {
+        return fmtPct(value);
+      }
+      if (value === 1) return "看多";
+      if (value === -1) return "看空";
+      if (value === 0) return "中性";
+      return value;
+    }
+
+    function renderMeta() {
+      $("#subtitle").textContent = "中国投资者视角 · 27 项明细资产 · 五类目标权重与全链路归因。";
+      $("#meta").innerHTML = [
+        `时点 ${formatAsOf(bundle.asof)}`,
+        `决策批次 ${formatDecisionBatch(bundle.decision_id)}`,
+        bundle.mode === "demo" ? "演示模式" : bundle.mode,
+        `${bundle.assets.length} 项明细资产`,
+        `${bundle.display_buckets.length} 个汇总桶`
+      ].map(text => `<span class="badge">${esc(text)}</span>`).join("");
+    }
+
+    function renderSummary() {
+      const prior = bucketPriorWeights();
+      const target = bucketTargetWeights();
+      const targetSum = sumValues(target);
+      const assetSum = bundle.assets.reduce((sum, asset) => sum + asset.target, 0);
+      const closureOk = Math.abs(assetSum - 1) < 1e-6 && Math.abs(targetSum - 1) < 1e-6;
+      const attributionOk = Object.entries(bundle.attribution).every(([bucketId, parts]) => {
+        const total = sumValues(parts);
+        return Math.abs(total - target[bucketId]) < 1e-6;
+      });
+      const triggeredCount = bundle.guardrail_actions.filter(item => item.triggered).length;
+
+      const classTargets = Object.fromEntries(bundle.asset_classes.map(assetClass => [
+        assetClass.id,
+        assetClass.bucket_ids.reduce((sum, bucketId) => sum + target[bucketId], 0)
+      ]));
+
+      const classPrior = Object.fromEntries(bundle.asset_classes.map(assetClass => [
+        assetClass.id,
+        assetClass.bucket_ids.reduce((sum, bucketId) => sum + prior[bucketId], 0)
+      ]));
+
+      const makeClassBar = (weights, labeled = false) => bundle.asset_classes.map(assetClass => {
+        const weight = weights[assetClass.id];
+        const label = labeled
+          ? `<span class="target-segment-label"><span>${assetClass.label}</span><b>${fmtPct(weight)}</b></span>`
+          : "";
+        return `<div class="${labeled ? "target-segment" : ""}" style="width:${weight * 100}%;background:${assetClass.color}" title="${assetClass.label} ${fmtPct(weight)}">${label}</div>`;
+      }).join("");
+
+      const targetBar = makeClassBar(classTargets, true);
+      const priorBar = makeClassBar(classPrior, true);
+
+      const tiltChips = bundle.asset_classes.map(assetClass => {
+        const delta = classTargets[assetClass.id] - classPrior[assetClass.id];
+        const cls = delta > 0.0001 ? "positive" : delta < -0.0001 ? "negative" : "flat";
+        return `
+          <span class="tilt-chip ${cls}">
+            <span>${assetClass.label}</span>
+            <b>${fmtPp(delta)}</b>
+          </span>`;
+      }).join("");
+
+      const makeClassBreakdown = (bucketWeights, classWeights) => bundle.asset_classes.map(assetClass => {
+        const classTotal = classWeights[assetClass.id];
+        const subBuckets = assetClass.bucket_ids.map(bucketId => {
+          const bucket = bucketById[bucketId];
+          return `<div class="class-sub-box" style="--bucket-color:${bucket.color}"><b title="${esc(bucket.label)}">${esc(bucket.label)}</b><span>${fmtPct(bucketWeights[bucket.id])}</span></div>`;
+        }).join("");
+        const miniBar = assetClass.bucket_ids.map(bucketId => {
+          const bucket = bucketById[bucketId];
+          const share = classTotal > 0 ? bucketWeights[bucket.id] / classTotal : 0;
+          return `<span style="width:${share * 100}%;--bucket-color:${bucket.color}" title="${esc(bucket.label)} ${fmtPct(bucketWeights[bucket.id])}"></span>`;
+        }).join("");
+        return `
+          <div class="class-row" style="--asset-color:${assetClass.color}">
+            <div class="class-row-head">
+              <span class="class-main"><span class="dot"></span>${assetClass.label}</span>
+              <span class="class-total">${fmtPct(classTotal)}</span>
+            </div>
+            <div class="class-mini-bar">${miniBar}</div>
+            <div class="class-sub ${assetClass.bucket_ids.length === 1 ? "single" : ""}">${subBuckets}</div>
+          </div>`;
+      }).join("");
+
+      const targetBreakdown = makeClassBreakdown(target, classTargets);
+      const priorBreakdown = makeClassBreakdown(prior, classPrior);
+      const tacticalMethodCards = ["tsmom", "clock", "erp"].map(methodId => {
+        const info = methodInfo(methodId);
+        const viewCount = bundle.bl_inputs.views.filter(view => viewMethodId(view) === methodId).length;
+        return `
+          <div class="tactical-method" style="--method-color:${info.color}">
+            ${methodBadge(methodId, "compact")}
+            <b>${viewCount} 条观点</b>
+          </div>`;
+      }).join("");
+
+      $("#summary").innerHTML = `
+        <div class="summary-cell final-result">
+          <div class="result-head">
+            <div>
+              <div class="label">最终结果</div>
+              <h2>合成目标权重</h2>
+            </div>
+            <span class="result-badge">Risk Parity 底仓经 Black-Litterman Model 融合后得到目标</span>
+          </div>
+          <div class="final-grid">
+            <div>
+              <div class="target-bar labeled">${targetBar}</div>
+              <div class="class-breakdown">${targetBreakdown}</div>
+            </div>
+            <div class="final-copy">
+              <b>最终建议</b>
+              <p>${esc(bundle.conclusion)}</p>
+            </div>
+          </div>
+        </div>
+        <div class="summary-cell path-panel">
+          <div class="label">权重生成路径</div>
+          <div class="allocation-stack">
+            <div class="allocation-layer strategic">
+              <div class="layer-head">
+                <span class="layer-title">战略底仓</span>
+                <span class="layer-index">第一层</span>
+              </div>
+              <div class="target-bar labeled">${priorBar}</div>
+              <div class="class-breakdown">${priorBreakdown}</div>
+              <div class="path-method-line">
+                ${methodBadge("risk_parity")}
+                <span class="layer-note">唯一战略方法，生成 5 大类与 7 个细分桶的底仓先验。</span>
+              </div>
+            </div>
+            <div class="allocation-layer tactical">
+              <div class="layer-head">
+                <span class="layer-title">战术偏离 + 观点整合</span>
+                <span class="layer-index">第二层</span>
+              </div>
+              <div class="tactical-methods">${tacticalMethodCards}</div>
+              <div class="tilt-grid">${tiltChips}</div>
+              <div class="layer-note">三种战术方法生成方向、收益与置信度观点，经 Black-Litterman Model 融合后，转成相对 Risk Parity 底仓的增减。</div>
+            </div>
+          </div>
+        </div>
+        <div class="summary-cell status-card">
+          <div class="label">权重闭合</div>
+          <div class="status-line ${closureOk ? "" : "warn"}"><span class="status-dot"></span>${closureOk ? "已通过" : "需检查"}</div>
+          <div class="small">明细资产与汇总桶都闭合到 ${(assetSum * 100).toFixed(4)}%</div>
+        </div>
+        <div class="summary-cell status-card">
+          <div class="label">溯源闭合</div>
+          <div class="status-line ${attributionOk ? "" : "warn"}"><span class="status-dot"></span>${attributionOk ? "已通过" : "需检查"}</div>
+          <div class="small">Risk Parity 底仓加 Black-Litterman Model 观点贡献后，等于汇总目标权重</div>
+        </div>
+        <div class="summary-cell status-card">
+          <div class="label">风控闸门</div>
+          <div class="status-line ${triggeredCount === 0 ? "" : "warn"}"><span class="status-dot"></span>${triggeredCount === 0 ? "未触发" : "已触发"}</div>
+          <div class="small">触发规则 ${triggeredCount} 条；本样例未发生硬约束裁剪</div>
+        </div>`;
+    }
+
+    function renderConclusion() {
+      $("#conclusion").hidden = true;
+      $("#conclusion").innerHTML = "";
+    }
+
+    function renderStepRail() {
+      const steps = [
+        { n: "第一层", c: "var(--method-risk-parity)", h: "四方法信号", d: "Risk Parity 负责战略底仓；其余三种方法形成战术观点。" },
+        { n: "第二层", c: "var(--bl)", h: "观点与 Black-Litterman Model 装配", d: "战略先验与战术观点经 Black-Litterman Model 融合为后验收益。" },
+        { n: "第三层", c: "var(--rose)", h: "权重归因", d: "先看汇总结论，再追到观点、信号和输入摘要。" }
+      ];
+      $("#stepRail").innerHTML = steps.map(step => `
+        <div class="step" style="--accent:${step.c}">
+          <div class="num">${step.n}</div>
+          <h3>${step.h}</h3>
+          <div class="small">${step.d}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderSignals() {
+      const grouped = [
+        {
+          index: "第一层",
+          title: "战略底仓",
+          note: "Risk Parity 是唯一战略方法，直接生成组合底仓先验。",
+          color: "var(--method-risk-parity)",
+          ids: ["sig_20260709_rp_001"]
+        },
+        {
+          index: "第二层",
+          title: "战术偏离",
+          note: "Time Series Momentum、Merrill Lynch Investment Clock、Equity Risk Premium 生成阶段性 Black-Litterman Model 观点。",
+          color: "var(--bl)",
+          ids: ["sig_20260709_tsmom_001", "sig_20260709_clock_001", "sig_20260709_erp_001"]
+        }
+      ];
+
+      $("#signalGroups").innerHTML = grouped.map(group => `
+        <div class="signal-layer" style="--layer-color:${group.color}">
+          <div class="signal-layer-head">
+            <span class="layer-index">${group.index}</span>
+            <span class="layer-title">${group.title}</span>
+            <span class="layer-note">${group.note}</span>
+          </div>
+          <div class="signal-grid">
+            ${group.ids.map(id => signalCard(bundle.signals_by_id[id])).join("")}
+          </div>
+        </div>
+      `).join("") + signalFlowSummary();
+
+      bindActivation(".signal-card", card => openSignal(card.dataset.signalId));
+      bindActivation(".signal-flow-row", row => openSignal(row.dataset.signalId));
+    }
+
+    function signalFlowSummary() {
+      const rows = bundle.input_signals.map(signalId => {
+        const signal = bundle.signals_by_id[signalId];
+        const views = bundle.bl_inputs.views.filter(view => view.source_signal_ids.includes(signalId));
+        const method = methodInfo(signal.method);
+        const isStrategic = signal.layer === "strategic";
+        const path = isStrategic
+          ? "<b>进入战略底仓</b> · 直接形成 Risk Parity 先验"
+          : `<b>${views.length} 条 Black-Litterman Model 观点</b> · ${views.slice(0, 2).map(view => esc(view.label)).join("、")}${views.length > 2 ? " 等" : ""}`;
+        return `
+          <div class="signal-flow-row" data-signal-id="${esc(signalId)}" style="--accent:${method.color}" role="button" tabindex="0">
+            <span class="flow-method">${esc(method.name)}</span>
+            <span class="flow-path">${path}</span>
+            <span class="flow-impact" style="color:${isStrategic ? method.color : "var(--bl)"}">${isStrategic ? "底仓" : `${views.length} 条`}</span>
+          </div>`;
+      }).join("");
+
+      return `
+        <div class="signal-output">
+          <div class="group-title" style="margin:0">信号去向 · 到观点层</div>
+          ${rows}
+        </div>`;
+    }
+
+    function signalCard(signal) {
+      const method = methodInfo(signal.method);
+      const chips = Object.entries(signal.values).flatMap(([key, value]) => {
+        let className = "neutral";
+        if (typeof value === "number" && value > 0) className = "up";
+        if (typeof value === "number" && value < 0) className = "down";
+        const label = signalValueLabel(key);
+        const shown = signalValueText(signal, key, value);
+        return `<span class="chip ${className}">${esc(label)} ${esc(shown)}</span>`;
+      }).join("");
+
+      const abstain = (signal.abstain || []).map(bucketId => {
+        return `<span class="chip abstain">${esc(bucketById[bucketId]?.label || bucketId)} 弃权</span>`;
+      }).join("");
+
+      return `
+        <article class="signal-card" data-signal-id="${esc(signal.signal_id)}" style="--accent:${method.color}" role="button" tabindex="0">
+          <div class="card-head">
+            <div>
+              <div class="method">${esc(method.name)}</div>
+              <div class="card-subline">${esc(layerLabels[signal.layer] || signal.layer)} · ${esc(viewTypeLabels[signal.view_type] || signal.view_type)}</div>
+            </div>
+            <div class="confidence">
+              <span>置信度</span><b>${fmtPct(signal.confidence)}</b>
+              <div class="mini-track"><span style="width:${signal.confidence * 100}%"></span></div>
+            </div>
+          </div>
+          <div class="chips">${chips}${abstain}</div>
+          <div class="rationale">${esc(signal.rationale)}</div>
+        </article>`;
+    }
+
+    function renderBL() {
+      const prior = bucketPriorWeights();
+      const priorRows = bundle.display_buckets.map(bucket => `
+        <div class="prior-row" style="--asset-color:${bucket.color}">
+          <b style="color:${bucket.color}">${bucket.label}</b>
+          <div class="bar"><span style="width:${prior[bucket.id] * 100}%"></span></div>
+          <span class="weight-meta">${fmtPct(prior[bucket.id])}</span>
+        </div>
+      `).join("");
+
+      const viewCard = (view, bucket) => {
+        const methodId = viewMethodId(view);
+        const method = methodInfo(methodId);
+        const bucketImpact = viewContributionForBucket(bucket.id, view.view_id);
+        return `
+          <article class="view-card" data-view-id="${esc(view.view_id)}" style="--accent:${method.color}" role="button" tabindex="0">
+            <div class="view-card-head">
+              <div>
+                ${methodBadge(methodId, "compact")}
+                <div class="view-title">${esc(view.label)}</div>
+                <div class="card-subline">作用于${esc(bucket.label)} · 血缘已记录</div>
+              </div>
+              <div class="view-impact" style="color:${bucketImpact >= 0 ? "var(--green)" : "var(--red)"}">${fmtPp(bucketImpact)}</div>
+            </div>
+            <div class="view-assets">${compactP(view, 4, bucket.id)}</div>
+            <div class="metric-row">
+              <div class="metric"><span class="k">观点收益</span><span class="v">${fmtBp(view.Q)}</span></div>
+              <div class="metric"><span class="k">置信度</span><span class="v">${fmtPct(view.confidence)}</span></div>
+              <div class="metric"><span class="k">对本类权重</span><span class="v" style="color:${bucketImpact >= 0 ? "var(--green)" : "var(--red)"}">${fmtPp(bucketImpact)}</span></div>
+            </div>
+          </article>`;
+      };
+
+      const viewGroups = bundle.display_buckets.map((bucket, index) => {
+        const bucketViews = bundle.bl_inputs.views
+          .filter(view => viewBucketIds(view).includes(bucket.id))
+          .sort((a, b) => Math.abs(viewContributionForBucket(bucket.id, b.view_id)) - Math.abs(viewContributionForBucket(bucket.id, a.view_id)));
+        const netImpact = bucketViews.reduce((sum, view) => sum + viewContributionForBucket(bucket.id, view.view_id), 0);
+        return `
+          <details class="view-bucket-group" style="--asset-color:${bucket.color}" ${matrixExpanded || index === 0 ? "open" : ""}>
+            <summary>
+              <span class="view-bucket-title">${esc(bucket.label)}</span>
+              <span class="view-bucket-meta">${bucketViews.length} 条观点 · ${fmtPp(netImpact)}</span>
+            </summary>
+            <div class="view-bucket-list">${bucketViews.map(view => viewCard(view, bucket)).join("")}</div>
+          </details>`;
+      }).join("");
+
+      const tacticalMethods = ["tsmom", "clock", "erp"];
+      const assemblyMethods = tacticalMethods.map(methodId => methodBadge(methodId, "compact")).join("");
+
+      const posteriorRows = bundle.display_buckets.map(bucket => {
+        const pi = prior[bucket.id] * 0.10;
+        const er = bundle.posterior_ER[bucket.id];
+        return `
+          <tr>
+            <td style="color:${bucket.color}"><b>${bucket.label}</b></td>
+            <td class="num">${fmtBp(pi)}</td>
+            <td class="num">${fmtBp(er)}</td>
+            <td class="num" style="color:${er - pi >= 0 ? "var(--green)" : "var(--red)"}">${fmtBp(er - pi)}</td>
+          </tr>`;
+      }).join("");
+
+      $("#blContent").innerHTML = `
+        <div>
+          <div class="group-title" style="margin-top:0">Black-Litterman Model 如何起作用</div>
+          <div class="bl-assembly">
+            <div class="bl-input-stack">
+              <div class="bl-node prior">
+                <div class="bl-node-kicker">Prior · 战略先验</div>
+                ${methodBadge("risk_parity", "compact")}
+                <strong>π = δΣw<sub>RP</sub></strong>
+                <p>Risk Parity 权重结合协方差与风险厌恶系数，反推出先验收益。</p>
+              </div>
+              <div class="bl-node views">
+                <div class="bl-node-kicker">Views · 战术观点</div>
+                <div class="bl-method-row">${assemblyMethods}</div>
+                <strong>P + Q + Ω · ${bundle.bl_inputs.views.length} 条</strong>
+                <div class="bl-field-row">
+                  <span class="bl-field">P 方向与暴露</span>
+                  <span class="bl-field">Q 观点收益</span>
+                  <span class="bl-field">置信度 → Ω</span>
+                </div>
+              </div>
+            </div>
+            <div class="bl-operator" aria-hidden="true">→</div>
+            <div class="bl-engine">
+              <div class="engine-name">Black-Litterman Model</div>
+              <strong>贝叶斯观点融合</strong>
+              <div class="engine-formula">μ<sub>BL</sub> = Fuse(π, P, Q, Ω)</div>
+              <p>Ω 决定每条观点的可信权重；后验不是简单平均。</p>
+              <button class="text-btn bl-tech-btn" id="openTraceTab">查看计算过程</button>
+            </div>
+            <div class="bl-operator" aria-hidden="true">→</div>
+            <div class="bl-node output">
+              <div class="bl-node-kicker">Posterior · 融合输出</div>
+              <strong>后验收益 → 目标权重</strong>
+              <p>优化器生成目标，并保留每条观点的可闭合贡献。</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="group-title">Prior 明细 · Risk Parity 战略底仓</div>
+          ${priorRows}
+        </div>
+        <div>
+          <div class="group-title">Views 明细 · 按资产类别组织</div>
+          <div class="view-list">${viewGroups}</div>
+          <div class="table-actions">
+            <span class="small">同一相对观点会同时出现在它影响的资产类别下。</span>
+            <span>
+              <button class="text-btn" id="toggleMatrix">${matrixExpanded ? "收起资产类别" : "展开全部类别"}</button>
+              <button class="text-btn" id="openMatrix">打开技术工作台</button>
+            </span>
+          </div>
+        </div>
+        <div>
+          <div class="group-title">融合输出 · 后验期望收益</div>
+          <table>
+            <thead><tr><th>资产桶</th><th class="num">先验收益</th><th class="num">后验收益</th><th class="num">变化</th></tr></thead>
+            <tbody>${posteriorRows}</tbody>
+          </table>
+        </div>`;
+
+      bindActivation(".view-card[data-view-id]", card => openView(card.dataset.viewId));
+      $("#toggleMatrix").addEventListener("click", () => {
+        matrixExpanded = !matrixExpanded;
+        renderBL();
+      });
+      $("#openMatrix").addEventListener("click", () => openMatrixModal("matrix"));
+      $("#openTraceTab").addEventListener("click", () => openMatrixModal("trace"));
+    }
+
+    function renderWeights() {
+      const prior = bucketPriorWeights();
+      const target = bucketTargetWeights();
+      const comparison = bundle.display_buckets.map(bucket => {
+        const delta = target[bucket.id] - prior[bucket.id];
+        return `
+          <div class="weight-row" style="--asset-color:${bucket.color}">
+            <b style="color:${bucket.color}">${bucket.label}</b>
+            <div class="barline">
+              <div class="bar" title="战略底仓 ${fmtPct(prior[bucket.id])}"><span style="width:${prior[bucket.id] * 100}%;opacity:.45"></span></div>
+              <div class="bar" title="目标 ${fmtPct(target[bucket.id])}"><span style="width:${target[bucket.id] * 100}%"></span></div>
+            </div>
+            <div class="weight-numbers">
+              <span>底仓 <b>${fmtPct(prior[bucket.id])}</b></span>
+              <span>战术 <b>${fmtPp(delta)}</b></span>
+              <span>目标 <b>${fmtPct(target[bucket.id])}</b></span>
+            </div>
+          </div>`;
+      }).join("");
+
+      const attribution = bundle.display_buckets.map((bucket, index) => {
+        const parts = bundle.attribution[bucket.id];
+        const total = sumValues(parts);
+        const delta = total - parts.prior;
+        const partNodes = Object.entries(parts).map(([key, value]) => {
+          if (key === "prior") return `<span class="part prior">战略底仓 ${fmtPct(value)}</span>`;
+          const view = viewById(key);
+          const methodId = viewMethodId(view);
+          const method = methodInfo(methodId);
+          const cls = value >= 0 ? "positive" : "negative";
+          return `<button class="part ${cls}" data-view-id="${esc(key)}" data-bucket-id="${esc(bucket.id)}" style="--method-color:${method.color}"><span class="part-method">${esc(method.name)}</span> · ${esc(view?.label || key)} ${fmtPp(value)}</button>`;
+        }).join("");
+        return `
+          <details class="attrib-drill" style="--asset-color:${bucket.color}" ${index === 0 ? "open" : ""}>
+            <summary>
+              <span style="color:${bucket.color}">${bucket.label}</span>
+              <span class="weight-meta">目标 ${fmtPct(total)}</span>
+              <span class="attrib-delta" style="color:${delta >= 0 ? "var(--green)" : "var(--red)"}">${fmtPp(delta)}</span>
+            </summary>
+            <div class="attrib-parts">${partNodes}</div>
+          </details>`;
+      }).join("");
+
+      const drilldown = bundle.display_buckets.map((bucket, index) => {
+        const bucketAssets = bundle.assets.filter(asset => asset.bucket === bucket.id);
+        const rows = bucketAssets.map(asset => `
+          <div class="underlying-row">
+            <span class="asset-name" title="${esc(asset.name)}">${esc(asset.name)}</span>
+            <span class="num">${fmtPct(asset.prior)}</span>
+            <span class="num"><b>${fmtPct(asset.target)}</b></span>
+            <span class="num" style="color:${asset.target - asset.prior >= 0 ? "var(--green)" : "var(--red)"}">${fmtPp(asset.target - asset.prior)}</span>
+          </div>`).join("");
+        return `
+          <details class="asset-drill" style="--asset-color:${bucket.color}" ${index === 0 ? "open" : ""}>
+            <summary>
+              <span class="drill-title" style="color:${bucket.color}">${bucket.label}</span>
+              <span class="weight-meta">${bucketAssets.length} 个标的 · ${fmtPct(target[bucket.id])}</span>
+            </summary>
+            <div class="underlying-list">
+              <div class="underlying-head"><span>标的</span><span>底仓</span><span>目标</span><span>变化</span></div>
+              ${rows}
+            </div>
+          </details>`;
+      }).join("");
+
+      const detailRows = (detailExpanded ? bundle.assets : bundle.assets.slice(0, 9)).map(asset => {
+        const bucket = bucketById[asset.bucket];
+        return `
+          <tr>
+            <td>${esc(asset.name)}</td>
+            <td style="color:${bucket.color}">${esc(bucket.label)}</td>
+            <td class="num">${fmtPct(asset.prior)}</td>
+            <td class="num">${fmtPct(asset.target)}</td>
+            <td class="num" style="color:${asset.target - asset.prior >= 0 ? "var(--green)" : "var(--red)"}">${fmtPp(asset.target - asset.prior)}</td>
+          </tr>`;
+      }).join("");
+      const hiddenDetail = bundle.assets.length - (detailExpanded ? bundle.assets.length : 9);
+
+      const checks = bundle.guardrail_actions.map(action => `
+        <div class="check ${action.triggered ? "warn" : ""}">
+          <b>${action.triggered ? "触发" : "通过"}</b>
+          <span title="规则编号：${esc(action.rule)}"><span class="check-name">${esc(ruleLabels[action.rule] || "风控规则")}</span><br><span class="small">${esc(action.detail)}</span></span>
+        </div>`).join("");
+
+      $("#weightContent").innerHTML = `
+        <div class="group-title">两层合成 · Risk Parity 战略底仓 + Black-Litterman Model 战术偏离 = 目标</div>
+        <div class="row-stack">${comparison}</div>
+        <div class="group-title">汇总桶下钻 · 底层标的</div>
+        <div class="bucket-drilldown">${drilldown}</div>
+        <div class="group-title">观点贡献归因 · 按汇总桶展开</div>
+        ${attribution}`;
+
+      $("#bottomAppendix").innerHTML = `
+        <section class="panel appendix-panel">
+          <h2>明细资产权重 · 27 项</h2>
+          <p class="section-sub">完整保留全部明细资产，用于复核汇总权重与变动。</p>
+          <div class="detail-table">
+            <table>
+              <thead><tr><th>资产</th><th>汇总桶</th><th class="num">先验</th><th class="num">目标</th><th class="num">变化</th></tr></thead>
+              <tbody>${detailRows}</tbody>
+            </table>
+          </div>
+          <div class="table-actions">
+            <span class="small">${hiddenDetail > 0 ? `已隐藏 ${hiddenDetail} 个明细资产。` : "已显示全部明细资产。"}</span>
+            <button class="text-btn" id="toggleDetails">${detailExpanded ? "收起明细" : "显示全部明细"}</button>
+          </div>
+        </section>
+        <section class="panel appendix-panel guardrail-panel">
+          <h2>风控闸门</h2>
+          <p class="section-sub">展示硬约束规则的触发状态，用于复核最终目标权重。</p>
+          <div class="checks">${checks}</div>
+        </section>`;
+
+      $$(".part[data-view-id]").forEach(button => {
+        button.addEventListener("click", event => {
+          openAttribution(event.currentTarget.dataset.bucketId, event.currentTarget.dataset.viewId);
+        });
+      });
+      $("#toggleDetails").addEventListener("click", () => {
+        detailExpanded = !detailExpanded;
+        renderWeights();
+      });
+    }
+
+    function renderWideMatrix() {
+      const bucketHeader = bundle.display_buckets.map(bucket => {
+        const count = bundle.assets.filter(asset => asset.bucket === bucket.id).length;
+        return `<th class="matrix-bucket-head" colspan="${count}" style="--asset-color:${bucket.color}">${esc(bucket.label)} · ${count}</th>`;
+      }).join("");
+      const header = assetOrder.map(assetId => {
+        const asset = assetById[assetId];
+        const display = assetDisplayMeta[assetId] || { short: asset.name, code: assetId };
+        const bucket = bucketById[asset.bucket];
+        return `
+          <th class="matrix-asset-head" title="${esc(asset.name)}" style="--asset-color:${bucket.color}">
+            <span class="matrix-asset-name">${esc(display.short)}</span>
+            <span class="matrix-asset-code">${esc(display.code)}</span>
+            <span class="matrix-asset-category">${esc(bucket.label)}</span>
+          </th>`;
+      }).join("");
+      const rows = bundle.bl_inputs.views.map(view => {
+        const methodId = viewMethodId(view);
+        const cells = assetOrder.map(assetId => {
+          const value = view.P[assetId] || 0;
+          const color = value > 0 ? "var(--green)" : value < 0 ? "var(--red)" : "var(--muted)";
+          return `<td style="color:${color}">${value ? `${value > 0 ? "+" : ""}${value}` : ""}</td>`;
+        }).join("");
+        return `
+          <tr>
+            <td class="matrix-row-label">
+              ${methodBadge(methodId, "compact")}
+              <div style="margin-top:5px"><b>${esc(view.label)}</b></div>
+              <div class="sid">${codeWithBreaks(view.view_id)}</div>
+              <button class="matrix-trace-link" type="button" data-view-id="${esc(view.view_id)}">查看本行计算</button>
+            </td>
+            ${cells}
+          </tr>`;
+      }).join("");
+      return `
+        <div class="matrix-intro">
+          <span><b>P 矩阵：</b>正数表示多头暴露，负数表示空头暴露；绝对观点单腿归一，相对观点的多空两腿分别归一。</span>
+          <span>行 = ${bundle.bl_inputs.views.length} 条观点 · 列 = ${bundle.assets.length} 项明细资产</span>
+        </div>
+        <table class="wide-matrix">
+          <thead>
+            <tr><th class="matrix-row-label" rowspan="2">观点 / 资产</th>${bucketHeader}</tr>
+            <tr>${header}</tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    }
+
+    function renderTraceDetails(focusViewId = "") {
+      const formulaCards = [
+        {
+          label: "步骤 1 · Prior",
+          color: "var(--method-risk-parity)",
+          title: "Risk Parity 反推战略先验",
+          body: "先由协方差与风险预算得到战略权重，再反向求隐含均衡收益。",
+          formula: "π = δΣw_RP"
+        },
+        {
+          label: "步骤 2 · Views",
+          color: "var(--method-cta)",
+          title: "战术信号装配 P / Q / Ω",
+          body: "P 定义资产暴露，Q 是观点收益，置信度 c 经校准映射为观点不确定性 Ω。",
+          formula: "Ω_i = ((1-c_i)/c_i) × view_variance_i"
+        },
+        {
+          label: "步骤 3 · Posterior",
+          color: "var(--bl)",
+          title: "Black-Litterman Model 贝叶斯融合",
+          body: "观点与先验按不确定性加权；置信度越低，观点对后验收益的影响越弱。",
+          formula: "μ_BL = π + τΣPᵀ(PτΣPᵀ+Ω)⁻¹(Q-Pπ)"
+        },
+        {
+          label: "步骤 4 · Target",
+          color: "var(--rose)",
+          title: "后验收益进入约束优化",
+          body: "优化器生成目标权重，再执行禁止做空、单资产上限和汇总权重闭合检查。",
+          formula: "w_target = Optimize(μ_BL, Σ, constraints)"
+        }
+      ].map(item => `
+        <article class="formula-card" style="--formula-color:${item.color}">
+          <div class="label">${item.label}</div>
+          <b>${item.title}</b>
+          <p>${item.body}</p>
+          <div class="formula-code">${item.formula}</div>
+        </article>`).join("");
+
+      const viewCards = bundle.bl_inputs.views.map(view => {
+        const signal = viewSourceSignal(view);
+        const methodId = viewMethodId(view);
+        const method = methodInfo(methodId);
+        const entries = Object.entries(view.P);
+        const positiveSum = entries.reduce((sum, [, value]) => sum + Math.max(value, 0), 0);
+        const negativeSum = entries.reduce((sum, [, value]) => sum + Math.abs(Math.min(value, 0)), 0);
+        const normalization = negativeSum > 0
+          ? `多头腿 ΣP⁺=${positiveSum.toFixed(3)}；空头腿 Σ|P⁻|=${negativeSum.toFixed(3)}`
+          : `绝对观点腿 ΣP=${positiveSum.toFixed(3)}`;
+        const pConstruction = entries.map(([assetId, exposure]) => {
+          const display = assetDisplayMeta[assetId] || { short: assetById[assetId]?.name || assetId };
+          return `${display.short} ${exposure > 0 ? "+" : ""}${exposure}`;
+        }).join("；");
+        const impactedBuckets = viewBucketIds(view).map(bucketId => {
+          const impact = viewContributionForBucket(bucketId, view.view_id);
+          return `${bucketById[bucketId].label} ${fmtPp(impact)}`;
+        }).join("；");
+        const sourceInputs = (signal?.inputs || []).map(input => `${input.data_id} · ${input.asof} · ${input.hash}`).join("；");
+        const focused = view.view_id === focusViewId;
+        return `
+          <article class="trace-view-card ${focused ? "focused" : ""}" id="trace-${esc(view.view_id)}" style="--method-color:${method.color}">
+            <div class="trace-view-head">
+              <div>
+                ${methodBadge(methodId, "compact")}
+                <div class="trace-view-title">${esc(view.label)}</div>
+                <div class="sid">${codeWithBreaks(view.view_id)}</div>
+              </div>
+              <span class="view-impact" style="color:${view.lambda >= 0 ? "var(--green)" : "var(--red)"}">${fmtPp(view.lambda)}</span>
+            </div>
+            <div class="trace-line"><b>资产类别</b><span>${viewBucketIds(view).map(id => esc(bucketById[id].label)).join(" / ")}</span></div>
+            <div class="trace-line"><b>P 如何得到</b><span>${esc(view.P_derivation)}<br>${esc(pConstruction)}<br><code>${esc(normalization)}</code></span></div>
+            <div class="trace-line"><b>Q 如何得到</b><span>${esc(view.Q_derivation)}<br><code>Q = ${fmtBp(view.Q)}</code></span></div>
+            <div class="trace-line"><b>置信度 → Ω</b><span>置信度与后端校准的观点方差共同决定不确定性<br><code>Ω = ((1-${view.confidence.toFixed(2)})/${view.confidence.toFixed(2)}) × ${view.view_variance.toExponential(4)} = ${view.Omega.toExponential(4)}</code></span></div>
+            <div class="trace-line"><b>业务映射</b><span>${esc(view.derivation)}</span></div>
+            <div class="trace-line"><b>目标权重贡献</b><span>${esc(impactedBuckets)}<br><code>归因推力 λ = ${fmtPp(view.lambda)}</code></span></div>
+            <div class="trace-line"><b>来源信号</b><span><code>${esc(signal?.signal_id || "")}</code><br>${esc(`${signal?.agent_id || ""} ${signal?.agent_version || ""} · ${signal?.code_version || ""}`)}<br>${esc(signal?.rationale || "")}</span></div>
+            <div class="trace-line"><b>输入与哈希</b><span>${esc(sourceInputs)}</span></div>
+          </article>`;
+      }).join("");
+
+      return `
+        <p class="trace-note"><b>可复算边界：</b>页面展示落库参数、公式关系和完整输入血缘；生产系统由后端确定性代码使用同一 DecisionRecord 复算，前端只读展示，不在浏览器中重新估计协方差或改写权重。</p>
+        <div class="formula-grid">${formulaCards}</div>
+        <div class="group-title">逐条观点计算链 · P / Q / Ω / 来源输入</div>
+        <div class="trace-view-list">${viewCards}</div>`;
+    }
+
+    function renderTechnicalModal() {
+      const matrixButton = $("#matrixViewTab");
+      const traceButton = $("#traceViewTab");
+      const matrixActive = matrixTab === "matrix";
+      matrixButton.classList.toggle("active", matrixActive);
+      traceButton.classList.toggle("active", !matrixActive);
+      matrixButton.setAttribute("aria-selected", String(matrixActive));
+      traceButton.setAttribute("aria-selected", String(!matrixActive));
+      $("#matrixModalBody").innerHTML = matrixActive ? renderWideMatrix() : renderTraceDetails(traceFocusViewId);
+
+      if (matrixActive) {
+        $$(".matrix-trace-link").forEach(button => {
+          button.addEventListener("click", () => {
+            matrixTab = "trace";
+            traceFocusViewId = button.dataset.viewId;
+            renderTechnicalModal();
+            const focused = $(`#trace-${CSS.escape(traceFocusViewId)}`);
+            if (focused?.scrollIntoView) focused.scrollIntoView({ block: "center" });
+          });
+        });
+      }
+    }
+
+    function openMatrixModal(tabName = "matrix", viewId = "") {
+      matrixTab = tabName;
+      traceFocusViewId = viewId;
+      renderTechnicalModal();
+      $("#matrixModal").classList.add("open");
+      if (matrixTab === "trace" && traceFocusViewId) {
+        const focused = $(`#trace-${CSS.escape(traceFocusViewId)}`);
+        if (focused?.scrollIntoView) focused.scrollIntoView({ block: "center" });
+      }
+    }
+
+    function closeMatrixModal() {
+      $("#matrixModal").classList.remove("open");
+    }
+
+    function clearSelection() {
+      $$(".selected").forEach(node => node.classList.remove("selected"));
+    }
+
+    function selectTrace({ signalIds = [], viewId = "" }) {
+      clearSelection();
+      signalIds.forEach(signalId => {
+        $$(`[data-signal-id="${CSS.escape(signalId)}"]`).forEach(card => card.classList.add("selected"));
+      });
+      if (viewId) {
+        $$(`.view-card[data-view-id="${CSS.escape(viewId)}"]`).forEach(viewCard => viewCard.classList.add("selected"));
+        $$(`.part[data-view-id="${CSS.escape(viewId)}"]`).forEach(part => part.classList.add("selected"));
+      }
+    }
+
+    function openSignal(signalId) {
+      const signal = bundle.signals_by_id[signalId];
+      selectTrace({ signalIds: [signalId] });
+      setDrawer("信号", methodInfo(signal.method).name, signalDetails(signal));
+    }
+
+    function openView(viewId) {
+      const view = viewById(viewId);
+      selectTrace({ signalIds: view.source_signal_ids, viewId });
+      setDrawer("Black-Litterman Model 观点", `${methodInfo(viewMethodId(view)).name} · ${view.label}`, viewDetails(view));
+      $("#openViewTrace").addEventListener("click", () => openMatrixModal("trace", viewId));
+    }
+
+    function openAttribution(bucketId, viewId) {
+      const view = viewById(viewId);
+      const value = bundle.attribution[bucketId][viewId];
+      selectTrace({ signalIds: view.source_signal_ids, viewId });
+      setDrawer("归因", `${bucketById[bucketId].label} ${fmtPp(value)}`, attributionDetails(bucketId, view, value));
+    }
+
+    function signalDetails(signal) {
+      return `
+        ${methodBadge(signal.method)}
+        ${kv("信号ID", signal.signal_id)}
+        ${kv("方法", methodInfo(signal.method).name)}
+        ${kv("层级", layerLabels[signal.layer] || signal.layer)}
+        ${kv("观点类型", viewTypeLabels[signal.view_type] || signal.view_type)}
+        ${kv("置信度", fmtPct(signal.confidence))}
+        ${kv("专家版本", `${signal.agent_id} / ${signal.agent_version}`)}
+        ${kv("代码版本", signal.code_version)}
+        ${kv("来源引用", signal.source_refs.join(", "))}
+        <div class="codebox">${esc(JSON.stringify({
+          values: signal.values,
+          abstain: signal.abstain,
+          params: signal.params,
+          inputs: signal.inputs,
+          derivation: signal.derivation
+        }, null, 2))}</div>`;
+    }
+
+    function viewDetails(view) {
+      const signals = view.source_signal_ids.map(id => bundle.signals_by_id[id]);
+      return `
+        ${methodBadge(viewMethodId(view))}
+        ${kv("观点ID", view.view_id)}
+        ${kv("来源方法", methodInfo(viewMethodId(view)).name)}
+        ${kv("来源信号", view.source_signal_ids.join(", "))}
+        ${kv("观点涉及资产", Object.keys(view.P).map(id => assetById[id]?.name || id).join(" / "))}
+        ${kv("观点收益", fmtBp(view.Q))}
+        ${kv("P 构造", view.P_derivation)}
+        ${kv("Q 推导", view.Q_derivation)}
+        ${kv("置信度", fmtPct(view.confidence))}
+        ${kv("观点方差", view.view_variance.toExponential(4))}
+        ${kv("不确定性", view.Omega.toExponential(4))}
+        ${kv("权重推力", fmtPp(view.lambda))}
+        ${kv("推导", view.derivation)}
+        <button class="text-btn" id="openViewTrace" type="button">在技术工作台查看完整计算</button>
+        <div class="codebox">${esc(JSON.stringify({ P: view.P }, null, 2))}</div>
+        <div class="group-title">源信号</div>
+        ${signals.map(signal => `<div class="codebox">${esc(signal.signal_id)}\n${esc(signal.rationale)}</div>`).join("")}`;
+    }
+
+    function attributionDetails(bucketId, view, value) {
+      const target = bucketTargetWeights()[bucketId];
+      const total = sumValues(bundle.attribution[bucketId]);
+      return `
+        ${methodBadge(viewMethodId(view))}
+        ${kv("汇总桶", bucketById[bucketId].label)}
+        ${kv("观点ID", view.view_id)}
+        ${kv("贡献", fmtPp(value))}
+        ${kv("汇总桶目标", fmtPct(target))}
+        ${kv("闭合", `${fmtPct(total)} 由先验 + 观点贡献闭合`)}
+        ${kv("来源信号", view.source_signal_ids.join(", "))}
+        <div class="codebox">${esc(JSON.stringify({
+          attribution_for_bucket: bundle.attribution[bucketId],
+          view,
+          source_signals: view.source_signal_ids.map(id => bundle.signals_by_id[id])
+        }, null, 2))}</div>`;
+    }
+
+    function kv(key, value) {
+      return `<div class="kv"><div class="k">${esc(key)}</div><div>${esc(value)}</div></div>`;
+    }
+
+    function setDrawer(kind, title, body) {
+      $("#drawerKind").textContent = kind;
+      $("#drawerTitle").textContent = title;
+      $("#drawerBody").innerHTML = body;
+      $("#drawer").classList.add("open");
+    }
+
+    function closeDrawer() {
+      $("#drawer").classList.remove("open");
+      clearSelection();
+    }
+
+    function init() {
+      renderMeta();
+      renderSummary();
+      renderConclusion();
+      renderStepRail();
+      renderSignals();
+      renderBL();
+      renderWeights();
+      $("#closeDrawer").addEventListener("click", closeDrawer);
+      $("#closeMatrix").addEventListener("click", closeMatrixModal);
+      $("#matrixViewTab").addEventListener("click", () => {
+        matrixTab = "matrix";
+        traceFocusViewId = "";
+        renderTechnicalModal();
+      });
+      $("#traceViewTab").addEventListener("click", () => {
+        matrixTab = "trace";
+        renderTechnicalModal();
+      });
+      $("#matrixModal").addEventListener("click", event => {
+        if (event.target.id === "matrixModal") closeMatrixModal();
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          closeDrawer();
+          closeMatrixModal();
+        }
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>

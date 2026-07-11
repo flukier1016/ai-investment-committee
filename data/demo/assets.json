@@ -1,0 +1,53 @@
+{
+  "_meta": {
+    "description": "AI 资产配置投委会 · 27 明细资产宇宙（Demo 数据）。口径以《AI前端实现交接_三层溯源看板.md》第 4 节为准。",
+    "source": "demo fixture",
+    "asof": "2026-07-09",
+    "note": "旧静态页为 28 资产（人民币现金 + 美元现金两条现金腿）；本项目按 V3/交接文档合并为单一现金腿，映射规则见 docs/data_migration.md"
+  },
+  "asset_classes": [
+    { "id": "equity", "label": "权益", "color": "#0b7668", "bucket_ids": ["cn_equity", "foreign_equity"] },
+    { "id": "bond", "label": "债券", "color": "#8a5b06", "bucket_ids": ["cn_bond", "foreign_bond"] },
+    { "id": "commodity", "label": "商品", "color": "#a33f64", "bucket_ids": ["commodity"] },
+    { "id": "fx", "label": "外汇", "color": "#6f63c8", "bucket_ids": ["fx"] },
+    { "id": "cash", "label": "现金", "color": "#4f5964", "bucket_ids": ["cash"] }
+  ],
+  "display_buckets": [
+    { "id": "cn_equity", "label": "中国股票", "asset_class": "equity", "color": "#0b7668", "note": "A股 + 港股" },
+    { "id": "foreign_equity", "label": "外国股票", "asset_class": "equity", "color": "#176f9d", "note": "美/欧/日/韩" },
+    { "id": "cn_bond", "label": "中国债券", "asset_class": "bond", "color": "#8a5b06", "note": "国债/信用债" },
+    { "id": "foreign_bond", "label": "外国债券", "asset_class": "bond", "color": "#59666f", "note": "美债/美元IG" },
+    { "id": "commodity", "label": "商品", "asset_class": "commodity", "color": "#a33f64", "note": "黑色/有色/能源/贵金属" },
+    { "id": "fx", "label": "外汇", "asset_class": "fx", "color": "#6f63c8", "note": "主要货币对" },
+    { "id": "cash", "label": "现金", "asset_class": "cash", "color": "#4f5964", "note": "流动性缓冲" }
+  ],
+  "assets": [
+    { "id": "cash", "name": "现金", "short_name": "现金", "code": "CASH.CNY", "bucket": "cash" },
+    { "id": "csi300", "name": "沪深300指数", "short_name": "沪深300", "code": "000300.SH", "bucket": "cn_equity" },
+    { "id": "csi500", "name": "中证500指数", "short_name": "中证500", "code": "000905.SH", "bucket": "cn_equity" },
+    { "id": "dividend_510880", "name": "上证红利ETF（510880）", "short_name": "上证红利", "code": "510880.SH", "bucket": "cn_equity" },
+    { "id": "hsi_2800", "name": "恒生指数（盈富基金2800.HK）", "short_name": "恒生指数", "code": "2800.HK", "bucket": "cn_equity" },
+    { "id": "spy", "name": "标普500指数（SPY ETF）", "short_name": "标普500", "code": "SPY", "bucket": "foreign_equity" },
+    { "id": "qqq", "name": "纳斯达克100指数（QQQ ETF）", "short_name": "纳指100", "code": "QQQ", "bucket": "foreign_equity" },
+    { "id": "fez", "name": "欧洲斯托克50指数（FEZ ETF）", "short_name": "欧股50", "code": "FEZ", "bucket": "foreign_equity" },
+    { "id": "ewj", "name": "日本股票（iShares MSCI日本ETF·EWJ）", "short_name": "日本股票", "code": "EWJ", "bucket": "foreign_equity" },
+    { "id": "ewy", "name": "韩国股票（iShares MSCI韩国ETF·EWY）", "short_name": "韩国股票", "code": "EWY", "bucket": "foreign_equity" },
+    { "id": "cgb10y_fut", "name": "10年期国债期货（主力连续）", "short_name": "10Y国债期货", "code": "T.CFE", "bucket": "cn_bond" },
+    { "id": "cgb_1_3", "name": "中债1-3年期国债（合成总回报）", "short_name": "1-3年国债", "code": "CGB1-3Y", "bucket": "cn_bond" },
+    { "id": "aaa_cp_3y", "name": "中债AAA级中短期票据·3年（合成总回报）", "short_name": "AAA中短票", "code": "AAA-MTN3Y", "bucket": "cn_bond" },
+    { "id": "us10y_zn", "name": "美国10年期国债期货（ZN）", "short_name": "美10Y期货", "code": "ZN", "bucket": "foreign_bond" },
+    { "id": "lqd", "name": "美元投资级公司债（LQD ETF）", "short_name": "美元IG债", "code": "LQD", "bucket": "foreign_bond" },
+    { "id": "rebar", "name": "螺纹钢期货（主力连续）", "short_name": "螺纹钢", "code": "RB.SHF", "bucket": "commodity" },
+    { "id": "copper", "name": "沪铜期货（上期所主力连续）", "short_name": "沪铜", "code": "CU.SHF", "bucket": "commodity" },
+    { "id": "wti", "name": "WTI原油期货（CL）", "short_name": "WTI原油", "code": "CL", "bucket": "commodity" },
+    { "id": "brent", "name": "布伦特原油期货（BZ）", "short_name": "布伦特", "code": "BZ", "bucket": "commodity" },
+    { "id": "gold", "name": "CME黄金期货（GC）", "short_name": "黄金", "code": "GC", "bucket": "commodity" },
+    { "id": "silver", "name": "CME白银期货（SI）", "short_name": "白银", "code": "SI", "bucket": "commodity" },
+    { "id": "usdcny", "name": "美元兑人民币（在岸CNY代理）", "short_name": "美元/人民币", "code": "USDCNY", "bucket": "fx" },
+    { "id": "eurusd", "name": "欧元兑美元", "short_name": "欧元/美元", "code": "EURUSD", "bucket": "fx" },
+    { "id": "usdjpy", "name": "美元兑日元", "short_name": "美元/日元", "code": "USDJPY", "bucket": "fx" },
+    { "id": "gbpusd", "name": "英镑兑美元", "short_name": "英镑/美元", "code": "GBPUSD", "bucket": "fx" },
+    { "id": "audusd", "name": "澳元兑美元", "short_name": "澳元/美元", "code": "AUDUSD", "bucket": "fx" },
+    { "id": "usdcad", "name": "美元兑加元", "short_name": "美元/加元", "code": "USDCAD", "bucket": "fx" }
+  ]
+}

@@ -1,0 +1,30 @@
+[project]
+name = "ai-committee-backend"
+version = "0.1.0"
+description = "AI 资产配置投委会 · 五方法三层确定性计算引擎与 API"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.8",
+    "numpy>=1.26",
+    "pandas>=2.2",
+    "scipy>=1.13",
+    "cvxpy>=1.5",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.2",
+    "httpx>=0.27",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["../tests/backend"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]

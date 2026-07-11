@@ -1,0 +1,237 @@
+{
+  "_meta": {
+    "source": "legacy_static_page",
+    "migrated_from": "AI投委会_静态页面html.html",
+    "asof": "2026-07-09",
+    "note": "展示性 fixture，仅供参考；计算数字一律由新引擎现算",
+    "usage": "可选 Demo：问卷 → 16 型 → 风险参数(target_vol/max_drawdown/single_asset_cap/bond_floor/rebalance)，只映射约束，不改变方法权重"
+  },
+  "questionnaire": [
+    {
+      "dim": 1,
+      "q": "组合单月下跌8%，你的第一反应更接近？",
+      "options": [
+        "逢低加仓，机会来了",
+        "持有观望，按纪律办事",
+        "减一部分仓，先降波动",
+        "大部分止损离场"
+      ]
+    },
+    {
+      "dim": 1,
+      "q": "你更愿意接受哪种收益路径？",
+      "options": [
+        "年化15%但可能回撤25%",
+        "年化10%回撤15%",
+        "年化7%回撤8%",
+        "年化4%几乎无回撤"
+      ]
+    },
+    {
+      "dim": 2,
+      "q": "你评估一笔配置成败的自然周期是？",
+      "options": [
+        "三年以上",
+        "一年",
+        "一个季度",
+        "一个月以内"
+      ]
+    },
+    {
+      "dim": 2,
+      "q": "面对短期噪音行情，你倾向于？",
+      "options": [
+        "完全忽略，盯长期逻辑",
+        "记录但不动作",
+        "小幅动态微调",
+        "快进快出捕捉波段"
+      ]
+    },
+    {
+      "dim": 3,
+      "q": "某资产连续上涨三个月，你更可能？",
+      "options": [
+        "顺势加仓，强者恒强",
+        "持有不动",
+        "部分止盈",
+        "反手减仓等回调"
+      ]
+    },
+    {
+      "dim": 3,
+      "q": "你更认同哪句话？",
+      "options": [
+        "趋势是你的朋友",
+        "别接下落的刀",
+        "均值回归是万有引力",
+        "人弃我取"
+      ]
+    },
+    {
+      "dim": 4,
+      "q": "年终复盘时你最在意的指标是？",
+      "options": [
+        "绝对收益率",
+        "相对基准超额",
+        "夏普比率",
+        "最大回撤"
+      ]
+    },
+    {
+      "dim": 4,
+      "q": "两只产品让你选？",
+      "options": [
+        "收益前10%但波动大",
+        "收益前30%波动中等",
+        "收益中游回撤小",
+        "几乎不亏但收益平庸"
+      ]
+    }
+  ],
+  "all_types": [
+    {
+      "type": "ALTR",
+      "type_name": "远航舰长",
+      "target_vol": 0.1725,
+      "max_drawdown": 0.24,
+      "single_asset_cap": 0.45,
+      "bond_floor": 0.05,
+      "rebalance": "monthly"
+    },
+    {
+      "type": "ALTP",
+      "type_name": "稳进舵手",
+      "target_vol": 0.15,
+      "max_drawdown": 0.18,
+      "single_asset_cap": 0.35,
+      "bond_floor": 0.1,
+      "rebalance": "monthly"
+    },
+    {
+      "type": "ALCR",
+      "type_name": "价值猎手",
+      "target_vol": 0.1725,
+      "max_drawdown": 0.24,
+      "single_asset_cap": 0.45,
+      "bond_floor": 0.05,
+      "rebalance": "monthly"
+    },
+    {
+      "type": "ALCP",
+      "type_name": "时间的朋友",
+      "target_vol": 0.15,
+      "max_drawdown": 0.18,
+      "single_asset_cap": 0.35,
+      "bond_floor": 0.1,
+      "rebalance": "monthly"
+    },
+    {
+      "type": "ASTR",
+      "type_name": "风口冲浪者",
+      "target_vol": 0.1725,
+      "max_drawdown": 0.24,
+      "single_asset_cap": 0.45,
+      "bond_floor": 0.05,
+      "rebalance": "weekly"
+    },
+    {
+      "type": "ASTP",
+      "type_name": "敏捷骑手",
+      "target_vol": 0.15,
+      "max_drawdown": 0.18,
+      "single_asset_cap": 0.35,
+      "bond_floor": 0.1,
+      "rebalance": "weekly"
+    },
+    {
+      "type": "ASCR",
+      "type_name": "逆势狙击手",
+      "target_vol": 0.1725,
+      "max_drawdown": 0.24,
+      "single_asset_cap": 0.45,
+      "bond_floor": 0.05,
+      "rebalance": "weekly"
+    },
+    {
+      "type": "ASCP",
+      "type_name": "波段守望者",
+      "target_vol": 0.15,
+      "max_drawdown": 0.18,
+      "single_asset_cap": 0.35,
+      "bond_floor": 0.1,
+      "rebalance": "weekly"
+    },
+    {
+      "type": "DLTR",
+      "type_name": "稳健船长",
+      "target_vol": 0.0805,
+      "max_drawdown": 0.105,
+      "single_asset_cap": 0.35,
+      "bond_floor": 0.2,
+      "rebalance": "monthly"
+    },
+    {
+      "type": "DLTP",
+      "type_name": "压舱石",
+      "target_vol": 0.07,
+      "max_drawdown": 0.0788,
+      "single_asset_cap": 0.25,
+      "bond_floor": 0.25,
+      "rebalance": "monthly"
+    },
+    {
+      "type": "DLCR",
+      "type_name": "耐心播种者",
+      "target_vol": 0.0805,
+      "max_drawdown": 0.105,
+      "single_asset_cap": 0.35,
+      "bond_floor": 0.2,
+      "rebalance": "monthly"
+    },
+    {
+      "type": "DLCP",
+      "type_name": "守护者",
+      "target_vol": 0.07,
+      "max_drawdown": 0.0788,
+      "single_asset_cap": 0.25,
+      "bond_floor": 0.25,
+      "rebalance": "monthly"
+    },
+    {
+      "type": "DSTR",
+      "type_name": "谨慎追风者",
+      "target_vol": 0.0805,
+      "max_drawdown": 0.105,
+      "single_asset_cap": 0.35,
+      "bond_floor": 0.2,
+      "rebalance": "weekly"
+    },
+    {
+      "type": "DSTP",
+      "type_name": "雷达哨兵",
+      "target_vol": 0.07,
+      "max_drawdown": 0.0788,
+      "single_asset_cap": 0.25,
+      "bond_floor": 0.25,
+      "rebalance": "weekly"
+    },
+    {
+      "type": "DSCR",
+      "type_name": "防守反击手",
+      "target_vol": 0.0805,
+      "max_drawdown": 0.105,
+      "single_asset_cap": 0.35,
+      "bond_floor": 0.2,
+      "rebalance": "weekly"
+    },
+    {
+      "type": "DSCP",
+      "type_name": "堡垒建造师",
+      "target_vol": 0.07,
+      "max_drawdown": 0.0788,
+      "single_asset_cap": 0.25,
+      "bond_floor": 0.25,
+      "rebalance": "weekly"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# 应用构建产物与依赖
+backend/.venv/
+frontend/node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 运行期决策记录与派生缓存（由引擎确定性重算）
+data/runs/

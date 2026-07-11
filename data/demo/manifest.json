@@ -1,0 +1,53 @@
+{
+  "seed": 20260709,
+  "start": "2020-01-02",
+  "end": "2026-07-09",
+  "regimes": [
+    {
+      "start": "2020-01-02",
+      "end": "2020-03-20",
+      "name": "covid_crash"
+    },
+    {
+      "start": "2020-03-23",
+      "end": "2020-12-31",
+      "name": "reflation_rebound"
+    },
+    {
+      "start": "2021-01-04",
+      "end": "2021-12-31",
+      "name": "expansion"
+    },
+    {
+      "start": "2022-01-03",
+      "end": "2022-12-30",
+      "name": "stagflation"
+    },
+    {
+      "start": "2023-01-02",
+      "end": "2023-06-30",
+      "name": "recession_trough"
+    },
+    {
+      "start": "2023-07-03",
+      "end": "2024-12-31",
+      "name": "recovery"
+    },
+    {
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "name": "overheat"
+    },
+    {
+      "start": "2026-01-01",
+      "end": "2026-07-09",
+      "name": "recovery_confirmed"
+    }
+  ],
+  "files": [
+    "market_prices.csv",
+    "macro.csv",
+    "erp_inputs.csv"
+  ],
+  "note": "Demo 合成数据，固定种子可复现；所有下游数字由引擎从本数据确定性计算。"
+}

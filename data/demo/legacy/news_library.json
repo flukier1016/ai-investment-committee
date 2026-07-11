@@ -1,0 +1,4100 @@
+{
+  "_meta": {
+    "source": "legacy_static_page",
+    "migrated_from": "AI投委会_静态页面html.html",
+    "asof": "2026-07-09",
+    "note": "展示性 fixture，仅供参考；计算数字一律由新引擎现算"
+  },
+  "items": [
+    {
+      "title": "ADNOC Signs 15-Year LNG Supply Deal With Japan’s Inpex",
+      "slug": "2026-07-07-adnoc-signs-15-year-lng-supply-deal-with-japan-s",
+      "published": "2026-07-07",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "LNG供应",
+        "能源合作",
+        "中东能源",
+        "日本进口"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "阿联酋ADNOC与日本伊奈克斯签订15年LNG供应协议，利好原油及能源类商品"
+    },
+    {
+      "title": "Binance Offers Yield To Bitcoin Owners",
+      "slug": "2026-07-07-binance-offers-yield-to-bitcoin-owners",
+      "published": "2026-07-07",
+      "assets": [
+        "copper",
+        "csi300",
+        "gold",
+        "qqq",
+        "spy",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "比特币",
+        "收益产品",
+        "期权策略",
+        "加密货币金融化",
+        "资产配置"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "Binance推出比特币收益产品，通过卖出看涨期权策略为持币者提供收益，反映加密资产与传统金融工具融合趋势。"
+    },
+    {
+      "title": "Dollar flat ahead of Fed Minutes; Euro softens despite German industrial bounce",
+      "slug": "2026-07-07-dollar-flat-ahead-of-fed-minutes-euro-softens-de",
+      "published": "2026-07-07",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "美元指数",
+        "外汇市场",
+        "美联储会议纪要",
+        "欧元走势"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "美元指数在美联储会议纪要公布前保持平稳，欧元因德国工业数据反弹仍显疲软。"
+    },
+    {
+      "title": "Gulf Oil Exporters Slash Prices as Buyers Gain the Upper Hand",
+      "slug": "2026-07-07-gulf-oil-exporters-slash-prices-as-buyers-gain-t",
+      "published": "2026-07-07",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "原油价格",
+        "中东出口",
+        "买家议价权",
+        "伊朗原油",
+        "需求疲软"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "中东原油出口商为吸引买家大幅降价，因亚洲需求疲软及伊朗原油重返市场，导致油市竞争加剧，利空原油价格。"
+    },
+    {
+      "title": "India Resumes Iraqi Oil Imports Despite Hormuz Shipping Risks",
+      "slug": "2026-07-07-india-resumes-iraqi-oil-imports-despite-hormuz-s",
+      "published": "2026-07-07",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "伊拉克原油",
+        "航运风险",
+        "印度进口"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "印度重启伊拉克原油进口，尽管需经霍尔木兹海峡，显示其恢复中东原油供应的意愿。"
+    },
+    {
+      "title": "India’s Fuel Consumption Slips Despite Record Crude Oil Imports",
+      "slug": "2026-07-07-india-s-fuel-consumption-slips-despite-record-cr",
+      "published": "2026-07-07",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "原油进口",
+        "燃料消费",
+        "地缘政治",
+        "供应紧张"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "印度尽管创纪录进口原油，但燃料消费环比下降，反映需求疲软，利空原油市场。"
+    },
+    {
+      "title": "Monetary Base and the Bank of Japan's Transactions (June)",
+      "slug": "2026-07-07-monetary-base-and-the-bank-of-japan-s-transactio",
+      "published": "2026-07-07",
+      "assets": [
+        "ewj",
+        "usdcny"
+      ],
+      "tags": [
+        "货币基础",
+        "日本央行",
+        "货币政策"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "日本央行的货币基础变动及交易行为对日股和美元兑人民币汇率产生影响"
+    },
+    {
+      "title": "Russia’s oil refineries are burning — and, now, so is its bond market",
+      "slug": "2026-07-07-russia-s-oil-refineries-are-burning-and-now-so-i",
+      "published": "2026-07-07",
+      "assets": [
+        "cgb10y_fut",
+        "gold",
+        "us10y_zn",
+        "wti"
+      ],
+      "tags": [
+        "俄罗斯",
+        "原油",
+        "债券市场",
+        "地缘政治"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "俄罗斯原油炼油厂停产及债券市场动荡引发全球大宗商品和债券市场波动。"
+    },
+    {
+      "title": "Shell Signals Oil and Gas Trading Windfall in Q2 Amid Iran War",
+      "slug": "2026-07-07-shell-signals-oil-and-gas-trading-windfall-in-q2",
+      "published": "2026-07-07",
+      "assets": [
+        "us10y_zn",
+        "wti"
+      ],
+      "tags": [
+        "央行",
+        "利率",
+        "原油",
+        "供给冲击"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "Shell expects to have booked significantly higher oil and LNG trading results in the second quarter of the year as the I"
+    },
+    {
+      "title": "Sterling today: Pound holds near multi-week highs as dollar stays becalmed",
+      "slug": "2026-07-07-sterling-today-pound-holds-near-multi-week-highs",
+      "published": "2026-07-07",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "英镑",
+        "美元指数",
+        "汇率",
+        "外汇市场"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "英镑维持在数周高点附近，美元指数表现疲软。"
+    },
+    {
+      "title": "Stock Market Today: Nasdaq Slides As Samsung Tumbles On Earnings; Micron, Sandisk Lose Big (Live Coverage)",
+      "slug": "2026-07-07-stock-market-today-nasdaq-slides-as-samsung-tumb",
+      "published": "2026-07-07",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "美股下跌",
+        "半导体行业",
+        " earnings",
+        "科技股",
+        "市场波动"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "受三星财报不及预期及内存芯片股大跌影响，纳斯达克指数下跌，科技股普遍承压。"
+    },
+    {
+      "title": "The Nasdaq-100 has been far more volatile than the S&P 500. Now add SpaceX to the mix.",
+      "slug": "2026-07-07-the-nasdaq-100-has-been-far-more-volatile-than-t",
+      "published": "2026-07-07",
+      "assets": [
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "波动性",
+        "科技股",
+        "SpaceX"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "纳斯达克100波动性高于标普500，SpaceX因素加剧市场波动。"
+    },
+    {
+      "title": "The trade of the year is entering a new phase, says Goldman Sachs. Here’s what it means for stocks.",
+      "slug": "2026-07-07-the-trade-of-the-year-is-entering-a-new-phase-sa",
+      "published": "2026-07-07",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "贸易",
+        "股市",
+        "高盛"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "高盛称年度交易进入新阶段，利好股市"
+    },
+    {
+      "title": "Treasury yields edge higher as markets brace for hawkish tone in Fed minutes",
+      "slug": "2026-07-07-treasury-yields-edge-higher-as-markets-brace-for",
+      "published": "2026-07-07",
+      "assets": [
+        "us10y_zn"
+      ],
+      "tags": [
+        "美国国债收益率",
+        "美联储会议纪要",
+        "货币政策预期"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "市场预期美联储会议纪要将释放鹰派信号，推动美国国债收益率上升。"
+    },
+    {
+      "title": "Why Isn’t Oil at $90? Markets Could Be Underpricing the Strait of Hormuz Risk",
+      "slug": "2026-07-07-why-isn-t-oil-at-90-markets-could-be-underpricin",
+      "published": "2026-07-07",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "地缘政治风险",
+        "航运安全",
+        "原油供应",
+        "市场情绪"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "地缘政治紧张加剧， Strait of Hormuz 航运安全受威胁，市场对原油供应中断风险定价不足，存在潜在上行压力。"
+    },
+    {
+      "title": "在岸人民幣兌美元創近兩星期新低",
+      "slug": "2026-07-07-在岸人民幣兌美元創近兩星期新低",
+      "published": "2026-07-07",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "人民币汇率",
+        "美元走势",
+        "货币政策预期"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "在岸人民币兑美元跌至近两周新低，反映市场对美联储政策路径调整的预期及美元走势的观望情绪。"
+    },
+    {
+      "title": "李家超：香港黃金交易生態圈定必受全球信賴",
+      "slug": "2026-07-07-李家超-香港黃金交易生態圈定必受全球信賴",
+      "published": "2026-07-07",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金交易",
+        "金融生态",
+        "跨境支付",
+        "香港金融"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "李家超宣布香港黄金中央清算及结算系统试运行，推动黄金交易生态圈建设，强化香港作为全球黄金安全港地位。"
+    },
+    {
+      "title": "金管局：官方外匯儲備資產維持4459億美元",
+      "slug": "2026-07-07-金管局-官方外匯儲備資產維持4459億美元",
+      "published": "2026-07-07",
+      "assets": [
+        "csi300",
+        "hsi_2800",
+        "usdcny"
+      ],
+      "tags": [
+        "外汇储备",
+        "货币政策",
+        "汇率稳定"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "香港金管局公布6月底官方外汇储备资产维持在4459亿美元，显示货币稳定，对美元有利，对港股和A股影响中性。"
+    },
+    {
+      "title": "As oil exits the ‘danger zone,’ here’s what history suggests happens next for stocks",
+      "slug": "2026-07-06-as-oil-exits-the-danger-zone-here-s-what-history",
+      "published": "2026-07-06",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "wti"
+      ],
+      "tags": [
+        "原油",
+        "股市",
+        "历史走势"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "原油脱离危险区间后，历史数据显示股市可能走强"
+    },
+    {
+      "title": "Bitcoin rebounds after Trump says he's become 'a big crypto guy'",
+      "slug": "2026-07-06-bitcoin-rebounds-after-trump-says-he-s-become-a",
+      "published": "2026-07-06",
+      "assets": [
+        "copper",
+        "csi300",
+        "gold",
+        "qqq",
+        "spy",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "比特币",
+        "特朗普",
+        "加密货币",
+        "市场情绪",
+        "企业持仓",
+        "投资账户",
+        "数字黄金",
+        "资产配置"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "特朗普表态支持加密货币推动比特币反弹，尽管企业持仓变动引发市场波动，整体利好风险资产与加密货币"
+    },
+    {
+      "title": "China’s top ETF is now gold, not stocks",
+      "slug": "2026-07-06-china-s-top-etf-is-now-gold-not-stocks",
+      "published": "2026-07-06",
+      "assets": [
+        "cgb10y_fut",
+        "csi300",
+        "gold",
+        "us10y_zn",
+        "usdcny"
+      ],
+      "tags": [
+        "黄金储备",
+        "ETF资金流向",
+        "货币政策",
+        "地缘经济",
+        "美元走强"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "全球央行持续增持黄金，中国最大ETF转向黄金基金，反映资产配置重心向贵金属转移，利多黄金及美元，利空股市与债券"
+    },
+    {
+      "title": "Dow Jones Futures Rise, Nasdaq Set To Reclaim Key Level; Apple, SpaceX, Sandisk, Robinhood In Focus",
+      "slug": "2026-07-06-dow-jones-futures-rise-nasdaq-set-to-reclaim-key",
+      "published": "2026-07-06",
+      "assets": [
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "科技股",
+        "美股",
+        "期货",
+        "市场前瞻",
+        "AI",
+        "企业动态"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "科技股引领美股期货上涨，苹果、SpaceX、SanDisk和Robinhood受关注，市场预期纳斯达克将重返关键水平。"
+    },
+    {
+      "title": "Euro and pound slip as dollar recovers; markets await Fed Minutes under Warsh",
+      "slug": "2026-07-06-euro-and-pound-slip-as-dollar-recovers-markets-a",
+      "published": "2026-07-06",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "美元反弹",
+        "欧元走弱",
+        "英镑走弱",
+        "美联储会议纪要",
+        "市场观望"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "美元指数回升，欧元和英镑走弱，市场等待美联储会议纪要发布"
+    },
+    {
+      "title": "Europe stocks steady near records; eyes on Fed Minutes, central bank speakers",
+      "slug": "2026-07-06-europe-stocks-steady-near-records-eyes-on-fed-mi",
+      "published": "2026-07-06",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "欧洲股市",
+        "美联储会议纪要",
+        "央行讲话"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "欧洲股市维持稳定接近历史高点，市场关注美联储会议纪要及央行官员讲话。"
+    },
+    {
+      "title": "Eurozone yields consolodate as Germany’s 10-year pulls back from 2-week high",
+      "slug": "2026-07-06-eurozone-yields-consolodate-as-germany-s-10-year",
+      "published": "2026-07-06",
+      "assets": [
+        "cgb10y_fut",
+        "us10y_zn"
+      ],
+      "tags": [
+        "欧元区收益率",
+        "德国10年期国债"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "欧元区收益率企稳，德国10年期国债收益率回落至两周高点下方。"
+    },
+    {
+      "title": "Germany Weathers Energy Crisis With Growing Dependence on American LNG",
+      "slug": "2026-07-06-germany-weathers-energy-crisis-with-growing-depe",
+      "published": "2026-07-06",
+      "assets": [
+        "copper",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "能源危机",
+        "LNG进口",
+        "美国液化天然气",
+        "地缘政治",
+        "欧洲能源",
+        "美元走强"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "德国因中东局势导致能源供应受阻，增加对美国液化天然气依赖，推动原油、铜等大宗商品及美元走强，美债承压。"
+    },
+    {
+      "title": "Gold Is Starting to Look Like a Tactical Trade Again",
+      "slug": "2026-07-06-gold-is-starting-to-look-like-a-tactical-trade-a",
+      "published": "2026-07-06",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金",
+        "通胀数据",
+        "美联储政策",
+        "技术分析",
+        "美元走势"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "黄金因市场对美联储加息预期降温及即将公布的CPI数据预期而重拾上涨动能，技术面显示突破关键支撑位将改善前景。"
+    },
+    {
+      "title": "Here’s Why HP (HPE) is Among the 15 Best Data Center Stocks to Buy and Hold for the Next Decade",
+      "slug": "2026-07-06-here-s-why-hp-hpe-is-among-the-15-best-data-cent",
+      "published": "2026-07-06",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "数据中心",
+        "人工智能",
+        "网络基础设施",
+        "AI算力",
+        "企业IT投资"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "HPE在AI数据中心领域获得多项重要合作与技术升级，推动其在AI基础设施和网络解决方案中的布局，利好全球科技股及AI相关资产。"
+    },
+    {
+      "title": "More European Investors Oppose Norway’s Push for Arctic Oil Drilling",
+      "slug": "2026-07-06-more-european-investors-oppose-norway-s-push-for",
+      "published": "2026-07-06",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "北极石油开采",
+        "能源转型",
+        "欧洲投资者",
+        "环保立场"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "欧洲多家金融机构反对挪威在北极地区开展石油钻探，强调能源转型应优先于化石能源开发，利空原油市场。"
+    },
+    {
+      "title": "Oil drops more than 1% after Opec+ raises August output targets",
+      "slug": "2026-07-06-oil-drops-more-than-1-after-opec-raises-august-o",
+      "published": "2026-07-06",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "OPEC+增产",
+        "原油供应",
+        "油价下跌"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "OPEC+上调8月产量目标，导致原油价格下跌超1%。"
+    },
+    {
+      "title": "Op-Ed: Molybdenum and the geopolitics of substitution",
+      "slug": "2026-07-06-op-ed-molybdenum-and-the-geopolitics-of-substitu",
+      "published": "2026-07-06",
+      "assets": [
+        "copper",
+        "gold"
+      ],
+      "tags": [
+        "地缘政治",
+        "关键矿产",
+        "替代性",
+        "供应链安全",
+        "钨",
+        "钼"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "钼价上涨反映关键矿产功能性短缺与地缘政治风险，推动战略替代与合金优化，利好钼及关联金属。"
+    },
+    {
+      "title": "Op-Ed: The copper the world needs is already above ground",
+      "slug": "2026-07-06-op-ed-the-copper-the-world-needs-is-already-abov",
+      "published": "2026-07-06",
+      "assets": [
+        "copper",
+        "gold"
+      ],
+      "tags": [
+        "铜需求",
+        "矿业供应",
+        "电气化",
+        "人工智能",
+        "资源回收"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "全球铜需求激增，现有矿产资源回收利用或成缓解供应短缺的关键路径，利好铜及黄金等大宗商品"
+    },
+    {
+      "title": "South Korea Charges Refiners With Gas Price Gouging",
+      "slug": "2026-07-06-south-korea-charges-refiners-with-gas-price-goug",
+      "published": "2026-07-06",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "燃油价格",
+        "价格操纵",
+        "韩国监管"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "韩国对四大炼油商因燃油价格串通行为提起诉讼，涉事企业被指在美以伊冲突后协同调整油价，造成巨额损失。"
+    },
+    {
+      "title": "Stock market today: S&P 500, Nasdaq slip after Samsung results spark chip sell-off",
+      "slug": "2026-07-06-stock-market-today-s-p-500-nasdaq-slip-after-sam",
+      "published": "2026-07-06",
+      "assets": [
+        "copper",
+        "qqq",
+        "spy",
+        "wti"
+      ],
+      "tags": [
+        "芯片股",
+        "人工智能",
+        "原油价格",
+        "地缘政治风险",
+        "市场波动"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "三星财报引发芯片股抛售，科技股回落，原油价格因伊朗袭击事件上涨。"
+    },
+    {
+      "title": "The London Gold Fix: The Hidden Force Behind Gold Price Moves",
+      "slug": "2026-07-06-the-london-gold-fix-the-hidden-force-behind-gold",
+      "published": "2026-07-06",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金价格",
+        "伦敦金定盘价",
+        "市场机制",
+        "价格发现"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "伦敦金定盘价作为黄金价格波动的隐性驱动力，揭示了机构交易活动在特定时段集中导致价格剧烈波动的市场机制。"
+    },
+    {
+      "title": "Two things Samsung might be considering: price hikes and a U.S. listing",
+      "slug": "2026-07-06-two-things-samsung-might-be-considering-price-hi",
+      "published": "2026-07-06",
+      "assets": [
+        "csi300",
+        "hsi_2800",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "三星",
+        "价格调整",
+        "美国上市",
+        "半导体",
+        "科技股"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "三星可能考虑提价及在美国上市，利好全球科技股及半导体产业链"
+    },
+    {
+      "title": "Volkswagen CEO faces acid test from unions over swingeing job cut plans",
+      "slug": "2026-07-06-volkswagen-ceo-faces-acid-test-from-unions-over",
+      "published": "2026-07-06",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "汽车行业",
+        "劳资关系",
+        "裁员",
+        "企业治理"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "大众汽车CEO因大规模裁员计划面临工会强烈反对，可能影响公司运营及股价表现。"
+    },
+    {
+      "title": "WTI vs Natural Gas: Why Oil and Natural Gas Are No Longer Trading the Same Story",
+      "slug": "2026-07-06-wti-vs-natural-gas-why-oil-and-natural-gas-are-n",
+      "published": "2026-07-06",
+      "assets": [
+        "copper",
+        "gold",
+        "wti"
+      ],
+      "tags": [
+        "原油",
+        "天然气",
+        "地缘政治",
+        "能源市场分化",
+        "库存",
+        "天气",
+        "供需关系"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "原油与天然气因不同驱动因素出现分化，地缘政治影响原油而天然气受库存、天气和国内需求主导，导致两者走势背离。"
+    },
+    {
+      "title": "仲量聯行料全年樓價最多升10%　受惠供應減少及內地買家入市",
+      "slug": "2026-07-06-仲量聯行料全年樓價最多升10-受惠供應減少及內地買家入市",
+      "published": "2026-07-06",
+      "assets": [
+        "csi300",
+        "hsi_2800",
+        "usdcny"
+      ],
+      "tags": [
+        "楼价",
+        "供应减少",
+        "内地买家",
+        "利率风险",
+        "港股调整"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "仲量联行预计全年楼价最多上涨10%，受供应减少及内地买家入市支撑，但需警惕利率上升风险可能导致下半年涨幅放缓。"
+    },
+    {
+      "title": "在岸人民幣兌美元低收逾百點子",
+      "slug": "2026-07-06-在岸人民幣兌美元低收逾百點子",
+      "published": "2026-07-06",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "人民币汇率",
+        "美元指数",
+        "市场预期"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "在岸人民币兑美元下跌逾百点，受美元指数高位波动及市场预期影响，短期面临调整压力。"
+    },
+    {
+      "title": "港股高收266點　連升3日　科指升近1%",
+      "slug": "2026-07-06-港股高收266點-連升3日-科指升近1",
+      "published": "2026-07-06",
+      "assets": [
+        "hsi_2800"
+      ],
+      "tags": [
+        "港股",
+        "科技股",
+        "AI投资",
+        "恒生指数",
+        "市场情绪"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "港股连续三日上涨，恒生指数收升逾1.1%，科技股受AI投资消息推动表现强劲，部分AI概念股走弱。"
+    },
+    {
+      "title": "索致泰145亿美元收购Element 瞄准AI供应链",
+      "slug": "2026-07-06-索致泰145亿美元收购element-瞄准ai供应链",
+      "published": "2026-07-06",
+      "assets": [
+        "csi300",
+        "hsi_2800",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "AI供应链",
+        "半导体材料",
+        "并购",
+        "工业科技"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "索致泰145亿美元收购Element，聚焦AI与半导体供应链材料布局，利好科技及工业相关股票"
+    },
+    {
+      "title": "AI需求加上补贴停止 美国清洁电价势必飙涨",
+      "slug": "2026-07-05-ai需求加上补贴停止-美国清洁电价势必飙涨",
+      "published": "2026-07-05",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "csi300",
+        "ewj",
+        "fez",
+        "gold",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "清洁能源",
+        "电价上涨",
+        "补贴取消",
+        "AI需求",
+        "数据中心",
+        "气候政策"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国《降低通胀法》补贴停止将导致清洁能源购电协议成本大幅上涨，推高电价并影响金融市场，利多债券与美元，利空股市与大宗商品"
+    },
+    {
+      "title": "8 of the top 10 wealth-creating stocks over 100 years are Big Tech. But these two outliers still created $2.6T",
+      "slug": "2026-07-04-8-of-the-top-10-wealth-creating-stocks-over-100",
+      "published": "2026-07-04",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "科技股",
+        "财富创造",
+        "股票市场",
+        "大市值公司",
+        "投资回报"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "过去百年中，科技巨头主导了美国股市的财富创造，前十大财富创造公司中有八家为大型科技企业，凸显科技股的显著优势。"
+    },
+    {
+      "title": "AI boom reshapes FX markets through equity hedging flows",
+      "slug": "2026-07-04-ai-boom-reshapes-fx-markets-through-equity-hedgi",
+      "published": "2026-07-04",
+      "assets": [
+        "qqq",
+        "spy",
+        "usdcny"
+      ],
+      "tags": [
+        "美元",
+        "风险偏好"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "AI boom reshapes FX markets through equity hedging flows"
+    },
+    {
+      "title": "Asia Bets on Biofuels to Dodge Middle East Oil Shortages",
+      "slug": "2026-07-04-asia-bets-on-biofuels-to-dodge-middle-east-oil-s",
+      "published": "2026-07-04",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "原油",
+        "供给冲击"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "Interest in developing biofuels has fluctuated and has been strongly driven by global energy trends. In 2024, following "
+    },
+    {
+      "title": "Courts and Congress Are Undoing Trump's War on Wind Power",
+      "slug": "2026-07-04-courts-and-congress-are-undoing-trump-s-war-on-w",
+      "published": "2026-07-04",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "gold",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "wti"
+      ],
+      "tags": [
+        "清洁能源",
+        "政策支持",
+        "风电",
+        "绿色转型"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "美国风电政策获得政治和司法层面支持，推动清洁能源发展，利好可再生能源相关资产及绿色经济相关股票"
+    },
+    {
+      "title": "Iran conflict strengthens case for power, metals over oil: strategist",
+      "slug": "2026-07-04-iran-conflict-strengthens-case-for-power-metals",
+      "published": "2026-07-04",
+      "assets": [
+        "copper",
+        "csi300",
+        "ewj",
+        "fez",
+        "gold",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "wti"
+      ],
+      "tags": [
+        "地缘政治",
+        "能源",
+        "金属",
+        "股市"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "地缘冲突推动电力与金属需求预期，削弱原油吸引力"
+    },
+    {
+      "title": "Is AI inflation transitory?",
+      "slug": "2026-07-04-is-ai-inflation-transitory",
+      "published": "2026-07-04",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "人工智能",
+        "通胀",
+        "货币政策"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "人工智能相关技术发展可能推动通胀持续，利好科技股表现"
+    },
+    {
+      "title": "Morgan Stanley shifts to defensive European energy stocks, upgrades Galp",
+      "slug": "2026-07-04-morgan-stanley-shifts-to-defensive-european-ener",
+      "published": "2026-07-04",
+      "assets": [
+        "fez"
+      ],
+      "tags": [
+        "能源",
+        "防御性配置",
+        "评级上调",
+        "欧洲股市"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "摩根士丹利转向防御性欧洲能源股，上调Galp评级。"
+    },
+    {
+      "title": "Mortgage and refinance interest rates today, Saturday, July 4: Rates are mixed this July 4 holiday",
+      "slug": "2026-07-04-mortgage-and-refinance-interest-rates-today-satu",
+      "published": "2026-07-04",
+      "assets": [
+        "cgb10y_fut",
+        "us10y_zn"
+      ],
+      "tags": [
+        "房贷利率",
+        "利率走势",
+        "债券市场"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "美国房贷及再融资利率变动，显示长期国债利率走低，对债券市场构成利多影响。"
+    },
+    {
+      "title": "The S&P 500 Is Up 10% in 2026 -- What Long-Term Investors Should Do Next",
+      "slug": "2026-07-04-the-s-p-500-is-up-10-in-2026-what-long-term-inve",
+      "published": "2026-07-04",
+      "assets": [
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "股市表现",
+        "估值水平",
+        "投资策略",
+        "科技股",
+        "市场轮动"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "美股主要指数年内表现强劲，但高估值引发对未来回报的担忧，建议投资者考虑分散配置以应对潜在风险。"
+    },
+    {
+      "title": "Why June’s jobs and inflation data are bullish for bonds",
+      "slug": "2026-07-04-why-june-s-jobs-and-inflation-data-are-bullish-f",
+      "published": "2026-07-04",
+      "assets": [
+        "cgb10y_fut",
+        "us10y_zn"
+      ],
+      "tags": [
+        "就业数据",
+        "通胀数据",
+        "债券",
+        "利率预期"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "6月就业和通胀数据利好债券市场"
+    },
+    {
+      "title": "Christine Lagarde leaves door open to early ECB exit, as she mulls French politics",
+      "slug": "2026-07-03-christine-lagarde-leaves-door-open-to-early-ecb",
+      "published": "2026-07-03",
+      "assets": [
+        "cgb10y_fut",
+        "fez",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny"
+      ],
+      "tags": [
+        "欧洲央行",
+        "货币政策",
+        "法国政治",
+        "欧元",
+        "利率前景",
+        "市场波动"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "拉加德暗示可能提前结束欧央行任期，引发市场对欧元区货币政策前景及法国政治走向的担忧，利多美股与美元，利空欧债与欧元。"
+    },
+    {
+      "title": "Colombia's Oil and Gas Reserves Keep Shrinking",
+      "slug": "2026-07-03-colombia-s-oil-and-gas-reserves-keep-shrinking",
+      "published": "2026-07-03",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "石油储备",
+        "投资减少",
+        "勘探失败",
+        "油价下行"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "哥伦比亚石油和天然气储备持续萎缩，因投资不足和勘探成功率低导致行业前景黯淡。"
+    },
+    {
+      "title": "Copper's Next Move Depends On Washington, Not The Strait Of Hormuz",
+      "slug": "2026-07-03-copper-s-next-move-depends-on-washington-not-the",
+      "published": "2026-07-03",
+      "assets": [
+        "copper"
+      ],
+      "tags": [
+        "铜",
+        "地缘政治",
+        "航运",
+        "中东局势"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "铜价走势受华盛顿政策影响大于霍尔木兹海峡局势变化"
+    },
+    {
+      "title": "Dollar slides from 13-month high on cooling payrolls; euro set for weekly gains",
+      "slug": "2026-07-03-dollar-slides-from-13-month-high-on-cooling-payr",
+      "published": "2026-07-03",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "美元走势",
+        "就业数据",
+        "欧元走势"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "美元从13个月高点回落，因就业数据降温，欧元有望周线收涨"
+    },
+    {
+      "title": "Germany’s 2-year yield ticks up after hitting lowest level since mid-April",
+      "slug": "2026-07-03-germany-s-2-year-yield-ticks-up-after-hitting-lo",
+      "published": "2026-07-03",
+      "assets": [
+        "cgb10y_fut",
+        "us10y_zn"
+      ],
+      "tags": [
+        "德国国债收益率",
+        "利率走势",
+        "债券市场"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "德国两年期国债收益率回升，显示市场对利率前景预期变化"
+    },
+    {
+      "title": "Gold and Silver Approach Key Resistance Levels",
+      "slug": "2026-07-03-gold-and-silver-approach-key-resistance-levels",
+      "published": "2026-07-03",
+      "assets": [
+        "gold",
+        "usdcny"
+      ],
+      "tags": [
+        "贵金属",
+        "就业数据",
+        "美联储政策",
+        "美元走势"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "弱于预期的美国就业数据缓解了加息担忧，推动黄金和白银连续第三日反弹，同时美元走弱进一步支撑贵金属上涨。"
+    },
+    {
+      "title": "Gold Eyes Bigger Recovery as Weak Payrolls Dent Rate Hike Bets",
+      "slug": "2026-07-03-gold-eyes-bigger-recovery-as-weak-payrolls-dent",
+      "published": "2026-07-03",
+      "assets": [
+        "gold",
+        "usdcny"
+      ],
+      "tags": [
+        "黄金",
+        "就业数据",
+        "利率预期",
+        "美元指数"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "弱于预期的美国就业数据削弱了美联储加息预期，推动黄金反弹并导致美元指数回落。"
+    },
+    {
+      "title": "Gold Rebounds as Weak Jobs Data Cuts Fed-Hike Bets",
+      "slug": "2026-07-03-gold-rebounds-as-weak-jobs-data-cuts-fed-hike-be",
+      "published": "2026-07-03",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金",
+        "就业数据",
+        "美联储加息预期",
+        "贵金属"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "弱于预期的就业数据降低美联储加息预期，推动黄金反弹。"
+    },
+    {
+      "title": "Gold: This Ratio Could Reveal Whether the Yellow Metal Is Ready to Rebound",
+      "slug": "2026-07-03-gold-this-ratio-could-reveal-whether-the-yellow",
+      "published": "2026-07-03",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金",
+        "利率预期",
+        "非农数据",
+        "美元走势",
+        "技术分析"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "非农数据疲软导致利率预期下降，利好黄金反弹，黄金与科技股比价触及关键低位，技术面显现复苏信号。"
+    },
+    {
+      "title": "Gold to Rebound After a Brutal Pullback? What the Charts Are Warning for Metals",
+      "slug": "2026-07-03-gold-to-rebound-after-a-brutal-pullback-what-the",
+      "published": "2026-07-03",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金反弹",
+        "技术分析",
+        "贵金属",
+        "市场波动"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "黄金在经历大幅回调后可能出现反弹，技术图表显示潜在的长期上涨机会，投资者需谨慎应对市场波动。"
+    },
+    {
+      "title": "Hormuz Turns Oil Outlooks Into a Guessing Game",
+      "slug": "2026-07-03-hormuz-turns-oil-outlooks-into-a-guessing-game",
+      "published": "2026-07-03",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "地缘政治",
+        "原油供应",
+        "市场预测"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "霍尔木兹海峡局势使2026-2027年全球原油供应前景变得不确定，市场预测趋于谨慎。"
+    },
+    {
+      "title": "Mortgage and refinance interest rates today, Friday, July 3: Rates mostly higher again today",
+      "slug": "2026-07-03-mortgage-and-refinance-interest-rates-today-frid",
+      "published": "2026-07-03",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn"
+      ],
+      "tags": [
+        "房贷利率",
+        "利率上升",
+        "美国国债",
+        "股市",
+        "房地产",
+        "货币政策"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "美国房贷利率普遍上升，反映市场利率环境趋紧，对债券和股市构成压力，尤其对利率敏感的科技股和房地产相关板块不利。"
+    },
+    {
+      "title": "Oil Set for Fourth Straight Weekly Loss as Hormuz Flows Return",
+      "slug": "2026-07-03-oil-set-for-fourth-straight-weekly-loss-as-hormu",
+      "published": "2026-07-03",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "原油",
+        "地缘政治",
+        "供应恢复",
+        "市场情绪"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "因霍尔木兹海峡恢复通航及油流增加，原油价格连续第四周下跌，市场供应担忧缓解导致油价承压。"
+    },
+    {
+      "title": "Oil Under Pressure Amid Rebound in Middle East Flows",
+      "slug": "2026-07-03-oil-under-pressure-amid-rebound-in-middle-east-f",
+      "published": "2026-07-03",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "原油供应",
+        "地缘政治缓解",
+        "库存变化",
+        "期货曲线"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "中东航线流量恢复导致原油市场承压，ICE Brent期货曲线进入远期升水，显示即期市场供应过剩。"
+    },
+    {
+      "title": "OPEC Oil Production Jumps, But Gulf Supply Is Still Far From Normal",
+      "slug": "2026-07-03-opec-oil-production-jumps-but-gulf-supply-is-sti",
+      "published": "2026-07-03",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "OPEC产量",
+        "地缘政治",
+        "原油供应",
+        "中东局势"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "OPEC原油产量在6月显著回升，但受地缘政治影响，供应仍远未恢复至危机前水平，支撑原油价格。"
+    },
+    {
+      "title": "Output Gap, Potential Growth Rate, and Labor Market Indicators",
+      "slug": "2026-07-03-output-gap-potential-growth-rate-and-labor-marke",
+      "published": "2026-07-03",
+      "assets": [
+        "ewj",
+        "usdcny"
+      ],
+      "tags": [
+        "产出缺口",
+        "潜在增长率",
+        "劳动力市场",
+        "日本经济",
+        "货币政策",
+        "工资通胀"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "日本央行更新产出缺口、潜在增长率及劳动力市场指标，反映经济供需平衡与价格趋势，对日股和美元兑人民币构成中性偏多影响。"
+    },
+    {
+      "title": "Sterling today: Pound gains as dollar slumps on weak U.S. payrolls",
+      "slug": "2026-07-03-sterling-today-pound-gains-as-dollar-slumps-on-w",
+      "published": "2026-07-03",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "英镑",
+        "美元",
+        "就业数据"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "英镑因美元走弱而上涨，主要受美国疲软就业数据影响。"
+    },
+    {
+      "title": "Tesla quarterly deliveries set record; European recovery raises hopes of annual growth",
+      "slug": "2026-07-03-tesla-quarterly-deliveries-set-record-european-r",
+      "published": "2026-07-03",
+      "assets": [
+        "csi300",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "特斯拉",
+        "交付量",
+        "欧洲市场",
+        "增长预期"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "特斯拉季度交付量创纪录，欧洲市场复苏提振全年增长预期，利好全球股市"
+    },
+    {
+      "title": "Alibaba-affiliate Ant Group rushes into humanoid robots with a dozen deals in 18 months",
+      "slug": "2026-07-02-alibaba-affiliate-ant-group-rushes-into-humanoid",
+      "published": "2026-07-02",
+      "assets": [
+        "csi300",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "人工智能",
+        "机器人",
+        "投资",
+        "科技",
+        "中国科技",
+        "Alibaba"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "阿里系蚂蚁集团加速布局人形机器人领域，年内已投资12家相关企业，推动AI与机器人融合发展，利好科技股及中国科技企业。"
+    },
+    {
+      "title": "BHP seeks to restart Cerro Colorado mine with $1.5B investment",
+      "slug": "2026-07-02-bhp-seeks-to-restart-cerro-colorado-mine-with-1",
+      "published": "2026-07-02",
+      "assets": [
+        "copper",
+        "gold"
+      ],
+      "tags": [
+        "铜矿重启",
+        "水资源解决方案",
+        "矿业投资",
+        "大宗商品",
+        "黄金",
+        "铜"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "BHP计划投资15亿美元重启智利Cerro Colorado铜矿，采用脱盐水和浸出技术，推动铜供应预期改善，利好铜及黄金等大宗商品。"
+    },
+    {
+      "title": "Canadian dollar reaches 10-day high on US jobs data",
+      "slug": "2026-07-02-canadian-dollar-reaches-10-day-high-on-us-jobs-d",
+      "published": "2026-07-02",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "美元指数",
+        "汇率",
+        "就业数据"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "美元因美国就业数据强劲而走强，加元兑美元走弱"
+    },
+    {
+      "title": "Carney Backs B.C. Tanker Ban as Alberta Unveils Pipeline Plan",
+      "slug": "2026-07-02-carney-backs-b-c-tanker-ban-as-alberta-unveils-p",
+      "published": "2026-07-02",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "原油出口",
+        "管道建设",
+        "加拿大能源政策"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "加拿大联邦政府重申对不列颠哥伦比亚省北海岸油轮禁令，打击阿尔伯塔省西海岸管道计划，利空原油市场"
+    },
+    {
+      "title": "Chinese copper foil maker Londian Wason New Energy Tech files for US IPO",
+      "slug": "2026-07-02-chinese-copper-foil-maker-londian-wason-new-ener",
+      "published": "2026-07-02",
+      "assets": [
+        "copper"
+      ],
+      "tags": [
+        "铜箔",
+        "IPO",
+        "新能源"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "中国铜箔制造商 Londian Wason 新能源科技提交美国IPO申请，利好铜资产"
+    },
+    {
+      "title": "Citadel's hedge funds post broad first-half gains, top performing strategy sidesteps quant selloff",
+      "slug": "2026-07-02-citadel-s-hedge-funds-post-broad-first-half-gain",
+      "published": "2026-07-02",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "csi300",
+        "ewj",
+        "fez",
+        "gold",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        " hedge funds ",
+        "市场波动",
+        "量化投资",
+        "科技股",
+        "美联储政策",
+        "油价",
+        "人工智能",
+        "资产配置"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "Citadel旗下多策略基金在2026年上半年取得显著收益，尤其在量化投资回调期间表现稳健，反映市场对科技股和宏观政策预期的积极变化。"
+    },
+    {
+      "title": "Crude Oil Flows Through Hormuz Signal Relief for Saudi Exports",
+      "slug": "2026-07-02-crude-oil-flows-through-hormuz-signal-relief-for",
+      "published": "2026-07-02",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "原油出口",
+        "霍尔木兹海峡",
+        "沙特原油",
+        "亚洲需求"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "沙特原油通过霍尔木兹海峡出口恢复，推动原油供应改善，利好原油市场。"
+    },
+    {
+      "title": "Crude Oil’s Hormuz Risk Premium Is Unwinding Into a Supply Glut",
+      "slug": "2026-07-02-crude-oil-s-hormuz-risk-premium-is-unwinding-int",
+      "published": "2026-07-02",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "地缘风险缓解",
+        "供应恢复",
+        "油价下跌"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "地缘风险缓解导致霍尔木兹海峡航运恢复，全球原油供应迅速回升，油价显著下跌。"
+    },
+    {
+      "title": "Dollar falls as June jobs report misses expectations, yen surges",
+      "slug": "2026-07-02-dollar-falls-as-june-jobs-report-misses-expectat",
+      "published": "2026-07-02",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "美元指数",
+        "就业数据",
+        "日元",
+        "汇率波动"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美元因6月就业数据不及预期而走弱，日元大幅上涨"
+    },
+    {
+      "title": "Dow scores fresh record despite tepid jobs report. Why the rest of 2026 is about workers.",
+      "slug": "2026-07-02-dow-scores-fresh-record-despite-tepid-jobs-repor",
+      "published": "2026-07-02",
+      "assets": [
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "股市",
+        "就业数据",
+        "经济前景"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "尽管就业报告疲软，道指再创历史新高，市场关注2026年劳动力市场对经济的影响。"
+    },
+    {
+      "title": "Europe’s Energy Transition Stalls as Heat Wave Exposes the Cost of Inaction",
+      "slug": "2026-07-02-europe-s-energy-transition-stalls-as-heat-wave-e",
+      "published": "2026-07-02",
+      "assets": [
+        "copper",
+        "csi300",
+        "fez",
+        "qqq",
+        "spy",
+        "wti"
+      ],
+      "tags": [
+        "能源转型",
+        "气候危机",
+        "碳排放",
+        "绿色投资",
+        "热浪"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "欧洲能源转型因热浪暴露进展滞后，市场担忧投资受阻，利空能源与工业金属及全球股市"
+    },
+    {
+      "title": "Gold Futures Rally Looks Vulnerable as Resistance Builds Near $4,124",
+      "slug": "2026-07-02-gold-futures-rally-looks-vulnerable-as-resistanc",
+      "published": "2026-07-02",
+      "assets": [
+        "gold",
+        "usdcny"
+      ],
+      "tags": [
+        "黄金价格",
+        "美元指数",
+        "就业数据",
+        "美联储政策",
+        "地缘政治",
+        "日元汇率"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "黄金期货上涨受阻于关键阻力位，美元因美联储鹰派言论走强，日元因市场猜测日本央行干预而走高。"
+    },
+    {
+      "title": "Gold Rebounds After Payrolls Miss Rewrites September Fed Pricing",
+      "slug": "2026-07-02-gold-rebounds-after-payrolls-miss-rewrites-septe",
+      "published": "2026-07-02",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "就业数据",
+        "美联储利率预期",
+        "黄金",
+        "贵金属",
+        "市场情绪"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "美国6月非农就业数据远低于预期，削弱了美联储9月加息的预期，推动黄金价格大幅反弹。"
+    },
+    {
+      "title": "Gold’s $4,000 Defense Tests Whether the Correction Has Finally Exhausted",
+      "slug": "2026-07-02-gold-s-4-000-defense-tests-whether-the-correctio",
+      "published": "2026-07-02",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金",
+        "就业数据",
+        "美联储利率预期",
+        "避险情绪",
+        "技术支撑"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "弱于预期的美国6月就业数据降低美联储加息预期，提振黄金避险需求，金价反弹至4050-4100美元区间，守住4000美元关键支撑位。"
+    },
+    {
+      "title": "Gold Stabilizes Ahead of Payrolls as Yields, US Dollar Shape Sentiment",
+      "slug": "2026-07-02-gold-stabilizes-ahead-of-payrolls-as-yields-us-d",
+      "published": "2026-07-02",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金",
+        "就业数据",
+        "美联储利率",
+        "国债收益率",
+        "美元指数"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "弱于预期的就业数据缓解了美联储加息担忧，推动黄金上涨，市场关注即将发布的非农报告对利率前景的影响。"
+    },
+    {
+      "title": "HELOC and home equity loan rates, Friday, July 3: With rates rising, understand how HELOC/HEL rates work",
+      "slug": "2026-07-02-heloc-and-home-equity-loan-rates-friday-july-3-w",
+      "published": "2026-07-02",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "csi300",
+        "ewj",
+        "fez",
+        "gold",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "房贷利率",
+        "利率上升",
+        "美联储政策",
+        "家庭资产",
+        "信贷市场"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国房贷利率上升引发对家庭资产和信贷市场的关注，整体利空权益类资产，利多债券与美元。"
+    },
+    {
+      "title": "Iran Exports Crude at 20% Premium Even as Unsold Barrels Pile Up at Sea",
+      "slug": "2026-07-02-iran-exports-crude-at-20-premium-even-as-unsold",
+      "published": "2026-07-02",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "伊朗原油出口",
+        "原油库存",
+        "地缘政治",
+        "油价上涨"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "伊朗原油出口量增加且以20%溢价出售，尽管部分原油滞留在海上，推动国际油价回升至战前水平。"
+    },
+    {
+      "title": "Iran Tightens Grip on Strait of Hormuz Tanker Traffic",
+      "slug": "2026-07-02-iran-tightens-grip-on-strait-of-hormuz-tanker-tr",
+      "published": "2026-07-02",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "地缘政治",
+        "航运安全",
+        "原油供应"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "伊朗加强霍尔木兹海峡油轮管控，引发原油供应担忧"
+    },
+    {
+      "title": "Job seekers giving up: Labor force participation rate falls to lowest in 50 years, outside of Covid era",
+      "slug": "2026-07-02-job-seekers-giving-up-labor-force-participation",
+      "published": "2026-07-02",
+      "assets": [
+        "qqq",
+        "spy",
+        "us10y_zn"
+      ],
+      "tags": [
+        "劳动力参与率",
+        "失业率",
+        "就业数据",
+        "经济放缓",
+        "美联储政策预期"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国劳动力参与率降至50年最低，失业率下降因求职者退出劳动力市场，显示经济潜在疲软，利空美股，利好美债。"
+    },
+    {
+      "title": "June Jobs Report Shows US Labor Market Making Slower but Steady Gains",
+      "slug": "2026-07-02-june-jobs-report-shows-us-labor-market-making-sl",
+      "published": "2026-07-02",
+      "assets": [
+        "qqq",
+        "spy",
+        "us10y_zn"
+      ],
+      "tags": [
+        "就业数据",
+        "劳动力市场",
+        "美联储政策预期"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国6月就业数据增速放缓但依然稳健，失业率下降，利好股市，利空债券。"
+    },
+    {
+      "title": "Kuwait Wants Consortiums to Bid for $7 Billion Oil Pipeline Deal",
+      "slug": "2026-07-02-kuwait-wants-consortiums-to-bid-for-7-billion-oi",
+      "published": "2026-07-02",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "石油管道",
+        "基础设施投资",
+        "中东能源"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "科威特寻求 consortium 投标70亿美元石油管道项目，推动国际资本参与，利好原油资产"
+    },
+    {
+      "title": "Kyrgyzstan Scrambles for Backup Fuel Supplies as Russian Shortage Bites",
+      "slug": "2026-07-02-kyrgyzstan-scrambles-for-backup-fuel-supplies-as",
+      "published": "2026-07-02",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "燃料供应",
+        "地缘风险",
+        "能源安全"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "吉尔吉斯斯坦因俄罗斯燃料短缺担忧进口供应中断，寻求多方支援以保障燃料供应。"
+    },
+    {
+      "title": "Latest Jobs Report Shows Labor Market Is Not a Source of Inflationary Pressure",
+      "slug": "2026-07-02-latest-jobs-report-shows-labor-market-is-not-a-s",
+      "published": "2026-07-02",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn"
+      ],
+      "tags": [
+        "就业报告",
+        "通胀压力",
+        "货币政策",
+        "美联储"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "最新就业报告显示劳动力市场未构成通胀压力，美联储主席表态将坚定追求价格稳定，利好债券与股市"
+    },
+    {
+      "title": "Mortgage rates hover near 6.5% as other housing metrics show modest improvement: Mortgage rates today, July 2, 2026",
+      "slug": "2026-07-02-mortgage-rates-hover-near-6-5-as-other-housing-m",
+      "published": "2026-07-02",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "csi300",
+        "gold",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "房贷利率",
+        "就业数据",
+        "美联储政策",
+        "房地产市场",
+        "住房需求",
+        "利率预期"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国房贷利率维持在6.5%附近，就业数据疲软或降低美联储加息预期，对债券有利，但对股市和大宗商品构成压力。"
+    },
+    {
+      "title": "Newcore Gold hits above-reserve grade at Nyam deposit",
+      "slug": "2026-07-02-newcore-gold-hits-above-reserve-grade-at-nyam-de",
+      "published": "2026-07-02",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金勘探",
+        "高品位矿化",
+        "资源增长",
+        "钻探进展"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "Newcore Gold在加纳Enchi项目Nyam金矿钻探中发现高于储量品位的矿化，显示资源增长潜力，利好黄金资产。"
+    },
+    {
+      "title": "Nvidia is betting on a trillion-dollar robotics boom. Here is the hidden way to trade it.",
+      "slug": "2026-07-02-nvidia-is-betting-on-a-trillion-dollar-robotics",
+      "published": "2026-07-02",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "机器人",
+        "科技股",
+        "NVIDIA"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "NVIDIA押注万亿级机器人产业增长，相关科技股有望受益。"
+    },
+    {
+      "title": "Oil Glut Calls May Be Getting Ahead of Reality",
+      "slug": "2026-07-02-oil-glut-calls-may-be-getting-ahead-of-reality",
+      "published": "2026-07-02",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "原油供应",
+        "地缘政治",
+        "航运通道"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "原油价格下跌，尽管霍尔木兹海峡航运恢复快于预期，但供应过剩担忧仍存。"
+    },
+    {
+      "title": "OPEC+ Plans Another Output Hike. The Market Barely Notices.",
+      "slug": "2026-07-02-opec-plans-another-output-hike-the-market-barely",
+      "published": "2026-07-02",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "OPEC+增产",
+        "原油供应",
+        "地缘政治"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "OPEC+计划继续增加原油产量，市场反应平淡，利空原油价格。"
+    },
+    {
+      "title": "Retail giant exits U.S. fashion after multi-million-dollar scandal",
+      "slug": "2026-07-02-retail-giant-exits-u-s-fashion-after-multi-milli",
+      "published": "2026-07-02",
+      "assets": [
+        "csi300",
+        "hsi_2800",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "零售业",
+        "消费支出",
+        "企业丑闻",
+        "美国经济",
+        "股市波动"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "零售巨头因财务丑闻和消费疲软退出美国时尚市场，拖累相关股市表现。"
+    },
+    {
+      "title": "Russia's Fuel Crisis Spreads to Central Asia as Drone Strikes Escalate",
+      "slug": "2026-07-02-russia-s-fuel-crisis-spreads-to-central-asia-as",
+      "published": "2026-07-02",
+      "assets": [
+        "copper",
+        "gold",
+        "wti"
+      ],
+      "tags": [
+        "能源危机",
+        "地缘冲突",
+        "燃料短缺",
+        "供应链中断"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "乌克兰无人机袭击导致俄罗斯能源基础设施受损，引发燃料短缺并波及中亚，推升原油、铜和黄金等大宗商品价格。"
+    },
+    {
+      "title": "South African rand gains as dollar weakens on U.S. jobs data",
+      "slug": "2026-07-02-south-african-rand-gains-as-dollar-weakens-on-u",
+      "published": "2026-07-02",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "美元指数",
+        "汇率",
+        "南非兰特"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "美元指数走弱带动南非兰特走强"
+    },
+    {
+      "title": "South Korea’s currency chief says in talks with Japan, allies",
+      "slug": "2026-07-02-south-korea-s-currency-chief-says-in-talks-with",
+      "published": "2026-07-02",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "汇率",
+        "韩国",
+        "日本",
+        "外交对话"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "韩国货币主管在与日本及盟友的会谈中发言，涉及汇率相关议题。"
+    },
+    {
+      "title": "Sterling today: Pound firms as dollar softens ahead of U.S. jobs data",
+      "slug": "2026-07-02-sterling-today-pound-firms-as-dollar-softens-ahe",
+      "published": "2026-07-02",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "英镑",
+        "美元指数",
+        "就业数据"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "英镑因美元走弱而走强，市场关注美国就业数据对汇市的影响。"
+    },
+    {
+      "title": "Tehran Is Racing the Clock to Export as Much Oil as Possible",
+      "slug": "2026-07-02-tehran-is-racing-the-clock-to-export-as-much-oil",
+      "published": "2026-07-02",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "伊朗原油出口",
+        "地缘政治",
+        "油价",
+        "贸易谈判"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "伊朗在美伊达成60天谈判协议后加速原油出口，推动油价走强"
+    },
+    {
+      "title": "The Energy Report: US Oil Dominance Becomes Self-Evident",
+      "slug": "2026-07-02-the-energy-report-us-oil-dominance-becomes-self",
+      "published": "2026-07-02",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "美国石油主导地位",
+        "能源独立",
+        "页岩革命",
+        "全球油价",
+        "出口增长"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "美国凭借页岩革命实现能源独立并成为全球最大的石油和天然气生产国，原油产量和净出口量均创历史新高，进一步巩固其全球能源主导地位。"
+    },
+    {
+      "title": "The U.S. Has More SMR Projects Than Its Four Closest Rivals Combined",
+      "slug": "2026-07-02-the-u-s-has-more-smr-projects-than-its-four-clos",
+      "published": "2026-07-02",
+      "assets": [
+        "copper",
+        "gold",
+        "wti"
+      ],
+      "tags": [
+        "小型模块化反应堆",
+        "核能发展",
+        "能源转型",
+        "清洁能源"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "美国在小型模块化核反应堆项目数量上领先全球，推动清洁能源发展，利好原油、铜和黄金等大宗商品。"
+    },
+    {
+      "title": "Trading Gold Over Today’s NFP Release",
+      "slug": "2026-07-02-trading-gold-over-today-s-nfp-release",
+      "published": "2026-07-02",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "非农数据",
+        "就业报告",
+        "美联储加息预期",
+        "黄金走势"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "弱就业数据缓解美联储加息担忧，推动黄金价格上涨。"
+    },
+    {
+      "title": "Trump Administration Advances New California Oil Lease Plans",
+      "slug": "2026-07-02-trump-administration-advances-new-california-oil",
+      "published": "2026-07-02",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "石油开采",
+        "能源政策",
+        "美国联邦土地",
+        "页岩油"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "特朗普政府推进加州新一轮石油租赁计划，利好原油价格"
+    },
+    {
+      "title": "Trump blasts ‘hostile’ Fed and says Warsh ‘has to do what he has to do’ on interest rates",
+      "slug": "2026-07-02-trump-blasts-hostile-fed-and-says-warsh-has-to-d",
+      "published": "2026-07-02",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn"
+      ],
+      "tags": [
+        "美联储",
+        "利率政策",
+        "特朗普",
+        "货币政策"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "特朗普批评美联储态度强硬，暗示其对官员利率决策施压，引发市场对货币政策走向的担忧，利空债券、利空股市"
+    },
+    {
+      "title": "Trump’s billion-dollar crypto haul triggers some everyday investors sitting on big losses",
+      "slug": "2026-07-02-trump-s-billion-dollar-crypto-haul-triggers-some",
+      "published": "2026-07-02",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "csi300",
+        "gold",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "加密货币",
+        "特朗普",
+        "投资者情绪",
+        "市场波动"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "特朗普的巨额加密货币收益引发普通投资者亏损的讨论，市场情绪趋于中性。"
+    },
+    {
+      "title": "U.S. bond yields  tick up on hawkish Warsh rhetoric; payrolls awaited",
+      "slug": "2026-07-02-u-s-bond-yields-tick-up-on-hawkish-warsh-rhetori",
+      "published": "2026-07-02",
+      "assets": [
+        "us10y_zn"
+      ],
+      "tags": [
+        "美国债券收益率",
+        "鹰派言论",
+        "非农数据"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "美国债券收益率因鹰派言论小幅上升，市场静待非农数据公布。"
+    },
+    {
+      "title": "U.S. job creation cools in June with payrolls growth of just 57,000; unemployment rate at 4.2%",
+      "slug": "2026-07-02-u-s-job-creation-cools-in-june-with-payrolls-gro",
+      "published": "2026-07-02",
+      "assets": [
+        "qqq",
+        "spy",
+        "us10y_zn"
+      ],
+      "tags": [
+        "就业数据",
+        "美联储利率预期",
+        "股市表现",
+        "国债收益率"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "美国6月就业增长大幅放缓，失业率下降主要因劳动力参与率下滑，市场预期美联储加息推迟，推动股市上涨和国债收益率下行。"
+    },
+    {
+      "title": "UAE Rewrites Offshore Oil Pricing To Capture Asian Markets",
+      "slug": "2026-07-02-uae-rewrites-offshore-oil-pricing-to-capture-asi",
+      "published": "2026-07-02",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "原油定价",
+        "中东原油",
+        "全球基准",
+        "能源市场"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "阿联酋重塑离岸原油定价机制以抢占亚洲市场，推动穆尔班原油成为全球主要能源定价基准。"
+    },
+    {
+      "title": "US Department of Energy awards $75M to recover critical minerals from coal feedstocks",
+      "slug": "2026-07-02-us-department-of-energy-awards-75m-to-recover-cr",
+      "published": "2026-07-02",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "gold",
+        "us10y_zn",
+        "wti"
+      ],
+      "tags": [
+        "关键矿产",
+        "能源转型",
+        "美国政府投资",
+        "煤炭资源利用",
+        "稀土元素",
+        "供应链安全"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国能源部拨款7500万美元支持从煤基原料中回收关键矿产，利好铜、黄金等关键矿产相关资产，同时可能影响能源与债券市场"
+    },
+    {
+      "title": "US resumes dollar transfers to Iraq, NYT reports",
+      "slug": "2026-07-02-us-resumes-dollar-transfers-to-iraq-nyt-reports",
+      "published": "2026-07-02",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "美元",
+        "外汇",
+        "国际关系"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "美国恢复向伊拉克的美元转账，利好美元指数"
+    },
+    {
+      "title": "Where can I invest my kid’s ‘Trump account’ money? The Treasury Department just answered that question.",
+      "slug": "2026-07-02-where-can-i-invest-my-kid-s-trump-account-money",
+      "published": "2026-07-02",
+      "assets": [
+        "qqq",
+        "spy",
+        "us10y_zn"
+      ],
+      "tags": [
+        "特朗普",
+        "财政政策",
+        "国债",
+        "股市",
+        "投资",
+        "儿童账户"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "特朗普相关财政政策预期提振美债与美股市场"
+    },
+    {
+      "title": "World Cup could boost the June jobs report by 40,000, Goldman estimates",
+      "slug": "2026-07-02-world-cup-could-boost-the-june-jobs-report-by-40",
+      "published": "2026-07-02",
+      "assets": [
+        "qqq",
+        "spy",
+        "us10y_zn"
+      ],
+      "tags": [
+        "就业数据",
+        "世界杯",
+        "经济展望",
+        "非农",
+        "劳动力市场"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "世界杯带动就业增长预期，利好美股，利空美债。"
+    },
+    {
+      "title": "美国6月新增就业岗位5.7万个，逊于华尔街预期",
+      "slug": "2026-07-02-美国6月新增就业岗位5-7万个-逊于华尔街预期",
+      "published": "2026-07-02",
+      "assets": [
+        "cgb10y_fut",
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn"
+      ],
+      "tags": [
+        "美国就业",
+        "美联储加息预期",
+        "经济放缓"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "美国6月新增就业岗位大幅低于预期，导致市场对美联储加息的预期降温，利空美股及全球股市，利多债券市场。"
+    },
+    {
+      "title": "Bloom Energy Rises On Big AI Infrastructure Expansion",
+      "slug": "2026-07-01-bloom-energy-rises-on-big-ai-infrastructure-expa",
+      "published": "2026-07-01",
+      "assets": [
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "AI基础设施",
+        "数据中心",
+        "能源科技"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "Bloom Energy与Brookfield扩大AI数据中心能源项目合作，推动其股价上涨，利好纳斯达克及标普500科技板块。"
+    },
+    {
+      "title": "Dollar firms as U.S. economic data, Warsh comments keep rate hike bets elevated",
+      "slug": "2026-07-01-dollar-firms-as-u-s-economic-data-warsh-comments",
+      "published": "2026-07-01",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "美元指数",
+        "美联储利率预期",
+        "经济数据"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "美元走强，因美国经济数据及官员言论提振加息预期"
+    },
+    {
+      "title": "Energy Transition Minerals receives regional approvals for Penouta mine restart in Spain",
+      "slug": "2026-07-01-energy-transition-minerals-receives-regional-app",
+      "published": "2026-07-01",
+      "assets": [
+        "copper",
+        "gold",
+        "wti"
+      ],
+      "tags": [
+        "能源转型",
+        "关键矿产",
+        "欧洲矿产开发",
+        "供应链安全",
+        "半导体材料"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "欧洲推进本土关键矿产开发，Penouta矿重启获批准，利好铜、黄金等关键金属"
+    },
+    {
+      "title": "FedEx sells supply chain unit to CMA CGM for $1.4B",
+      "slug": "2026-07-01-fedex-sells-supply-chain-unit-to-cma-cgm-for-1-4",
+      "published": "2026-07-01",
+      "assets": [],
+      "tags": [
+        "物流",
+        "企业并购",
+        "供应链"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "FedEx出售其供应链业务给CMA CGM，聚焦核心货运与包裹递送服务。"
+    },
+    {
+      "title": "Gold prices today, Wednesday, July 1: Prices remain below $4,100, but could have plenty of room to rise",
+      "slug": "2026-07-01-gold-prices-today-wednesday-july-1-prices-remain",
+      "published": "2026-07-01",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金价格",
+        "美联储政策",
+        "央行需求",
+        "通胀预期"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "尽管黄金价格短期承压，但分析师预计受央行持续需求推动，金价仍有上涨空间，尤其警惕美联储加息对市场的潜在影响。"
+    },
+    {
+      "title": "GreenMet plans $150M rare earth processing hub in West Virginia",
+      "slug": "2026-07-01-greenmet-plans-150m-rare-earth-processing-hub-in",
+      "published": "2026-07-01",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "gold",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "稀土",
+        "关键矿产",
+        "供应链安全",
+        "清洁能源",
+        "美国本土化",
+        "采矿",
+        "加工",
+        "私人投资",
+        "就业",
+        "地缘政治"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国计划在西弗吉尼亚州建设1.5亿美元稀土加工枢纽，推动关键矿产本土化，利好稀土相关金属及能源与金融资产"
+    },
+    {
+      "title": "Here’s What Supported Lattice Semiconductor Corp.’s (LSCC) Revenue Growth",
+      "slug": "2026-07-01-here-s-what-supported-lattice-semiconductor-corp",
+      "published": "2026-07-01",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "csi300",
+        "ewj",
+        "fez",
+        "gold",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "半导体",
+        "AI基础设施",
+        "数据中心",
+        "供应链",
+        "地缘政治",
+        "通胀",
+        "货币政策"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "半导体公司Lattice Semiconductor因AI和数据中心需求强劲推动营收增长，获投资机构青睐，整体市场环境利好科技股，但对债券、大宗商品及汇率影响中性。"
+    },
+    {
+      "title": "Here’s Why TimesSquare Mid Cap Growth Strategy Added Insmed (INSM)",
+      "slug": "2026-07-01-here-s-why-timessquare-mid-cap-growth-strategy-a",
+      "published": "2026-07-01",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "csi300",
+        "ewj",
+        "fez",
+        "gold",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "生物科技",
+        "医疗健康",
+        "公司投资",
+        "市场情绪",
+        "地缘政治",
+        "供应链",
+        "通胀",
+        "货币政策"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "一家美国中盘成长型基金因Insmed公司新药上市表现超预期而增持其股票，尽管部分产品销售未达预期，但整体市场环境受地缘政治和能源价格影响，资金流向避险资产，整体市场情绪偏谨慎。"
+    },
+    {
+      "title": "Inflation peaked in May as energy prices fell in June, Kalshi traders think",
+      "slug": "2026-07-01-inflation-peaked-in-may-as-energy-prices-fell-in",
+      "published": "2026-07-01",
+      "assets": [
+        "cgb10y_fut",
+        "gold",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "通胀见顶",
+        "能源价格",
+        "原油",
+        "美元",
+        "国债",
+        "股市",
+        "预测市场"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "能源价格回落推动通胀预期降温，市场认为通胀已见顶，利好美债、股市及美元，利空原油与黄金。"
+    },
+    {
+      "title": "June’s Top Commodity Performers and Underperformers",
+      "slug": "2026-07-01-june-s-top-commodity-performers-and-underperform",
+      "published": "2026-07-01",
+      "assets": [],
+      "tags": [],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "June’s Top Commodity Performers and Underperformers"
+    },
+    {
+      "title": "North Sea oil and renewables: The UK’s next PM faces a defining energy policy decision",
+      "slug": "2026-07-01-north-sea-oil-and-renewables-the-uk-s-next-pm-fa",
+      "published": "2026-07-01",
+      "assets": [
+        "copper",
+        "csi300",
+        "ewj",
+        "fez",
+        "gold",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "能源安全",
+        "地缘政治",
+        "石油钻探",
+        "可再生能源",
+        "气候政策",
+        "英国能源政策"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "英国新任首相候选人面临是否扩大北海石油钻探或优先发展可再生能源的重大能源政策抉择，受伊朗战争、俄乌冲突及全球能源供应紧张影响，市场对能源安全与气候目标的平衡高度关注。"
+    },
+    {
+      "title": "Private payrolls rose by 98,000 in June, less than expected, ADP reports",
+      "slug": "2026-07-01-private-payrolls-rose-by-98-000-in-june-less-tha",
+      "published": "2026-07-01",
+      "assets": [
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "就业数据",
+        "经济放缓",
+        "美联储政策预期",
+        "薪资增长"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国6月私人部门就业增长低于预期，显示经济动能减弱，利空股市、利好债券。"
+    },
+    {
+      "title": "Sell the Canada Dollar Now, Just in Time for the Fourth of July",
+      "slug": "2026-07-01-sell-the-canada-dollar-now-just-in-time-for-the",
+      "published": "2026-07-01",
+      "assets": [
+        "usdcny"
+      ],
+      "tags": [
+        "美元指数",
+        "加拿大元",
+        "技术分析",
+        "美联储政策"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "美元指数因市场预期美联储更趋鹰派而走强，加拿大元期货面临下行压力，技术面显示空头占优。"
+    },
+    {
+      "title": "Stock market today: Dow rises, S&P 500 and Nasdaq dip after June jobs report falls short",
+      "slug": "2026-07-01-stock-market-today-dow-rises-s-p-500-and-nasdaq",
+      "published": "2026-07-01",
+      "assets": [
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "就业数据",
+        "利率预期",
+        "科技股",
+        "美股分化",
+        "美联储政策"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国6月就业数据不及预期，引发市场对美联储加息路径的重新评估，科技股承压，标普500和纳斯达克下跌，道指小幅上涨，整体股市分化。"
+    },
+    {
+      "title": "TimesSquare Mid Cap Growth Strategy Downplays Market Fears on Stevanato Group S.p.A. (STVN)",
+      "slug": "2026-07-01-timessquare-mid-cap-growth-strategy-downplays-ma",
+      "published": "2026-07-01",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "csi300",
+        "fez",
+        "gold",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "医疗健康",
+        "生物制药",
+        "供应链",
+        "地缘政治",
+        "能源价格",
+        "货币政策"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "新闻提及全球市场在地缘紧张与能源价格波动背景下，医疗健康板块个股表现承压，但部分公司因长期合同具备抗风险能力，整体市场情绪中性。"
+    },
+    {
+      "title": "Warsh faces multiple alternative inflation signs as Fed charts new course",
+      "slug": "2026-07-01-warsh-faces-multiple-alternative-inflation-signs",
+      "published": "2026-07-01",
+      "assets": [
+        "cgb10y_fut",
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny"
+      ],
+      "tags": [
+        "美联储政策",
+        "通胀衡量",
+        "货币政策",
+        "利率前景",
+        "经济数据"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美联储主席Warsh推动重新评估通胀衡量方式并探索新数据技术，可能影响货币政策路径，利多债券、利空股市及整体经济预期，同时利好美元。"
+    },
+    {
+      "title": "Xi touts China Communist Party's global influence in speech marking 105th anniversary",
+      "slug": "2026-07-01-xi-touts-china-communist-party-s-global-influenc",
+      "published": "2026-07-01",
+      "assets": [
+        "copper",
+        "csi300",
+        "gold",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "中国共产党",
+        "全球影响力",
+        "军事支出",
+        "经济转型",
+        "地缘政治",
+        "人民币汇率",
+        "大宗商品需求"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "习近平在中共成立105周年讲话中强调中国全球影响力，提及军事扩张与经济转型，提振中国资产及大宗商品需求，利好人民币汇率与相关资产。"
+    },
+    {
+      "title": "谷歌被勒令向Klarna支付20亿美元损害赔偿金",
+      "slug": "2026-07-01-谷歌被勒令向klarna支付20亿美元损害赔偿金",
+      "published": "2026-07-01",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "csi300",
+        "gold",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "反垄断",
+        "科技巨头",
+        "法律诉讼",
+        "欧洲监管",
+        "金融科技",
+        "谷歌"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "谷歌因反垄断诉讼被判决向Klarna支付近20亿美元赔偿，引发市场对科技巨头监管风险的担忧，利空科技股，利多美元。"
+    },
+    {
+      "title": "Atlantic Strategic confirms viability, 12-month pathway for monazite processing plant",
+      "slug": "2026-06-30-atlantic-strategic-confirms-viability-12-month-p",
+      "published": "2026-06-30",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "gold",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "稀有金属",
+        "稀土",
+        "供应链",
+        "美国本土化",
+        "矿产加工",
+        "可行性研究",
+        "能源转型"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国矿产公司确认独居石加工项目技术可行性，12个月内可建成示范厂，推动本土稀土供应链发展，利好铜、黄金等大宗商品及美元，利空美债"
+    },
+    {
+      "title": "BHP Invent, MIT spinout trial copper and gold recovery technology from waste streams",
+      "slug": "2026-06-30-bhp-invent-mit-spinout-trial-copper-and-gold-rec",
+      "published": "2026-06-30",
+      "assets": [
+        "copper",
+        "gold"
+      ],
+      "tags": [
+        "铜回收技术",
+        "黄金回收",
+        "矿业创新",
+        "资源效率"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "BHP与MIT衍生公司SiTration合作成功测试从废料中回收高纯度铜和黄金的技术，推动矿业资源高效利用与可持续发展。"
+    },
+    {
+      "title": "Cleveland Fed President Hammack says AI could fuel inflation, rate hikes may be necessary",
+      "slug": "2026-06-30-cleveland-fed-president-hammack-says-ai-could-fu",
+      "published": "2026-06-30",
+      "assets": [
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny"
+      ],
+      "tags": [
+        "人工智能",
+        "通胀",
+        "利率政策",
+        "货币政策"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "AI需求激增可能推高通胀，美联储官员暗示或需加息，利空股市、利多美债和美元。"
+    },
+    {
+      "title": "Fortuna lifts West Africa growth with $1B Senegal gold project",
+      "slug": "2026-06-30-fortuna-lifts-west-africa-growth-with-1b-senegal",
+      "published": "2026-06-30",
+      "assets": [
+        "copper",
+        "gold"
+      ],
+      "tags": [
+        "黄金项目",
+        "铜价",
+        "矿产开发",
+        "西非矿业"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "Fortuna矿业在塞内加尔启动10亿美元黄金项目，可行性研究提升项目价值并延长矿期，推动黄金及铜等大宗商品利好。"
+    },
+    {
+      "title": "Gold price set for worst quarter in 13 years",
+      "slug": "2026-06-30-gold-price-set-for-worst-quarter-in-13-years",
+      "published": "2026-06-30",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金价格",
+        "地缘政治",
+        "通胀预期",
+        "利率政策"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "黄金价格面临13年来最差季度表现，受中东局势升级及加息预期打压。"
+    },
+    {
+      "title": "Koryx Copper wins analyst support after Namibia assays",
+      "slug": "2026-06-30-koryx-copper-wins-analyst-support-after-namibia",
+      "published": "2026-06-30",
+      "assets": [
+        "copper",
+        "gold"
+      ],
+      "tags": [
+        "铜矿勘探",
+        "黄金",
+        "非洲矿业",
+        "资源开发",
+        "分析师支持"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "Koryx铜矿在纳米比亚的钻探发现长段铜矿体，获分析师看好，推动铜与黄金相关资产走强。"
+    },
+    {
+      "title": "PH7 secures C$5M federal funding for copper extraction technology",
+      "slug": "2026-06-30-ph7-secures-c-5m-federal-funding-for-copper-extr",
+      "published": "2026-06-30",
+      "assets": [
+        "copper",
+        "gold"
+      ],
+      "tags": [
+        "铜矿开采",
+        "绿色氢气",
+        "关键矿产",
+        "技术创新",
+        "可持续采矿"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "加拿大公司pH7获500万加元资助研发铜提取新技术，推动绿色低碳铜生产，利好铜及黄金等大宗商品"
+    },
+    {
+      "title": "Small-cap stocks enjoy their best first half in 35 years. Here's what's driving it",
+      "slug": "2026-06-30-small-cap-stocks-enjoy-their-best-first-half-in",
+      "published": "2026-06-30",
+      "assets": [
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "小盘股",
+        "人工智能",
+        "半导体",
+        "估值修复",
+        "供应链",
+        "科技股"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "小盘股因人工智能投资热潮向供应链扩散，带动半导体及相关公司大幅上涨，实现35年来最佳上半年表现。"
+    },
+    {
+      "title": "South32 sells nearly all its aluminum business to Alcoa for $5.6B",
+      "slug": "2026-06-30-south32-sells-nearly-all-its-aluminum-business-t",
+      "published": "2026-06-30",
+      "assets": [
+        "copper",
+        "gold"
+      ],
+      "tags": [
+        "铝业并购",
+        "大宗商品",
+        "矿业",
+        "铜",
+        "黄金",
+        "铝"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "South32出售其大部分铝业务给Alcoa，聚焦高利润铜锌等基础金属，利好铜、黄金等大宗商品，利空铝价。"
+    },
+    {
+      "title": "The 250-year history of U.S. energy consumption",
+      "slug": "2026-06-30-the-250-year-history-of-u-s-energy-consumption",
+      "published": "2026-06-30",
+      "assets": [
+        "copper",
+        "gold",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "能源消费",
+        "石油",
+        "天然气",
+        "可再生能源",
+        "能源结构"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国能源消费结构持续演变，石油仍为主要能源，2025年总能耗小幅回升，利好能源相关大宗商品及美元资产。"
+    },
+    {
+      "title": "金价跌破每盎司4000美元",
+      "slug": "2026-06-30-金价跌破每盎司4000美元",
+      "published": "2026-06-30",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金价格",
+        "美联储加息",
+        "投资者情绪"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "黄金价格下跌，受美联储加息预期和散户热情减退影响"
+    },
+    {
+      "title": "Freeman Gold triples Lemhi project value, builds 1Moz reserve",
+      "slug": "2026-06-29-freeman-gold-triples-lemhi-project-value-builds",
+      "published": "2026-06-29",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金项目",
+        "矿产开发",
+        "金价上涨",
+        "资源储备"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "Freeman Gold项目可行性研究大幅提升其价值并建立100万盎司黄金储量，推动黄金资产走强。"
+    },
+    {
+      "title": "Gold price falls nearly 2% as rebound proves short-lived",
+      "slug": "2026-06-29-gold-price-falls-nearly-2-as-rebound-proves-shor",
+      "published": "2026-06-29",
+      "assets": [
+        "gold"
+      ],
+      "tags": [
+        "黄金价格",
+        "地缘政治",
+        "通胀预期",
+        "利率前景",
+        "市场波动"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "黄金价格回落近2%，因中东紧张局势引发通胀担忧，市场预期加息压力加剧，利空黄金短期走势。"
+    },
+    {
+      "title": "Op-Ed: The decoy effect — how Beijing steers western mining capital",
+      "slug": "2026-06-29-op-ed-the-decoy-effect-how-beijing-steers-wester",
+      "published": "2026-06-29",
+      "assets": [
+        "copper",
+        "gold",
+        "wti"
+      ],
+      "tags": [
+        "地缘政治",
+        "资源管制",
+        "市场心理",
+        " decoy效应",
+        "供应链安全"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "文章指出中国通过制造资源出口管制的假象来转移西方对真实战略——即通过过剩供应压制西方矿业投资的注意力，从而影响全球大宗商品市场情绪。"
+    },
+    {
+      "title": "SpaceX to join the Nasdaq-100 in a fast-tracked process that will drive huge ETF buying demand",
+      "slug": "2026-06-29-spacex-to-join-the-nasdaq-100-in-a-fast-tracked",
+      "published": "2026-06-29",
+      "assets": [
+        "qqq"
+      ],
+      "tags": [
+        "纳斯达克100",
+        "指数纳入",
+        "ETF资金流入",
+        "SpaceX",
+        "科技股"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "SpaceX将快速纳入纳斯达克100指数，推动被动基金买入需求，利好科技股及指数表现。"
+    },
+    {
+      "title": "Tactical Resources eyes Nasdaq debut as Texas rare earths project advances",
+      "slug": "2026-06-29-tactical-resources-eyes-nasdaq-debut-as-texas-ra",
+      "published": "2026-06-29",
+      "assets": [
+        "copper",
+        "gold",
+        "qqq",
+        "wti"
+      ],
+      "tags": [
+        "稀土",
+        "美国",
+        "上市",
+        "关键矿产",
+        "能源",
+        "金属",
+        "矿业",
+        "资本市场",
+        "SPAC",
+        "加工",
+        "供应链"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "Tactical Resources推进德克萨斯州稀土项目并计划在纳斯达克上市，利好美国科技与关键矿产相关资产及大宗商品"
+    },
+    {
+      "title": "Why investors may want to prioritize bond markets outside the U.S.",
+      "slug": "2026-06-27-why-investors-may-want-to-prioritize-bond-market",
+      "published": "2026-06-27",
+      "assets": [
+        "cgb10y_fut",
+        "fez",
+        "us10y_zn"
+      ],
+      "tags": [
+        "债券市场",
+        "利率政策",
+        "通胀",
+        "国际配置",
+        "多元化",
+        "欧洲央行",
+        "美联储",
+        "全球债券",
+        "期限结构"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "国际债券市场因通胀和利率政策差异提供配置机会，尤其欧洲等地区债券因紧缩预期和高收益率受青睐，建议投资者分散配置全球债券以优化组合"
+    },
+    {
+      "title": "Integra grows reserve by 74% at Florida Canyon gold mine",
+      "slug": "2026-06-26-integra-grows-reserve-by-74-at-florida-canyon-go",
+      "published": "2026-06-26",
+      "assets": [
+        "copper",
+        "gold"
+      ],
+      "tags": [
+        "黄金矿产",
+        "铜矿资源",
+        "矿业投资",
+        "贵金属",
+        "矿产储量增长"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "Integra Resources旗下佛罗里达峡谷金矿储量大幅增长74%，推动黄金产量和矿产寿命提升，利好黄金及铜等贵金属资产"
+    },
+    {
+      "title": "Minneapolis Fed President Neel Kashkari says he expects a rate hike this year",
+      "slug": "2026-06-26-minneapolis-fed-president-neel-kashkari-says-he",
+      "published": "2026-06-26",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny"
+      ],
+      "tags": [
+        "利率政策",
+        "通胀",
+        "货币政策转向",
+        "地缘政治风险",
+        "美元",
+        "国债",
+        "股市",
+        "全球市场"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "美联储明尼阿波利斯联储主席卡什卡里预期今年将加息，因通胀持续高企且地缘政治紧张加剧，市场对利率政策转向鹰派，利空债券、股市，利多美元。"
+    },
+    {
+      "title": "Op-Ed: DRC is setting the terms of global competition for critical minerals",
+      "slug": "2026-06-26-op-ed-drc-is-setting-the-terms-of-global-competi",
+      "published": "2026-06-26",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "gold",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "钴矿",
+        "地缘政治",
+        "供应链",
+        "关键矿产",
+        "大宗商品",
+        "货币政策"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "刚果民主共和国通过控制钴出口配额提升全球关键矿产供应链话语权，推动大宗商品价格上行并影响全球货币政策与汇率走势。"
+    },
+    {
+      "title": "Shipping rebounds in Strait of Hormuz one week after U.S.-Iran deal – but fragile confidence threatens recovery",
+      "slug": "2026-06-26-shipping-rebounds-in-strait-of-hormuz-one-week-a",
+      "published": "2026-06-26",
+      "assets": [
+        "gold",
+        "qqq",
+        "spy",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "地缘政治",
+        "航运安全",
+        "原油运输",
+        "美元走强",
+        "市场情绪",
+        "能源安全"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "伊朗与美国临时协议后霍尔木兹海峡航运恢复，但新袭击事件引发市场对能源运输安全的担忧，推升原油和黄金价格，利好美元，对股市情绪构成扰动。"
+    },
+    {
+      "title": "Trump Threatens to Impose 100% Tariff on European Countries Over Tech Taxes",
+      "slug": "2026-06-26-trump-threatens-to-impose-100-tariff-on-european",
+      "published": "2026-06-26",
+      "assets": [
+        "csi300",
+        "fez",
+        "qqq",
+        "spy",
+        "usdcny"
+      ],
+      "tags": [
+        "贸易摩擦",
+        "关税",
+        "地缘政治风险"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "特朗普威胁对欧洲国家征收100%关税以回应科技税，引发市场对贸易紧张局势升级的担忧，利空全球股市，利好美元"
+    },
+    {
+      "title": "Warsh reaches within the Fed for latest advisory appointments",
+      "slug": "2026-06-26-warsh-reaches-within-the-fed-for-latest-advisory",
+      "published": "2026-06-26",
+      "assets": [
+        "cgb10y_fut",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny"
+      ],
+      "tags": [
+        "美联储政策",
+        "货币政策",
+        "经济展望",
+        "利率预期",
+        "金融监管"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美联储主席Warsh任命新任经济顾问并推进内部改革，引发市场对货币政策走向及利率预期的重新评估，整体偏向利好债券与美元，对股市影响中性。"
+    },
+    {
+      "title": "Bank of Canada publishes report on  monetary policy framework consultations",
+      "slug": "2026-06-25-bank-of-canada-publishes-report-on-monetary-poli",
+      "published": "2026-06-25",
+      "assets": [
+        "cgb10y_fut",
+        "us10y_zn",
+        "usdcny"
+      ],
+      "tags": [
+        "货币政策",
+        "利率决策",
+        "通胀目标",
+        "央行沟通",
+        "经济稳定性"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "加拿大央行发布货币政策框架咨询报告，强调维持灵活通胀目标和2%通胀目标的广泛支持，市场预期利率政策将保持稳健，利好美债与美元。"
+    },
+    {
+      "title": "Bond ETF flows surge in hunt for yield: 'Market sniffing out something here,' says BlackRock exec",
+      "slug": "2026-06-25-bond-etf-flows-surge-in-hunt-for-yield-market-sn",
+      "published": "2026-06-25",
+      "assets": [
+        "cgb10y_fut",
+        "us10y_zn"
+      ],
+      "tags": [
+        "债券ETF流入",
+        "实际收益率",
+        "美联储政策",
+        "通胀担忧",
+        "利率预期"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "投资者对债券ETF的强劲需求反映出对实际收益率的追逐，尤其在通胀担忧和美联储政策不确定性背景下，资金大量流入美国国债及多资产收入ETF。"
+    },
+    {
+      "title": "Chicago Fed President Goolsbee says inflation is too high; Williams sees price pressures easing",
+      "slug": "2026-06-25-chicago-fed-president-goolsbee-says-inflation-is",
+      "published": "2026-06-25",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny"
+      ],
+      "tags": [
+        "通胀",
+        "美联储政策",
+        "利率预期",
+        "货币政策",
+        "经济数据"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "美联储官员对通胀仍持担忧态度，暗示可能维持高利率，利空债券与股市，利多美元。"
+    },
+    {
+      "title": "Core inflation rate hit 3.4% in May, highest since October 2023, Fed’s preferred gauge shows",
+      "slug": "2026-06-25-core-inflation-rate-hit-3-4-in-may-highest-since",
+      "published": "2026-06-25",
+      "assets": [
+        "cgb10y_fut",
+        "qqq",
+        "spy",
+        "us10y_zn"
+      ],
+      "tags": [
+        "通胀",
+        "美联储",
+        "利率政策",
+        "消费者支出",
+        "GDP增长"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国核心通胀率升至3.4%为2023年10月以来最高，强化美联储抗通胀立场，市场预期9月加息，利空股市、利多美债。"
+    },
+    {
+      "title": "Speech by Board Member TAMURA in Hyogo (Economic Activity, Prices, and Monetary Policy in Japan)",
+      "slug": "2026-06-25-speech-by-board-member-tamura-in-hyogo-economic",
+      "published": "2026-06-25",
+      "assets": [
+        "ewj",
+        "usdcny"
+      ],
+      "tags": [
+        "日本经济活动",
+        "物价",
+        "货币政策"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "日本央行官员在兵库县发表关于日本经济活动、物价及货币政策的讲话"
+    },
+    {
+      "title": "Federal Reserve says U.S. banks can withstand $708 billion in losses amid overhaul of capital rules",
+      "slug": "2026-06-24-federal-reserve-says-u-s-banks-can-withstand-708",
+      "published": "2026-06-24",
+      "assets": [
+        "us10y_zn"
+      ],
+      "tags": [
+        "央行",
+        "利率"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "The Fed's annual exercise comes at a pivotal moment for bank regulation because, unlike previous years, the results will"
+    },
+    {
+      "title": "JPMorgan Chase unveils $50 billion buyback, Goldman Sachs raises dividend after Fed stress test",
+      "slug": "2026-06-24-jpmorgan-chase-unveils-50-billion-buyback-goldma",
+      "published": "2026-06-24",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "银行股",
+        "分红",
+        "回购",
+        "美联储压力测试",
+        "资本充足率"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "美国主要银行在通过美联储压力测试后宣布提高分红和大规模股票回购，显示金融行业资本充足且盈利强劲，利好全球股市。"
+    },
+    {
+      "title": "U.S. commercial crude oil inventories have decreased in June",
+      "slug": "2026-06-24-u-s-commercial-crude-oil-inventories-have-decrea",
+      "published": "2026-06-24",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "原油库存",
+        "供需关系",
+        "石油供应"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "美国商业原油库存下降，显示供应趋紧，利好原油价格。"
+    },
+    {
+      "title": "Factory job cuts in June neared financial crisis and Covid levels, S&P says",
+      "slug": "2026-06-23-factory-job-cuts-in-june-neared-financial-crisis",
+      "published": "2026-06-23",
+      "assets": [
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "制造业就业",
+        "工厂裁员",
+        "PMI数据",
+        "通胀压力",
+        "利率预期"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "美国制造业就业大幅下滑接近金融危机和疫情水平，尽管PMI数据好于预期，但主要由库存重建推动，凸显需求可持续性与成本压力担忧，对股市构成利空。"
+    },
+    {
+      "title": "Indicators for Core CPI",
+      "slug": "2026-06-23-indicators-for-core-cpi",
+      "published": "2026-06-23",
+      "assets": [
+        "ewj",
+        "usdcny"
+      ],
+      "tags": [
+        "核心通胀",
+        "货币政策",
+        "日本央行"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "日本央行发布核心CPI指标，反映通胀趋势，可能影响日股和日元走势。"
+    },
+    {
+      "title": "U.S. issues sweeping Iran oil sanctions waivers, unlocking billions in revenue for Tehran",
+      "slug": "2026-06-23-u-s-issues-sweeping-iran-oil-sanctions-waivers-u",
+      "published": "2026-06-23",
+      "assets": [
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "伊朗原油",
+        "制裁放松",
+        "美元结算",
+        "地缘政治",
+        "油价上涨",
+        "金融市场"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国大幅放松对伊朗原油制裁，允许美元结算交易，预计将显著提振伊朗原油出口与收入，推升国际油价并利好美元，对全球股市情绪中性，但可能压制美债价格。"
+    },
+    {
+      "title": "UAE's exit from OPEC+ reduced the group's share of crude oil production and capacity",
+      "slug": "2026-06-23-uae-s-exit-from-opec-reduced-the-group-s-share-o",
+      "published": "2026-06-23",
+      "assets": [
+        "wti"
+      ],
+      "tags": [
+        "OPEC+减产",
+        "原油供应",
+        "地缘政治",
+        "产能变化"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "阿联酋退出OPEC+导致该组织原油产量和产能占比下降，对全球原油市场构成利空影响。"
+    },
+    {
+      "title": "Semiannual Report on Currency and Monetary Control (Summary)",
+      "slug": "2026-06-22-semiannual-report-on-currency-and-monetary-contr",
+      "published": "2026-06-22",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "ewj",
+        "gold",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "货币政策",
+        "经济复苏",
+        "通胀",
+        "利率",
+        "地缘政治",
+        "金融市场",
+        "汇率",
+        "债券收益率"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "日本经济在2025年10月至2026年3月间温和复苏，通胀受政策影响回落，债券收益率上升，金融市场受中东局势影响转趋谨慎，美元兑离岸人民币及日股受支撑，整体资产配置情绪偏中性但利多美元与股市，利空债券。"
+    },
+    {
+      "title": "How Deal With U.S. Could Reconnect Iran to the Global Economy",
+      "slug": "2026-06-20-how-deal-with-u-s-could-reconnect-iran-to-the-gl",
+      "published": "2026-06-20",
+      "assets": [
+        "gold",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "伊朗",
+        "地缘政治",
+        "原油",
+        "黄金",
+        "美元指数",
+        "汇率"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "伊朗解除制裁预期提振原油、黄金及美元相关资产"
+    },
+    {
+      "title": "Hormuz relief may not ease the economic toll that's already 'baked in,' analysts warn",
+      "slug": "2026-06-19-hormuz-relief-may-not-ease-the-economic-toll-tha",
+      "published": "2026-06-19",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "gold",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "地缘政治",
+        "能源安全",
+        "通胀压力",
+        "供应链恢复",
+        "全球经济增长"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "地缘紧张缓解但经济影响已固化，能源与大宗商品价格承压，通胀预期上升，对债券和股市构成压力，美元走强。"
+    },
+    {
+      "title": "Bank of England holds interest rates at 3.75% amid Iran war peace prospects",
+      "slug": "2026-06-18-bank-of-england-holds-interest-rates-at-3-75-ami",
+      "published": "2026-06-18",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "csi300",
+        "ewj",
+        "fez",
+        "gold",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "利率政策",
+        "通胀压力",
+        "能源价格",
+        "地缘政治",
+        "货币政策",
+        "经济衰退风险"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "英国央行维持利率不变，因能源价格上涨推高通胀，市场仍预期年内加息，利多债券与美元，利空股市与多数商品。"
+    },
+    {
+      "title": "Bank Rate maintained at 3.75% - June 2026 Monetary Policy Summary and Minutes",
+      "slug": "2026-06-18-bank-rate-maintained-at-3-75-june-2026-monetary",
+      "published": "2026-06-18",
+      "assets": [
+        "cgb10y_fut",
+        "us10y_zn",
+        "usdcny"
+      ],
+      "tags": [
+        "利率政策",
+        "通胀",
+        "货币政策",
+        "能源价格",
+        "经济展望"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "英国央行维持利率在3.75%不变，因能源价格波动及经济前景不确定性，强调将根据通胀和经济形势灵活调整政策，利好债券与美元。"
+    },
+    {
+      "title": "Here are the five big takeaways from Kevin Warsh's first meeting as Fed chairman",
+      "slug": "2026-06-18-here-are-the-five-big-takeaways-from-kevin-warsh",
+      "published": "2026-06-18",
+      "assets": [
+        "qqq",
+        "spy",
+        "us10y_zn"
+      ],
+      "tags": [
+        "美联储",
+        "利率政策",
+        "通胀",
+        "货币政策",
+        "债券收益率"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "美联储主席Warsh首次FOMC会议维持利率不变但释放鹰派信号，强调通胀控制决心，导致股市下跌、2年期美债收益率飙升。"
+    },
+    {
+      "title": "Permian natural gas production increased faster than crude oil",
+      "slug": "2026-06-18-permian-natural-gas-production-increased-faster",
+      "published": "2026-06-18",
+      "assets": [
+        "copper",
+        "gold",
+        "wti"
+      ],
+      "tags": [
+        "页岩气",
+        "油气比",
+        "能源生产"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "美国二叠纪地区天然气产量增速超过原油，主要因气油比上升。"
+    },
+    {
+      "title": "Transcript of the Governor's pooled broadcast interview given on 18 June 2026",
+      "slug": "2026-06-18-transcript-of-the-governor-s-pooled-broadcast-in",
+      "published": "2026-06-18",
+      "assets": [
+        "cgb10y_fut",
+        "us10y_zn",
+        "usdcny"
+      ],
+      "tags": [
+        "利率政策",
+        "通胀",
+        "能源价格",
+        "地缘政治",
+        "货币政策",
+        "美元",
+        "国债"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "英国央行行长对当前通胀仍高于目标及能源价格波动保持谨慎，尽管地缘局势缓和带来积极信号，但政策仍维持观望，利多国债、利多美元。"
+    },
+    {
+      "title": "Warsh Makes His Case With Jargon, and a Penchant for Detail",
+      "slug": "2026-06-18-warsh-makes-his-case-with-jargon-and-a-penchant",
+      "published": "2026-06-18",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn"
+      ],
+      "tags": [
+        "美联储",
+        "货币政策",
+        "利率决策"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "美联储主席Warsh在会议后发表讲话，涉及货币政策与经济前景，影响债券与股市"
+    },
+    {
+      "title": "Fed holds rates steady at Warsh’s first meeting.",
+      "slug": "2026-06-17-fed-holds-rates-steady-at-warsh-s-first-meeting",
+      "published": "2026-06-17",
+      "assets": [
+        "csi300",
+        "ewj",
+        "fez",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn"
+      ],
+      "tags": [
+        "美联储利率",
+        "通胀预期",
+        "货币政策",
+        "债券收益率"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "美联储维持利率不变，市场预期通胀压力将导致未来加息，利空债市，对股市构成压力。"
+    },
+    {
+      "title": "Index-linked Treasury Stock",
+      "slug": "2026-06-17-index-linked-treasury-stock",
+      "published": "2026-06-17",
+      "assets": [
+        "cgb10y_fut",
+        "us10y_zn"
+      ],
+      "tags": [
+        "英国国债",
+        "通胀挂钩债券",
+        "利率支付"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "英国政府发行的通胀挂钩国债2030年息票率确定为6.3401%，利好债券类资产"
+    },
+    {
+      "title": "See How the First Fed Statement Under Warsh Evolved",
+      "slug": "2026-06-17-see-how-the-first-fed-statement-under-warsh-evol",
+      "published": "2026-06-17",
+      "assets": [
+        "us10y_zn"
+      ],
+      "tags": [
+        "美联储",
+        "利率政策",
+        "货币政策"
+      ],
+      "sentiment": "bearish",
+      "sentiment_zh": "利空",
+      "source": "公开资料/新闻整理",
+      "summary": "美联储政策声明措辞变化暗示未来利率路径可能调整，利空美国10年国债。"
+    },
+    {
+      "title": "Three Iranian tankers exit U.S. blockade for first time in months as shipowners eye Hormuz in 'wary disbelief'",
+      "slug": "2026-06-17-three-iranian-tankers-exit-u-s-blockade-for-firs",
+      "published": "2026-06-17",
+      "assets": [
+        "cgb10y_fut",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "wti"
+      ],
+      "tags": [
+        "伊朗原油出口",
+        "地缘政治",
+        "航运",
+        "能源市场",
+        "制裁解除",
+        "地缘风险缓解",
+        "原油供应",
+        "全球贸易",
+        "美元",
+        "美债"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "伊朗原油出口解禁预期推动原油及权益类资产上涨，美债承压，市场对地缘风险缓解持谨慎乐观态度。"
+    },
+    {
+      "title": "UK inflation holds steady at 2.8% in May",
+      "slug": "2026-06-17-uk-inflation-holds-steady-at-2-8-in-may",
+      "published": "2026-06-17",
+      "assets": [
+        "cgb10y_fut",
+        "gold",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "通胀",
+        "利率政策",
+        "能源价格",
+        "美元",
+        "黄金",
+        "原油",
+        "英镑",
+        "货币政策"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "英国5月通胀率维持在2.8%，低于预期，主要受交通成本推动，市场预期英央行将维持利率不变，但未来可能加息，利好美元与债券利空，能源与黄金价格受地缘政治影响走高。"
+    },
+    {
+      "title": "Plan for the Outright Purchases of Japanese Government Bonds",
+      "slug": "2026-06-16-plan-for-the-outright-purchases-of-japanese-gove",
+      "published": "2026-06-16",
+      "assets": [
+        "ewj",
+        "us10y_zn",
+        "usdcny"
+      ],
+      "tags": [
+        "日本国债购买计划",
+        "货币政策",
+        "日元汇率",
+        "股市",
+        "债券市场"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "日本政府计划购买国债，可能引发日元走强、日本股市承压、美债收益率下行。"
+    },
+    {
+      "title": "A Chinese start-up's unfolding dilemma exposes cracks in Beijing's tech funding machine",
+      "slug": "2026-06-12-a-chinese-start-up-s-unfolding-dilemma-exposes-c",
+      "published": "2026-06-12",
+      "assets": [
+        "csi300",
+        "qqq",
+        "spy"
+      ],
+      "tags": [
+        "中国科技融资",
+        "地方政府投资",
+        "资本错配",
+        "地缘政治风险",
+        "初创企业监管"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "中国地方政府科技投资模式暴露问题，监管收紧与资本错配引发市场对科技股及中国资产前景的担忧。"
+    },
+    {
+      "title": "Japanese Government Bonds Held by the Bank of Japan",
+      "slug": "2026-06-12-japanese-government-bonds-held-by-the-bank-of-ja",
+      "published": "2026-06-12",
+      "assets": [
+        "cgb10y_fut",
+        "ewj",
+        "us10y_zn",
+        "usdcny"
+      ],
+      "tags": [
+        "日本国债",
+        "货币政策",
+        "债券持有",
+        "美元走强",
+        "日元贬值"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "日本央行持有国债规模变化引发市场对货币政策和债券市场影响的讨论，利多债券、利空日股及日元。"
+    },
+    {
+      "title": "Largest wind farm in the United States slated to begin commercial operations",
+      "slug": "2026-06-12-largest-wind-farm-in-the-united-states-slated-to",
+      "published": "2026-06-12",
+      "assets": [
+        "cgb10y_fut",
+        "copper",
+        "csi300",
+        "ewj",
+        "fez",
+        "gold",
+        "hsi_2800",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "风电",
+        "可再生能源",
+        "能源转型",
+        "电力输送",
+        "基础设施"
+      ],
+      "sentiment": "neutral",
+      "sentiment_zh": "中性",
+      "source": "公开资料/新闻整理",
+      "summary": "美国最大风电项目SunZia即将投入商业运营，将为亚利桑那州和加利福尼亚州输送绿色电力"
+    },
+    {
+      "title": "UK economy shrank 0.1% in April as Iran conflict weighed on growth",
+      "slug": "2026-06-12-uk-economy-shrank-0-1-in-april-as-iran-conflict",
+      "published": "2026-06-12",
+      "assets": [
+        "cgb10y_fut",
+        "gold",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "英国经济",
+        "伊朗冲突",
+        "GDP萎缩",
+        "燃料成本",
+        "服务业下滑",
+        "美元走强",
+        "黄金上涨",
+        "原油上涨"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "英国4月GDP萎缩0.1%，受伊朗冲突推高燃料成本及服务业下滑拖累，经济增速放缓，市场预期英国央行加息可能性上升，利多债券与美元，利空股市与能源以外的资产。"
+    },
+    {
+      "title": "Changes to collateral eligibility in the Sterling Monetary Framework - Market Notice 11 June 2026",
+      "slug": "2026-06-11-changes-to-collateral-eligibility-in-the-sterlin",
+      "published": "2026-06-11",
+      "assets": [
+        "cgb10y_fut",
+        "us10y_zn",
+        "usdcny"
+      ],
+      "tags": [
+        "货币政策",
+        "利率政策",
+        "抵押品框架",
+        "国债",
+        "美元指数"
+      ],
+      "sentiment": "bullish",
+      "sentiment_zh": "利多",
+      "source": "公开资料/新闻整理",
+      "summary": "英国央行调整英镑货币框架抵押品资格，扩大政府关联实体债券准入并提高信用评级要求，利好债券及美元资产"
+    },
+    {
+      "title": "ECB hikes interest rates for first time since 2023 as Iran war ramps up energy costs",
+      "slug": "2026-06-11-ecb-hikes-interest-rates-for-first-time-since-20",
+      "published": "2026-06-11",
+      "assets": [
+        "cgb10y_fut",
+        "fez",
+        "gold",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "加息",
+        "地缘冲突",
+        "能源价格",
+        "通胀",
+        "经济增长",
+        "货币政策"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "欧洲央行因伊朗战争引发能源价格飙升而加息，通胀预期上调、增长展望下调，利空欧元区股市，利好债券与美元，推动大宗商品走强。"
+    },
+    {
+      "title": "Energy prices take center stage as the ECB prepares to decide on rates",
+      "slug": "2026-06-11-energy-prices-take-center-stage-as-the-ecb-prepa",
+      "published": "2026-06-11",
+      "assets": [
+        "cgb10y_fut",
+        "fez",
+        "us10y_zn",
+        "usdcny",
+        "wti"
+      ],
+      "tags": [
+        "能源价格",
+        "利率政策",
+        "通胀压力",
+        "欧洲央行",
+        "经济衰退风险"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "能源价格上涨推动欧洲央行加息预期，加剧通胀担忧并影响债券与股市，利好原油和美元，利空欧元区债券与股市。"
+    },
+    {
+      "title": "Wholesale prices rose 1.1% in May, more than expected, on surge in energy",
+      "slug": "2026-06-11-wholesale-prices-rose-1-1-in-may-more-than-expec",
+      "published": "2026-06-11",
+      "assets": [
+        "cgb10y_fut",
+        "qqq",
+        "spy",
+        "us10y_zn",
+        "wti"
+      ],
+      "tags": [
+        "通胀",
+        "能源价格",
+        "生产者价格指数",
+        "利率预期",
+        "货币政策"
+      ],
+      "sentiment": "mixed",
+      "sentiment_zh": "多空分化",
+      "source": "公开资料/新闻整理",
+      "summary": "美国5月生产者价格指数超预期上涨，主因能源价格飙升，加剧通胀担忧，利空债券与股市，利多原油，对美元影响中性。"
+    }
+  ]
+}

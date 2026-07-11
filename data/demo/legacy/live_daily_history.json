@@ -1,0 +1,588 @@
+{
+  "_meta": {
+    "source": "legacy_static_page",
+    "migrated_from": "AI投委会_静态页面html.html",
+    "asof": "2026-07-09",
+    "note": "展示性 fixture，仅供参考；计算数字一律由新引擎现算"
+  },
+  "history": [
+    {
+      "date": "2026-04-10",
+      "drift": 0.0,
+      "max_drift": 0.0,
+      "rebalanced": true
+    },
+    {
+      "date": "2026-04-13",
+      "drift": 0.0186,
+      "max_drift": 0.0141,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-04-14",
+      "drift": 0.0118,
+      "max_drift": 0.0049,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-04-15",
+      "drift": 0.0118,
+      "max_drift": 0.0085,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-04-16",
+      "drift": 0.0129,
+      "max_drift": 0.008,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-04-17",
+      "drift": 0.0216,
+      "max_drift": 0.0183,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-04-20",
+      "drift": 0.0204,
+      "max_drift": 0.0116,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-04-21",
+      "drift": 0.0208,
+      "max_drift": 0.0178,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-04-22",
+      "drift": 0.0154,
+      "max_drift": 0.011,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-04-23",
+      "drift": 0.0277,
+      "max_drift": 0.0197,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-04-24",
+      "drift": 0.0302,
+      "max_drift": 0.0239,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-04-27",
+      "drift": 0.0367,
+      "max_drift": 0.0276,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-04-28",
+      "drift": 0.0395,
+      "max_drift": 0.0185,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-04-29",
+      "drift": 0.0366,
+      "max_drift": 0.0112,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-04-30",
+      "drift": 0.0473,
+      "max_drift": 0.0222,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-01",
+      "drift": 0.019,
+      "max_drift": 0.0076,
+      "rebalanced": true
+    },
+    {
+      "date": "2026-05-04",
+      "drift": 0.0321,
+      "max_drift": 0.01,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-05",
+      "drift": 0.0265,
+      "max_drift": 0.0089,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-06",
+      "drift": 0.0293,
+      "max_drift": 0.0166,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-07",
+      "drift": 0.0284,
+      "max_drift": 0.0151,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-08",
+      "drift": 0.0285,
+      "max_drift": 0.0169,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-11",
+      "drift": 0.0281,
+      "max_drift": 0.0164,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-12",
+      "drift": 0.0333,
+      "max_drift": 0.0245,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-13",
+      "drift": 0.035,
+      "max_drift": 0.0231,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-14",
+      "drift": 0.0356,
+      "max_drift": 0.0239,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-15",
+      "drift": 0.0507,
+      "max_drift": 0.0335,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-18",
+      "drift": 0.046,
+      "max_drift": 0.0292,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-19",
+      "drift": 0.0496,
+      "max_drift": 0.031,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-20",
+      "drift": 0.0396,
+      "max_drift": 0.0224,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-21",
+      "drift": 0.0353,
+      "max_drift": 0.0154,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-22",
+      "drift": 0.0342,
+      "max_drift": 0.0193,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-25",
+      "drift": 0.0349,
+      "max_drift": 0.0195,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-26",
+      "drift": 0.027,
+      "max_drift": 0.0123,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-27",
+      "drift": 0.0228,
+      "max_drift": 0.0104,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-28",
+      "drift": 0.0272,
+      "max_drift": 0.0121,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-05-29",
+      "drift": 0.0278,
+      "max_drift": 0.0136,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-01",
+      "drift": 0.0106,
+      "max_drift": 0.0045,
+      "rebalanced": true
+    },
+    {
+      "date": "2026-06-02",
+      "drift": 0.0176,
+      "max_drift": 0.0078,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-03",
+      "drift": 0.0298,
+      "max_drift": 0.0216,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-04",
+      "drift": 0.0252,
+      "max_drift": 0.0189,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-05",
+      "drift": 0.0634,
+      "max_drift": 0.0235,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-08",
+      "drift": 0.0623,
+      "max_drift": 0.0238,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-09",
+      "drift": 0.0549,
+      "max_drift": 0.0263,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-10",
+      "drift": 0.0313,
+      "max_drift": 0.0209,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-11",
+      "drift": 0.0406,
+      "max_drift": 0.0306,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-12",
+      "drift": 0.036,
+      "max_drift": 0.0282,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-15",
+      "drift": 0.0374,
+      "max_drift": 0.0293,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-16",
+      "drift": 0.047,
+      "max_drift": 0.0328,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-17",
+      "drift": 0.0333,
+      "max_drift": 0.0278,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-18",
+      "drift": 0.0413,
+      "max_drift": 0.0307,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-19",
+      "drift": 0.0414,
+      "max_drift": 0.0307,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-22",
+      "drift": 0.0319,
+      "max_drift": 0.0263,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-23",
+      "drift": 0.0701,
+      "max_drift": 0.0356,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-24",
+      "drift": 0.0541,
+      "max_drift": 0.0341,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-25",
+      "drift": 0.0632,
+      "max_drift": 0.0335,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-26",
+      "drift": 0.061,
+      "max_drift": 0.0341,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-29",
+      "drift": 0.0608,
+      "max_drift": 0.0341,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-06-30",
+      "drift": 0.0498,
+      "max_drift": 0.0328,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-07-01",
+      "drift": 0.0221,
+      "max_drift": 0.0105,
+      "rebalanced": true
+    },
+    {
+      "date": "2026-07-02",
+      "drift": 0.024,
+      "max_drift": 0.0121,
+      "rebalanced": false
+    },
+    {
+      "date": "2026-07-03",
+      "drift": 0.016,
+      "max_drift": 0.0106,
+      "rebalanced": false,
+      "rulings": [
+        {
+          "engine_id": "mvo_bl",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "risk_parity",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "merrill_clock",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "momentum",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "erp_value",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "yale",
+          "verdict": "守住",
+          "multiplier": 1.05
+        }
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "drift": 0.1063,
+      "max_drift": 0.0988,
+      "rebalanced": false,
+      "rulings": [
+        {
+          "engine_id": "mvo_bl",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "risk_parity",
+          "verdict": "被驳倒",
+          "multiplier": 0.9
+        },
+        {
+          "engine_id": "merrill_clock",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "momentum",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "erp_value",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "yale",
+          "verdict": "守住",
+          "multiplier": 1.05
+        }
+      ]
+    },
+    {
+      "date": "2026-07-03",
+      "drift": 0.108,
+      "max_drift": 0.106,
+      "rebalanced": false,
+      "rulings": [
+        {
+          "engine_id": "mvo_bl",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "risk_parity",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "merrill_clock",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "momentum",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "erp_value",
+          "verdict": "守住",
+          "multiplier": 1.05
+        },
+        {
+          "engine_id": "yale",
+          "verdict": "守住",
+          "multiplier": 1.05
+        }
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "drift": 0.0,
+      "max_drift": 0.0,
+      "rebalanced": true,
+      "universe_break": "12资产→28资产"
+    },
+    {
+      "date": "2026-07-07",
+      "drift": 0.0134,
+      "max_drift": 0.0102,
+      "rebalanced": false,
+      "rulings": [
+        {
+          "engine_id": "mvo_bl",
+          "verdict": "部分",
+          "multiplier": 1.0
+        },
+        {
+          "engine_id": "risk_parity",
+          "verdict": "部分",
+          "multiplier": 1.0
+        },
+        {
+          "engine_id": "merrill_clock",
+          "verdict": "部分",
+          "multiplier": 1.0
+        },
+        {
+          "engine_id": "momentum",
+          "verdict": "部分",
+          "multiplier": 1.0
+        },
+        {
+          "engine_id": "erp_value",
+          "verdict": "部分",
+          "multiplier": 1.0
+        },
+        {
+          "engine_id": "yale",
+          "verdict": "部分",
+          "multiplier": 1.0
+        }
+      ]
+    },
+    {
+      "date": "2026-07-09",
+      "drift": 0.0,
+      "max_drift": 0.0,
+      "rebalanced": true
+    }
+  ],
+  "overlay": {
+    "asof": "2026-07-09",
+    "nav": 1.0,
+    "pnl_day": 2e-05,
+    "gross": 0.0459,
+    "days": 2,
+    "history": [
+      {
+        "date": "2026-07-07",
+        "nav": 0.999952,
+        "pnl_day": -4.8e-05,
+        "gross": 0.0479
+      },
+      {
+        "date": "2026-07-09",
+        "nav": 0.999972,
+        "pnl_day": 2e-05,
+        "gross": 0.0459
+      }
+    ]
+  },
+  "desk_bets": {
+    "open": [
+      {
+        "opened": "2026-07-07",
+        "strategy": "s5_fx_carry",
+        "name": "FX carry 篮",
+        "state": "持仓",
+        "legs": {
+          "eurusd": -0.05,
+          "gbpusd": -0.05,
+          "usdjpy": 0.05,
+          "usdcny": 0.05
+        },
+        "draw_band": 0.00053,
+        "days_left": 28
+      },
+      {
+        "opened": "2026-07-09",
+        "strategy": "s4_cn_us_10y",
+        "name": "中美10Y收敛",
+        "state": "做走阔",
+        "legs": {
+          "tbond_fut": -0.1,
+          "ust_fut": 0.0231
+        },
+        "draw_band": 0.0001,
+        "days_left": 30
+      }
+    ],
+    "resolved": [],
+    "record": {}
+  }
+}

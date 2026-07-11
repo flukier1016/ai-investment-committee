@@ -1,0 +1,202 @@
+// 核心词典：以中文串为键，EN 模式查表、缺项回退中文。
+// 覆盖：导航/共享组件/决策溯源旗舰页/技术工作台/后端标签（桶、大类、风控规则、情景）。
+
+export const dictCore: Record<string, string> = {
+  // ---- 品牌与导航 ----
+  '智策 AI投委会': 'AI Investment Committee',
+  '五方法三层 · Demo 研究推演': '5 Methods · 3 Layers · Research Demo',
+  '导航': 'NAVIGATION',
+  '总览': 'Overview',
+  '配置': 'Settings',
+  '决策溯源': 'Decision Trace',
+  '组合驾驶舱': 'Portfolio Cockpit',
+  '情景回放': 'Scenario Replay',
+  '回测分析': 'Backtest',
+  '日更驾驶舱': 'Daily Monitor',
+  '周度纪要': 'Weekly Brief',
+  '利差台与风控': 'Spread Desk & Risk',
+  '旗舰': 'FLAGSHIP',
+  '当前情景': 'Scenario',
+  '日间': 'Light',
+  '夜间': 'Dark',
+
+  // ---- 情景（后端 label）----
+  '复苏确认 · 2026年7月（当前基线）': 'Recovery Confirmed · Jul 2026 (Baseline)',
+  '滞胀压力 · 2022年10月（历史回放）': 'Stagflation Stress · Oct 2022 (Replay)',
+  '过热切换 · 2025年6月（历史回放）': 'Overheat Shift · Jun 2025 (Replay)',
+
+  // ---- 大类与桶（后端 label）----
+  '权益': 'Equity', '债券': 'Bonds', '商品': 'Commodities', '外汇': 'FX', '现金': 'Cash',
+  '中国股票': 'China Equity', '外国股票': 'Foreign Equity',
+  '中国债券': 'China Bonds', '外国债券': 'Foreign Bonds',
+
+  // ---- 方法层级与观点类型 ----
+  '战略底仓': 'Strategic Base', '战术偏离': 'Tactical Tilt', '弃权': 'Abstain',
+  '风险预算': 'Risk Budget', '方向观点': 'Directional', '宏观象限': 'Macro Regime',
+  '分位观点': 'Percentile', '战略': 'STRATEGIC', '战术': 'TACTICAL',
+  '复苏': 'Recovery', '过热': 'Overheat', '滞胀': 'Stagflation', '衰退': 'Recession',
+  '概率': 'Probability', '分位': 'Percentile', '股债利差': 'Equity-Bond Gap',
+  '中国股票相对中国债券': 'CN Equity vs CN Bonds',
+  '看多': 'Long', '看空': 'Short', '中性': 'Neutral',
+
+  // ---- 决策溯源页 ----
+  '决策溯源 · 一页式三层看板': 'Decision Trace · One-Page Three-Layer Board',
+  '中国投资者视角 · 27 项明细资产 · 五类目标权重与全链路归因 · 研究推演，非投资建议':
+    'China-investor lens · 27 assets · 5-class target weights with full attribution · Research only, not investment advice',
+  '演示模式': 'Demo Mode',
+  '项明细资产': ' assets', '个汇总桶': ' buckets',
+  '时点': 'As of', '指纹': 'Fingerprint',
+  '最终结果': 'FINAL RESULT',
+  '合成目标权重': 'Composite Target Weights',
+  'Risk Parity 底仓经 Black-Litterman Model 融合后得到目标': 'Risk Parity base fused via Black-Litterman Model',
+  '最终建议': 'Recommendation',
+  '权重生成路径': 'HOW WEIGHTS ARE BUILT',
+  '第一层': 'Layer 1', '第二层': 'Layer 2', '第三层': 'Layer 3',
+  '战术偏离 + 观点整合': 'Tactical Tilts + View Fusion',
+  '条观点': ' views',
+  '唯一战略方法，生成 5 大类与 7 个细分桶的底仓先验。': 'The only strategic method; generates the 5-class / 7-bucket base prior.',
+  '三种战术方法生成方向、收益与置信度观点，经 Black-Litterman Model 融合后，转成相对 Risk Parity 底仓的增减。':
+    'Three tactical methods produce direction, return and confidence views; the Black-Litterman Model fuses them into tilts vs the Risk Parity base.',
+  '权重闭合': 'Weight Closure', '溯源闭合': 'Attribution Closure', '风控闸门': 'Risk Gates',
+  '已通过': 'Passed', '需检查': 'Check', '未触发': 'Clear', '已触发': 'Triggered',
+  '明细资产与汇总桶都闭合到': 'Assets and buckets both close to ',
+  'Risk Parity 底仓加 Black-Litterman Model 观点贡献与风控段后，等于汇总目标权重':
+    'Base + view contributions + guardrail segment equals bucket targets',
+  '触发规则': 'Triggered rules', '条': '', '；本批次未发生硬约束裁剪': '; no hard-constraint clipping this batch',
+  '四方法信号': 'Four-Method Signals',
+  '观点与 Black-Litterman Model 装配': 'Views & Black-Litterman Assembly',
+  '权重归因': 'Weights & Attribution',
+  'Risk Parity 负责战略底仓；其余三种方法形成战术观点。': 'Risk Parity owns the strategic base; the other three form tactical views.',
+  '战略先验与战术观点经 Black-Litterman Model 融合为后验收益。': 'Prior and views fuse into posterior returns via the Black-Litterman Model.',
+  '先看汇总结论，再追到观点、信号和输入摘要。': 'Read the summary first, then trace to views, signals and inputs.',
+  'Risk Parity 独立生成战略底仓；Time Series Momentum、Merrill Lynch Investment Clock、Equity Risk Premium 形成战术观点。':
+    'Risk Parity builds the strategic base independently; Time Series Momentum, Merrill Lynch Investment Clock and Equity Risk Premium form tactical views.',
+  'Risk Parity 是唯一战略方法，直接生成组合底仓先验。': 'Risk Parity is the only strategic method, producing the portfolio base prior.',
+  'Time Series Momentum、Merrill Lynch Investment Clock、Equity Risk Premium 生成阶段性 Black-Litterman Model 观点。':
+    'Time Series Momentum, Merrill Lynch Investment Clock and Equity Risk Premium generate periodic Black-Litterman views.',
+  '置信度': 'Confidence',
+  '信号去向 · 到观点层': 'Signal Routing · Into the View Layer',
+  '进入战略底仓': 'Enters strategic base',
+  '直接形成 Risk Parity 先验': 'directly forms the Risk Parity prior',
+  '底仓': 'Base',
+  '本批次弃权或中性': 'abstained or neutral this batch',
+  '战术观点与 Black-Litterman Model 装配': 'Tactical Views & Black-Litterman Assembly',
+  '直观看见战略先验与战术观点如何经贝叶斯融合，形成后验收益并推动目标权重。':
+    'See how the prior and tactical views fuse (Bayesian) into posterior returns that drive target weights.',
+  'Black-Litterman Model 如何起作用': 'How the Black-Litterman Model Works',
+  '先验 π · 战略底仓': 'Prior π · Strategic Base',
+  '观点 · 三专家集议': 'Views · Three Experts Convene',
+  '后验 · 融合输出': 'Posterior · Fused Output',
+  'Risk Parity 权重结合协方差与风险厌恶系数，反推出先验收益。': 'Risk Parity weights + covariance + risk aversion back out the prior returns.',
+  'P 方向与暴露': 'P direction & exposure', 'Q 观点收益': 'Q view return', '置信度 → Ω': 'Confidence → Ω',
+  '贝叶斯观点融合': 'Bayesian View Fusion',
+  'Ω 决定每条观点的可信权重；后验不是简单平均。': 'Ω sets each view\'s credibility weight; the posterior is not a simple average.',
+  '查看计算过程': 'View calculation',
+  '后验收益 → 目标权重': 'Posterior returns → target weights',
+  '优化器生成目标，并保留每条观点的可闭合贡献。': 'The optimizer builds targets while keeping each view\'s contribution closed.',
+  '先验明细 · Risk Parity 战略底仓': 'Prior Detail · Risk Parity Strategic Base',
+  '观点明细 · 按资产类别组织': 'View Detail · Grouped by Asset Class',
+  '条观点 · ': ' views · ',
+  '作用于': 'Acts on ', '血缘已记录': 'lineage recorded',
+  '观点收益': 'View return', '对本类权重': 'Impact here',
+  '本资产类别本批次无战术观点。': 'No tactical views for this class in this batch.',
+  '同一相对观点会同时出现在它影响的资产类别下。': 'A relative view appears under every class it affects.',
+  '收起资产类别': 'Collapse classes', '展开全部类别': 'Expand all classes',
+  '打开技术工作台': 'Open Workbench',
+  '融合输出 · 后验期望收益': 'Fused Output · Posterior Expected Returns',
+  '资产桶': 'Bucket', '先验收益': 'Prior return', '后验收益': 'Posterior', '变化': 'Change',
+  '最终权重与归因': 'Final Weights & Attribution',
+  '先看中国投资者视角汇总，再下钻到 27 个明细资产。': 'Summary first, then drill into all 27 assets.',
+  '两层合成 · Risk Parity 战略底仓 + Black-Litterman Model 战术偏离 = 目标':
+    'Two-Layer Composition · Strategic Base + Tactical Tilt = Target',
+  '目标': 'Target',
+  '汇总桶下钻 · 底层标的': 'Bucket Drill-Down · Underlying Assets',
+  '个标的 · ': ' assets · ',
+  '标的': 'Asset', '先验': 'Prior',
+  '桶内标的加总': 'Bucket sum',
+  '✓ 等于桶目标': '✓ equals bucket target', '✗ 与桶目标不符': '✗ differs from bucket target',
+  '观点贡献归因 · 按汇总桶展开': 'View Attribution · Expand by Bucket',
+  '风控投影': 'Risk Projection',
+  '明细资产权重 · 27 项': 'Asset Weights · All 27',
+  '完整保留全部明细资产，用于复核汇总权重与变动。': 'Full asset list for verifying bucket weights and changes.',
+  '资产': 'Asset', '汇总桶': 'Bucket',
+  '已显示全部明细资产。': 'All assets shown.',
+  '已隐藏': 'Hidden ', '个明细资产。': ' assets.',
+  '显示全部明细': 'Show all', '收起明细': 'Collapse',
+  '展示硬约束规则的触发状态，用于复核最终目标权重。': 'Hard-constraint rule status for verifying final weights.',
+  '通过': 'PASS', '触发': 'HIT',
+  'Demo 演示数据 · 所有数字由后端确定性代码从数据快照计算，前端只读展示 · 非投资建议':
+    'Demo data · All numbers computed deterministically by the backend from data snapshots; frontend is read-only · Not investment advice',
+  '溯源': 'TRACE', '血缘详情': 'Lineage Detail', '信号': 'Signal', '归因': 'Attribution',
+  '关闭': 'Close',
+
+  // ---- 抽屉字段 ----
+  '信号ID': 'Signal ID', '方法': 'Method', '层级': 'Layer', '观点类型': 'View type',
+  '专家版本': 'Expert version', '代码版本': 'Code version', '来源引用': 'Source refs',
+  '观点ID': 'View ID', '来源方法': 'Source method', '来源信号': 'Source signal',
+  '观点涉及资产': 'Assets in view', 'P 构造': 'P construction', 'Q 推导': 'Q derivation',
+  '观点方差': 'View variance', '不确定性': 'Uncertainty', '权重推力': 'Weight push',
+  '推导': 'Derivation', '在技术工作台查看完整计算': 'Open full calculation in Workbench',
+  '源信号': 'Source signals', '贡献': 'Contribution', '汇总桶目标': 'Bucket target',
+  '闭合': 'Closure',
+
+  // ---- 技术工作台 ----
+  'Black-Litterman Model 技术工作台': 'Black-Litterman Model Workbench',
+  '观点矩阵、计算过程与完整血缘': 'View matrix, calculations and full lineage',
+  '观点矩阵': 'View Matrix', '计算过程与溯源': 'Calculations & Lineage',
+  '可复算边界：': 'Reproducibility boundary: ',
+  '页面展示落库参数、公式关系和完整输入血缘；生产系统由后端确定性代码使用同一 DecisionRecord 复算，前端只读展示，不在浏览器中重新估计协方差或改写权重。':
+    'This page renders stored parameters, formula relations and full input lineage. Production recomputes from the same DecisionRecord in deterministic backend code; the frontend never re-estimates covariance or rewrites weights.',
+  '本批次观点议案': 'View proposals this batch ',
+  '采纳': 'Adopted', '截断': 'Capped', '未采纳': 'Rejected',
+  '已采纳': 'Adopted', '已截断': 'Capped',
+  '立本': 'ANCHOR', '集议': 'CONVENE', '合议': 'FUSE', '守界': 'GUARD',
+  'Risk Parity 反推战略先验': 'Back Out the Prior from Risk Parity',
+  '先由协方差与四大类风险预算得到战略底仓，再反向求隐含均衡收益，作为一切观点的锚。':
+    'Covariance + four-class risk budgets build the base; implied equilibrium returns anchor every view.',
+  '风险厌恶': 'Risk aversion', '桶级先验收益': 'Bucket prior returns ',
+  '三专家装配观点议案': 'Three Experts Assemble Proposals',
+  'P 定义资产暴露，Q 锚定先验隐含收益再加信号倾斜，置信度经校准映射为不确定性 Ω。':
+    'P defines exposure; Q anchors on the implied prior plus a signal tilt; confidence maps to uncertainty Ω.',
+  '议案': 'Proposals ', '置信度区间': 'Confidence range',
+  'Black-Litterman Model 贝叶斯融合': 'Black-Litterman Bayesian Fusion',
+  '观点与先验按不确定性加权融合；置信度越低，观点对后验收益与权重推力的话语权越小。':
+    'Views and prior fuse weighted by uncertainty; lower confidence means less say over posterior returns and weight pushes.',
+  '推力合成与风控投影': 'Compose Pushes & Project Through Risk',
+  '按每条观点的权重推力 λ 合成目标，再投影进禁止做空、单资产上限、波动预算与闭合约束。':
+    'Targets compose from each view\'s push λ, then project into long-only, single-asset caps, vol budget and closure constraints.',
+  '单观点推力上限': 'Per-view push cap', '风控段合计': 'Guardrail segment total ',
+  '议案逐条复核 · 每条观点的完整算路（暴露 → 收益 → 不确定性 → 推力 → 归因）':
+    'Proposal-by-Proposal Review · Full Path (Exposure → Return → Uncertainty → Push → Attribution)',
+  '议题范围': 'Scope', '暴露构成 P': 'Exposure P', '观点收益 Q': 'View Return Q',
+  '不确定性 Ω': 'Uncertainty Ω', '权重推力 λ': 'Weight Push λ',
+  '业务判断': 'Judgement', '归因去向': 'Attribution', '输入与指纹': 'Inputs & Fingerprint',
+  '先验锚 P·π': 'Prior anchor P·π', '信号倾斜': 'Signal tilt',
+  '绝对观点腿': 'Absolute leg', '多头腿': 'Long leg', '空头腿': 'Short leg',
+  '…另': '… ', '项，完整暴露见观点矩阵': ' more; see View Matrix for full exposure',
+  '置信度越低 → Ω 越大 → 该议案在合议中的话语权越小': 'Lower confidence → larger Ω → less say in the fusion',
+  '联合融合中被同资产更强议案支配，按方向纪律未采纳': 'Dominated by a stronger same-asset proposal in joint fusion; rejected by direction discipline',
+  '超出单观点推力上限': 'Exceeds per-view push cap ', '已按 Idzorek 纪律截断': '; capped per Idzorek discipline',
+  'He-Litterman 原始': 'raw He-Litterman',
+  '推力刻度': 'Push scale',
+
+  // ---- 观点矩阵页 ----
+  'P 矩阵：': 'P matrix: ',
+  '正数表示多头暴露，负数表示空头暴露；绝对观点单腿归一，相对观点的多空两腿分别归一。':
+    'positive = long exposure, negative = short. Absolute views normalize one leg; relative views normalize each leg.',
+  '行 = ': 'Rows = ', '条观点 · 列 = ': ' views · Cols = ',
+  '观点 / 资产': 'View / Asset', '查看本行计算': 'View this row',
+
+  // ---- 引擎生成的观点标签后缀（配合组合词前缀匹配）----
+  '趋势转强': ' momentum turning up', '趋势偏弱': ' momentum weakening', '趋势维持': ' momentum holding',
+  '复苏受益': ' benefits in recovery', '复苏承压': ' pressured in recovery',
+  '过热受益': ' benefits in overheat', '过热承压': ' pressured in overheat',
+  '滞胀受益': ' benefits in stagflation', '滞胀承压': ' pressured in stagflation',
+  '衰退受益': ' benefits in recession', '衰退承压': ' pressured in recession',
+  '相对中国债券更具性价比': ' more attractive vs China bonds',
+  '相对中国股票更具性价比': ' more attractive vs China equity',
+
+  // ---- 风控规则（后端 label）----
+  '禁止做空': 'Long Only', '单一资产上限': 'Single-Asset Cap', '中国股票桶上限': 'China Equity Cap',
+  '权益大类上限': 'Equity Class Cap', '债券底仓下限': 'Bond Floor', '波动预算': 'Vol Budget',
+}
