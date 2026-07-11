@@ -179,6 +179,7 @@ function CockpitBody({ data }: { data: Record<string, any> }) {
       </div>
 
       <div className="page-grid grid-2">
+        <OutcomesCard />
         <div className="app-card">
           <h3>{t('净值走势（模拟期）')}</h3>
           <Chart option={navOption} height={320} />
@@ -300,6 +301,52 @@ function CockpitBody({ data }: { data: Record<string, any> }) {
           </table>
         </div>
       </div>
+    </div>
+  )
+}
+
+function OutcomesCard() {
+  const [data, setData] = useState<Record<string, any> | null>(null)
+  const [err, setErr] = useState('')
+  useEffect(() => {
+    api.outcomes(true).then(setData).catch((e: Error) => setErr(e.message))
+  }, [])
+  if (err) return null
+  if (!data) return <div className="app-card"><h3>{t('决策命中率（结果账本）')}</h3><div className="small">{t('正在解算历史结果…')}</div></div>
+  const methods: Array<[string, string]> = [
+    ['tsmom', 'Time Series Momentum'], ['clock', 'Merrill Lynch Investment Clock'], ['erp', 'Equity Risk Premium']]
+  return (
+    <div className="app-card" style={{ gridColumn: '1 / -1' }}>
+      <h3>{t('决策命中率（结果账本）')}
+        <span className="small" style={{ fontWeight: 400 }}>
+          {t('已解算')} {data.resolved_count} · {t('待解算')} {data.pending_count} · {t('持有期')} {data.horizon_days}{t('个交易日')}
+        </span>
+      </h3>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
+        {methods.map(([id, name]) => {
+          const s = data.method_hit_rates?.[id]
+          return (
+            <div key={id}>
+              <div className="kpi-label">{name}</div>
+              <div className="kpi-value">{s ? `${(s.hit_rate * 100).toFixed(1)}%` : '—'}</div>
+              <div className="small">{s ? `${s.hits}/${s.total} ${t('条观点方向命中')}` : t('暂无数据')}</div>
+            </div>
+          )
+        })}
+        <div>
+          <div className="kpi-label">{t('象限判断命中率')}</div>
+          <div className="kpi-value">{data.regime_hit_rate != null ? `${(data.regime_hit_rate * 100).toFixed(1)}%` : '—'}</div>
+          <div className="small">{data.regime_calls} {t('次象限判定')}</div>
+        </div>
+        <div>
+          <div className="kpi-label">{t('月均α（vs 等权）')}</div>
+          <div className={`kpi-value ${(data.avg_alpha_vs_equal ?? 0) >= 0 ? 'pos' : 'neg'}`}>
+            {data.avg_alpha_vs_equal != null ? `${(data.avg_alpha_vs_equal * 10000).toFixed(0)}bp` : '—'}
+          </div>
+          <div className="small">{t('胜率')} {data.alpha_win_rate_vs_equal != null ? `${(data.alpha_win_rate_vs_equal * 100).toFixed(0)}%` : '—'}</div>
+        </div>
+      </div>
+      <div className="small" style={{ marginTop: 8, color: 'var(--muted)' }}>{data.note}</div>
     </div>
   )
 }

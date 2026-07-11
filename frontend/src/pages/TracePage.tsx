@@ -38,6 +38,7 @@ export default function TracePage() {
   const [focusViewId, setFocusViewId] = useState('')
   const [bucketsExpanded, setBucketsExpanded] = useState(false)
   const [detailExpanded, setDetailExpanded] = useState(false)
+  const [committeeExpanded, setCommitteeExpanded] = useState(false)
 
   useEffect(() => {
     setBundle(null)
@@ -187,6 +188,12 @@ export default function TracePage() {
         <span className="badge">{bundle.assets.length}{tf(' 项明细资产', ' assets')}</span>
         <span className="badge">{bundle.display_buckets.length}{tf(' 个汇总桶', ' buckets')}</span>
         <span className="badge mono" title={`${tf('输入指纹', 'Input fingerprint')} ${bundle.input_fingerprint}`}>{t('指纹')} {bundle.input_fingerprint.slice(0, 10)}</span>
+        {bundle.degraded_inputs.length > 0 && (
+          <span className="badge" style={{ borderColor: 'var(--amber)', color: 'var(--amber)' }}
+            title={bundle.degraded_inputs.map((d) => `${d.input}: ${d.reason}`).join('\n')}>
+            ⚠ {t('输入降级')} {bundle.degraded_inputs.length}
+          </span>
+        )}
       </div>
 
       {/* ===== 第一整行：最终结果 ===== */}
@@ -585,6 +592,43 @@ export default function TracePage() {
             })()}
           </div>
         </section>
+      </section>
+
+      {/* ===== 委员会正反检验（规则抽取，无 LLM） ===== */}
+      <section className="panel" style={{ marginTop: 18 }}>
+        <h2>{t('委员会正反检验')}</h2>
+        <p className="section-sub">{t('正反论据由规则从决策记录确定性抽取，每条可回跳血缘；无 LLM 参与。')}</p>
+        <div className={`check ${bundle.committee_review.verdict.result === 'blocked' ? 'warn' : ''}`}
+          style={{ marginBottom: 12 }}>
+          <b>{bundle.committee_review.verdict.result === 'clean_pass' ? t('通过质询')
+            : bundle.committee_review.verdict.result === 'blocked' ? t('不予放行') : t('有保留通过')}</b>
+          <span>{bundle.committee_review.verdict.text}</span>
+        </div>
+        <div className="committee-grid">
+          {bundle.committee_review.challenges.slice(0, committeeExpanded ? undefined : 6).map((c) => (
+            <details key={c.id} className="attrib-drill" style={{ ['--asset-color' as string]: 'var(--rose)' }}>
+              <summary>
+                <span style={{ color: 'var(--rose)' }}>{t('质疑')}</span>
+                <span className="weight-meta" style={{ flex: 1, textAlign: 'left', whiteSpace: 'normal' }}>{c.text}</span>
+              </summary>
+              <div style={{ padding: '8px 10px', fontSize: 12.5, lineHeight: 1.7 }}>
+                <b style={{ color: 'var(--method-risk-parity)' }}>{t('回应')}</b>：{c.response.text}
+                {typeof c.refs.view_id === 'string' && (
+                  <button className="text-btn" style={{ marginLeft: 8 }}
+                    onClick={() => openView(c.refs.view_id as string)}>{t('查看该观点血缘')}</button>
+                )}
+              </div>
+            </details>
+          ))}
+        </div>
+        {bundle.committee_review.challenges.length > 6 && (
+          <div className="table-actions">
+            <span className="small">{t('共')} {bundle.committee_review.challenges.length} {t('条质询')}</span>
+            <button className="text-btn" onClick={() => setCommitteeExpanded((v) => !v)}>
+              {committeeExpanded ? t('收起') : t('展开全部质询')}
+            </button>
+          </div>
+        )}
       </section>
 
       {/* ===== 底部附录 ===== */}

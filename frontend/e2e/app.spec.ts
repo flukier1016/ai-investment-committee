@@ -155,3 +155,16 @@ test('主题与语言切换', async ({ page }) => {
   // 复位（localStorage 持久化，避免影响其他用例）
   await page.evaluate(() => localStorage.clear())
 })
+
+test('委员会正反检验与结果账本', async ({ page }) => {
+  await page.goto('/trace')
+  await expect(page.locator('.summary')).toBeVisible({ timeout: 45_000 })
+  const committee = page.locator('section.panel', { hasText: '委员会正反检验' })
+  await expect(committee).toBeVisible()
+  const first = committee.locator('details.attrib-drill').first()
+  await first.locator('summary').click()
+  await expect(first).toContainText('回应')
+  await page.goto('/cockpit')
+  await expect(page.locator('.app-card', { hasText: '决策命中率' })).toBeVisible({ timeout: 90_000 })
+  await expect(page.locator('.app-card', { hasText: '决策命中率' })).toContainText('%', { timeout: 90_000 })
+})

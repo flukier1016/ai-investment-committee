@@ -89,6 +89,20 @@ export interface DecisionChecks {
   macro_staleness_days: number | null
 }
 
+export interface CommitteeChallenge {
+  id: string
+  kind: string
+  text: string
+  refs: Record<string, unknown>
+  response: { text: string; refs: Record<string, unknown> }
+}
+
+export interface CommitteeReview {
+  challenges: CommitteeChallenge[]
+  verdict: { result: string; text: string; score: Record<string, number | boolean> }
+  note: string
+}
+
 export interface DecisionTraceBundle {
   decision_id: string
   asof: string
@@ -116,6 +130,8 @@ export interface DecisionTraceBundle {
   class_weights: Record<string, number>
   attribution: Record<string, Record<string, number>>
   guardrail_actions: GuardrailAction[]
+  degraded_inputs: Array<{ input: string; reason: string; action: string }>
+  committee_review: CommitteeReview
   checks: DecisionChecks
   config: Record<string, unknown>
   input_fingerprint: string

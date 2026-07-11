@@ -20,6 +20,10 @@ from . import universe
 TOL = 1e-6
 
 
+class InfeasibleConstraintsError(ValueError):
+    """约束集不可行：宁可响亮失败，也不输出和≠1 或越界的权重。"""
+
+
 def _short_name(asset_id: str) -> str:
     for a in universe.load_universe()["assets"]:
         if a["id"] == asset_id:
@@ -68,8 +72,10 @@ def project(w_target: np.ndarray, sigma: np.ndarray, asset_order: list[str],
     metric = sigma + 2e-3 * np.eye(n)
     problem = cp.Problem(cp.Minimize(cp.quad_form(w - w_target, cp.psd_wrap(metric))), constraints)
     problem.solve(solver=cp.CLARABEL)
-    if w.value is None:
-        raise RuntimeError(f"风控投影求解失败: {problem.status}")
+    if w.value is None or problem.status not in ("optimal", "optimal_inaccurate"):
+        raise InfeasibleConstraintsError(
+            f"风控约束集不可行或求解失败（status={problem.status}）："
+            "请检查单资产上限×资产数 ≥ 债券底仓等约束是否自洽")
     w_proj = np.maximum(np.asarray(w.value).flatten(), 0.0)
     return w_proj / w_proj.sum()
 

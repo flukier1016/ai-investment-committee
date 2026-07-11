@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from ..domain import universe
 from ..schemas.decision import DecisionRecord
+from .committee import build_committee_review
 
 
 def to_bundle(record: DecisionRecord) -> dict:
@@ -57,6 +58,8 @@ def to_bundle(record: DecisionRecord) -> dict:
         "class_weights": record.class_weights,
         "attribution": record.attribution,
         "guardrail_actions": [a.model_dump() for a in record.guardrail_actions],
+        "degraded_inputs": record.degraded_inputs,
+        "committee_review": build_committee_review(record),
         "checks": record.checks,
         "config": record.config,
         "input_fingerprint": record.input_fingerprint,

@@ -94,3 +94,33 @@ docs                  本文档、数据迁移说明、API 样例
 日频总回报面板，内置 8 段宏观 regime（新冠崩盘→再通胀→扩张→滞胀→衰退触底→
 复苏→过热→复苏确认），月频 PMI/CPI 带发布日（point-in-time），三个 Demo 情景
 在不同 as-of 产生方向不同的真实信号。合成数据仅用于演示，非任何真实行情。
+
+
+## 借鉴 TradingAgents 的工程与产品补强（2026-07）
+
+对照 [TauricResearch/TradingAgents](https://github.com/tauricresearch/tradingagents)
+（arXiv:2412.20138）做了差距分析后引入 8 项改进。其多 agent 自由辩论/反思记忆
+是 V3 第七节点名的 Prompt Infection 攻击面，刻意不搬；引入的是其工程纪律的
+确定性版本：
+
+1. **决策-结果闭环账本**（`services/outcomes.py`，`GET /api/outcomes`）：
+   pending→resolved 生命周期；到期用 point-in-time 价格解算实现收益、
+   vs 等权/60·40 α、逐观点方向命中（P 加权超额收益方向 vs 观点倾斜方向）、
+   象限命中；回测 55 期一键回填。对应 V3 7.4 outcomes analysis。
+2. **委员会正反检验**（`services/committee.py`，bundle.committee_review）：
+   TradingAgents 辩论形态的去 LLM 化——质疑/回应论据全部由规则从
+   DecisionRecord 抽取（截断/未采纳/方向冲突/风控触发/输入降级），
+   每条可回跳血缘，裁决由计分规则给出。
+3. **防前视双重断言**：load_slice 末尾对价格/宏观/ERP 三路数据硬断言
+   不含未来（不信任上游预过滤）。
+4. **类型化数据错误**：NoData/InsufficientHistory/Stale/ProviderNotConfigured
+   异常树；API 按类型返回结构化 400。
+5. **核心/可选数据分级**：价格（核心）缺失整次中止；战术信号（可选）缺失
+   显式弃权、BL 退回先验、`degraded_inputs` 入记录并在前端标注。
+6. **LLM 结构化输出契约预埋**（`schemas/llm.py` + `services/llm_views.py`）：
+   象限枚举 + 置信度档位（数值由代码映射进 Ω）+ citations 防幻觉校验；
+   任何失败降级为 abstain，绝不回退自由文本。当前零 LLM 依赖。
+7. **测试盲区补强**：+31 项（输入变坏弃权、参数微扰有界、不可行约束
+   响亮失败、回测口径不变量、存储容错、同形异义字对抗样本）。
+8. **CI 门禁**（`.github/workflows/ci.yml`）：后端验收 / 前端构建+e2e /
+   确定性承诺 CI 级断言（重跑数据生成器 diff、同 as-of 重放 decision_id 不变）。

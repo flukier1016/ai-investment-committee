@@ -47,6 +47,22 @@ def _sig_id(slice_: MarketSlice, method: str) -> str:
     return f"sig_{slice_.asof.strftime('%Y%m%d')}_{method}_001"
 
 
+def abstain_signal(slice_: MarketSlice, method: str, reason: str) -> TracedSignal:
+    """可选输入缺失时的显式弃权信号（V3 容错纪律：缺数据弃权而非硬凑）。"""
+    return TracedSignal(
+        signal_id=_sig_id(slice_, {"tsmom": "tsmom", "clock": "clock", "erp": "erp"}[method]),
+        method=method, method_name=METHOD_NAMES[method],  # type: ignore[arg-type]
+        layer="tactical", view_type="abstain",
+        asof=slice_.asof.isoformat(), values={}, strength={},
+        confidence=0.0, horizon_days=0,
+        rationale=f"输入数据不可用，按容错纪律整体弃权：{reason}",
+        abstain=list(universe.bucket_ids()),
+        agent_id=f"{method}_expert", agent_version=AGENT_VERSION,
+        code_version=code_version(), params={},
+        inputs=[], derivation=f"degraded: {reason}", source_refs=[],
+    )
+
+
 def risk_parity_signal(slice_: MarketSlice, config: AllocationConfig,
                        sigma=None, asset_order=None) -> tuple[TracedSignal, dict[str, float], dict]:
     """返回 (信号, 27资产战略权重, 推导细节)。"""
@@ -181,6 +197,9 @@ def erp_signal(slice_: MarketSlice, config: AllocationConfig) -> tuple[TracedSig
     """沪深300 E/P − 10Y 国债收益率的 3 年分位 → 仅中国股债相对观点。"""
     erp = slice_.erp
     window = 756
+    if len(erp) < 60:
+        signal = abstain_signal(slice_, "erp", f"ERP 输入仅 {len(erp)} 个交易日（<60）")
+        return signal, {"degraded": True}
     gap = (erp["csi300_ep"] - erp["cgb10y_yield"]).iloc[-window:]
     current = float(gap.iloc[-1])
     pct = float((gap <= current).mean())

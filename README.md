@@ -13,8 +13,8 @@
 ```bash
 make install   # backend: uv sync；frontend: npm install
 make dev       # 后端 http://localhost:8000 · 前端 http://localhost:5173
-make test      # 后端 28 项测试（含 15 项核心数据验收）
-make e2e       # Playwright 22 项交互测试（自动拉起前后端）
+make test      # 后端 59 项测试（含 15 项核心数据验收）
+make e2e       # Playwright 23 项交互测试（自动拉起前后端）
 make build     # 构建 frontend/dist（后端同端口托管，单进程部署）
 ```
 
@@ -35,6 +35,11 @@ make build     # 构建 frontend/dist（后端同端口托管，单进程部署�
 | 09 | 利差台与风控 | 5 个相对价值策略独立叠加账本，默认不改核心权重 |
 
 界面支持**日间/夜间主题**与**中/英双语**切换（导航栏左上角）；引擎生成的叙事文本保持中文。
+
+另有两项投委会特色机制（借鉴 TradingAgents 后做的确定性改造，详见
+[docs/architecture.md](docs/architecture.md)）：**决策-结果闭环账本**
+（逐观点方向命中率、象限命中率、月均 α，`GET /api/outcomes`）与
+**委员会正反检验**（质疑/回应论据由规则从决策记录抽取、可回跳血缘）。
 
 ## 端到端计算链路
 

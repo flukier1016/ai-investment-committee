@@ -51,6 +51,8 @@ export const api = {
     post<Record<string, any>>('/api/backtest/run', { scenario_id: 'recovery_2026', config: config ?? undefined }),
   daily: (scenario: string) => get<Record<string, any>>(`/api/daily?scenario_id=${scenario}`),
   weekly: (scenario: string) => get<Record<string, any>>(`/api/weekly-report?scenario_id=${scenario}`),
+  outcomes: (backfill = false) =>
+    get<Record<string, any>>(`/api/outcomes${backfill ? '?backfill=true' : ''}`),
   spreadDesk: (scenario: string) => get<Record<string, any>>(`/api/spread-desk?scenario_id=${scenario}`),
   compare: (base: string, other: string) =>
     get<{ base: DecisionTraceBundle; other: DecisionTraceBundle; bucket_diff: Record<string, number> }>(`/api/scenarios/compare?base=${base}&other=${other}`),

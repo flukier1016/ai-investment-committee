@@ -27,7 +27,7 @@ from . import universe
 from .black_litterman import run_bl
 from .covariance import shrunk_covariance
 from .guardrails import apply_guardrails
-from .market_data import MarketSlice, load_slice
+from .market_data import DataError, MarketSlice, load_slice
 from .versioning import code_version
 
 BUCKET_ZH = {"cn_equity": "中国股票", "foreign_equity": "外国股票", "cn_bond": "中国债券",
@@ -73,12 +73,27 @@ def run_decision(scenario_id: str, asof: str, config: AllocationConfig,
     sigma = shrunk_covariance(slice_.prices, asset_order,
                               config.cov_window_days, config.shrinkage)
 
-    # L1 信号层
+    # L1 信号层。核心/可选分级：价格与协方差（Risk Parity 依赖）是核心输入，
+    # 失败向上抛整次中止；三个战术信号是可选输入，失败降级为显式弃权，
+    # BL 少观点仍闭合，决策照常产出，降级事实记入 DecisionRecord.degraded_inputs。
+    degraded_inputs: list[dict] = []
     rp_signal, w_strategic_map, rp_detail = sig_mod.risk_parity_signal(
         slice_, config, sigma=sigma, asset_order=asset_order)
-    ts_signal, ts_detail = sig_mod.tsmom_signal(slice_, config)
-    ck_signal, ck_detail = sig_mod.clock_signal(slice_, config)
-    ep_signal, ep_detail = sig_mod.erp_signal(slice_, config)
+
+    def _tactical(method: str, gen):
+        try:
+            signal, detail = gen()
+        except DataError as exc:
+            signal, detail = sig_mod.abstain_signal(slice_, method, str(exc)), {}
+            degraded_inputs.append({"input": method, "reason": str(exc), "action": "abstain"})
+            return signal, detail
+        if signal.view_type == "abstain":
+            degraded_inputs.append({"input": method, "reason": signal.rationale, "action": "abstain"})
+        return signal, detail
+
+    ts_signal, ts_detail = _tactical("tsmom", lambda: sig_mod.tsmom_signal(slice_, config))
+    ck_signal, ck_detail = _tactical("clock", lambda: sig_mod.clock_signal(slice_, config))
+    ep_signal, ep_detail = _tactical("erp", lambda: sig_mod.erp_signal(slice_, config))
     signals: dict[str, TracedSignal] = {
         "risk_parity": rp_signal, "tsmom": ts_signal, "clock": ck_signal, "erp": ep_signal}
 
@@ -189,6 +204,7 @@ def run_decision(scenario_id: str, asof: str, config: AllocationConfig,
         guardrail_actions=actions,
         conclusion=_conclusion(prior_b, target_b, regime),
         checks=checks,
+        degraded_inputs=degraded_inputs,
         engine_runtime_ms=round(runtime_ms, 1),
         code_version=code_version(),
         created_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),

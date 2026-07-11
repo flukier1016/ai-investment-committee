@@ -130,6 +130,22 @@ export const dictCore: Record<string, string> = {
   '溯源': 'TRACE', '血缘详情': 'Lineage Detail', '信号': 'Signal', '归因': 'Attribution',
   '关闭': 'Close',
 
+  // ---- 委员会正反检验 / 结果账本 / 降级 ----
+  '委员会正反检验': 'Committee Cross-Examination',
+  '正反论据由规则从决策记录确定性抽取，每条可回跳血缘；无 LLM 参与。':
+    'Arguments are extracted deterministically from the DecisionRecord with traceable refs; no LLM involved.',
+  '质疑': 'Challenge', '回应': 'Response',
+  '通过质询': 'PASSED', '有保留通过': 'PASSED W/ NOTES', '不予放行': 'BLOCKED',
+  '查看该观点血缘': 'View lineage', '展开全部质询': 'Show all challenges',
+  '收起': 'Collapse', '共': 'Total', '条质询': ' challenges',
+  '输入降级': 'Degraded inputs',
+  '决策命中率（结果账本）': 'Decision Hit Rates (Outcomes Ledger)',
+  '正在解算历史结果…': 'Resolving historical outcomes…',
+  '已解算': 'Resolved', '待解算': 'Pending', '持有期': 'Horizon ', '个交易日': ' trading days',
+  '条观点方向命中': 'view calls hit', '暂无数据': 'No data',
+  '象限判断命中率': 'Regime Call Hit Rate', '次象限判定': ' regime calls',
+  '月均α（vs 等权）': 'Avg Monthly α (vs Equal-Weight)', '胜率': 'Win rate',
+
   // ---- 抽屉字段 ----
   '信号ID': 'Signal ID', '方法': 'Method', '层级': 'Layer', '观点类型': 'View type',
   '专家版本': 'Expert version', '代码版本': 'Code version', '来源引用': 'Source refs',

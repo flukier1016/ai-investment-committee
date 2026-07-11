@@ -13,12 +13,14 @@ from pydantic import BaseModel
 from ..domain import universe
 from ..domain.backtest import run_backtest
 from ..domain.daily import run_daily
-from ..domain.market_data import _prices, load_slice, trading_dates
+from ..domain.guardrails import InfeasibleConstraintsError
+from ..domain.market_data import DataError, _prices, load_slice, trading_dates
 from ..domain.pipeline import run_decision_cached
 from ..domain.spread_desk import desk_report
 from ..schemas.config import AllocationConfig
 from ..services import store
 from ..services.bundle import to_bundle
+from ..services import outcomes
 from ..services.weekly import build_weekly
 
 router = APIRouter(prefix="/api")
@@ -94,9 +96,13 @@ def run(req: RunRequest) -> dict:
         raise HTTPException(400, "as-of 超出数据范围")
     try:
         record = run_decision_cached(req.scenario_id, asof, config)
-    except ValueError as exc:  # point-in-time 历史不足等输入问题
-        raise HTTPException(400, str(exc)) from exc
+    except DataError as exc:  # 核心输入缺失/历史不足：客户端可修正的输入问题
+        raise HTTPException(400, detail={"error_type": type(exc).__name__, "message": str(exc)}) from exc
+    except InfeasibleConstraintsError as exc:  # 约束集不自洽：配置问题
+        raise HTTPException(400, detail={"error_type": "InfeasibleConstraints", "message": str(exc)}) from exc
     store.save(record)
+    outcomes.store_pending(record)
+    outcomes.resolve_pending()
     return to_bundle(record)
 
 
@@ -248,6 +254,15 @@ def spread(scenario_id: str = "recovery_2026") -> dict:
     report["events"] = legacy_risk.get("events", [])
     report["legacy_note"] = "宏观事件日历来自旧静态页迁移 fixture；策略数字由当前引擎从价格面板现算"
     return report
+
+
+@router.get("/outcomes")
+def outcomes_view(backfill: bool = False) -> dict:
+    """决策-结果闭环账本：命中率与 α 统计。backfill=true 时用回测逐期决策回填全历史。"""
+    if backfill:
+        outcomes.backfill_from_backtest(AllocationConfig())
+    outcomes.resolve_pending()
+    return outcomes.summarize()
 
 
 @router.get("/scenarios/compare")

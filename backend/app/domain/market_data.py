@@ -59,18 +59,47 @@ def trading_dates() -> pd.DatetimeIndex:
 MIN_HISTORY_ROWS = 300  # TSMOM 12-1 回看 + 协方差估计的最低可用历史
 
 
+# ---- 类型化数据错误：类型数 = 引擎应做出的反应数 ----
+# 借鉴 TradingAgents 0.3.0 的 data-access contract：调用方按类型决定
+# 「整次中止 / 单信号弃权 / 稍后重试」，API 层按类型映射 4xx/5xx。
+
+class DataError(Exception):
+    """数据层错误基类。"""
+
+
+class NoDataError(DataError):
+    """请求窗口内完全无数据（as-of 早于数据起点等）——核心输入缺失应整次中止。"""
+
+
+class InsufficientHistoryError(DataError):
+    """有数据但历史长度不满足估计窗口——核心输入不可用应整次中止。"""
+
+
+class StaleDataError(DataError):
+    """最新可见数据距 as-of 超过新鲜度阈值——接真实行情源后启用。"""
+
+
+class ProviderNotConfiguredError(DataError):
+    """请求了未配置的数据供应商——配置错误，启动/请求期响亮失败。"""
+
+
 def load_slice(asof: str | pd.Timestamp) -> MarketSlice:
     ts = pd.Timestamp(asof)
     px = _prices().loc[:ts]
     if px.empty:
-        raise ValueError(f"as-of {ts.date()} 早于数据起点")
+        raise NoDataError(f"as-of {ts.date()} 早于数据起点")
     if len(px) < MIN_HISTORY_ROWS:
-        raise ValueError(
+        raise InsufficientHistoryError(
             f"as-of {ts.date()} 可见历史仅 {len(px)} 个交易日，"
             f"少于引擎最低要求 {MIN_HISTORY_ROWS} 日（协方差与动量回看窗）")
     macro = _macro()
     macro_visible = macro[macro["publish_date"] <= ts].copy()
     erp = _erp_inputs().loc[:ts]
+    # 防前视硬断言（不信任上游预过滤，V3 5.4 point-in-time 纪律的最后一道闸）
+    assert px.index.max() <= ts, "价格切片含未来数据"
+    assert erp.empty or erp.index.max() <= ts, "ERP 切片含未来数据"
+    assert macro_visible.empty or macro_visible["publish_date"].max() <= ts, \
+        "宏观切片含发布日晚于 as-of 的数据"
     digest = hashlib.sha256()
     digest.update(str(px.index[-1].date()).encode())
     digest.update(str(len(px)).encode())

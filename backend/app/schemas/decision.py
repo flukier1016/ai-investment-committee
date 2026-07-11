@@ -102,6 +102,8 @@ class DecisionRecord(BaseModel):
     guardrail_actions: list[GuardrailAction]
     conclusion: str
     checks: dict[str, Any]
+    degraded_inputs: list[dict] = Field(default_factory=list,
+                                        description="可选输入缺失导致的降级记录（信号弃权等）")
     engine_runtime_ms: float
     code_version: str
     created_at: str
