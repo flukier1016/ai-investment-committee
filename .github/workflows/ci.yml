@@ -11,10 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # test_changelog.py 需要 PR/push 两端对象核对聚合变更范围。
+          fetch-depth: 0
       - uses: astral-sh/setup-uv@v4
       - name: 安装依赖
         run: uv sync --project backend
       - name: 验收测试
+        env:
+          CHANGELOG_EVENT_NAME: ${{ github.event_name }}
+          CHANGELOG_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          CHANGELOG_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: uv run --project backend pytest tests/backend -q
       - name: Lint（错误级）
         run: uv run --project backend --with ruff ruff check backend --select E9,F63,F7,F82
