@@ -36,14 +36,17 @@
 |---|---|---|---|
 | market_snapshot.json | `market_snapshot` | 参考 | 28→27 并腿 |
 | methodology_cards.json | `methodology` | 方法论出处卡 | 只保留四方法；yale/mvo_bl 存档标注 |
-| news_library.json | `knowledge` 195条 | 资讯 Demo 素材 | 资产标签映射 |
+| news_library.json | `knowledge` 195条 | 资讯 Demo 素材 | 资产标签映射 + `publish_ts` 日末代理 |
 | spread_desk_report.json | `debate.desk_report` | 利差台参考 | legs 并腿 |
 | risk_officer_report.json | `debate.risk_report` | 宏观事件日历（驾驶舱/利差台展示） | 原样 |
 | live_daily_history.json | `live` | 日更参考 | 删除六引擎 top_engine 字段 |
 | personality_quiz.json | `profile` | 投资性格问卷（配置页可选 Demo） | 明确标注只映射风险参数 |
 | ops_metrics.json | `ops_metrics` | 工程效能参考 | 原样 |
 
-所有 fixture 带 `"source": "legacy_static_page"` 标记与 as-of 时间。
+所有 fixture 带 `"source": "legacy_static_page"` 标记与 as-of 时间。旧资讯只有
+`published` 日期，没有真实发布时刻；抽取器保留原字段，并确定性补
+`publish_ts = YYYY-MM-DDT23:59:59Z`。这是防同日回测前视的保守日末可见代理，
+不冒充真实发布时间，策略写在 `news_library.json._meta.publish_ts_policy`。
 
 ## 三、不迁移 / 必须重算的旧口径
 
@@ -65,4 +68,6 @@
 唯一输入是 `data/demo/` 下的确定性合成数据（`market_prices.csv` / `macro.csv` /
 `erp_inputs.csv`，由 `scripts/generate_demo_data.py` 固定种子生成，含
 point-in-time 发布日）。legacy fixture 只用于展示性内容（事件日历、问卷、
-方法论文案），页面中均标注来源。
+方法论文案、资讯库），页面中均标注来源。`domain/news.py` 的
+`news_asof_filter()` 只建立未来真实新闻接入前的可见性红线，本阶段不把 legacy
+资讯接入 MarketSlice、输入指纹、信号或权重链。

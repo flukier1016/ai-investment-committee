@@ -9,6 +9,7 @@
    credit_aaa→aaa_cp_3y、ust_fut→us10y_zn、copper_sh→copper）；
 3. 六引擎口径的数据（辩论、engine_priors、v3 回测净值）不迁移；
 4. 全部标记 "source": "legacy_static_page"，仅作展示性 fixture，不进入计算链路。
+5. 新闻仅有发布日期，保守映射为当日 23:59:59Z 的 publish_ts 可见性代理。
 
 用法：python scripts/extract_legacy_fixtures.py /path/to/AI投委会_静态页面html.html
 """
@@ -16,7 +17,10 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
+import uuid
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -43,6 +47,17 @@ def merge_weight_dict(weights: dict[str, float]) -> dict[str, float]:
         nk = map_id(k)
         out[nk] = round(out.get(nk, 0.0) + float(v), 6)
     return out
+
+
+def legacy_date_to_publish_ts(published: object) -> str:
+    """旧库只有发布日期；保守映射到 UTC 日末，避免同日回测提前看见。"""
+    if not isinstance(published, str) or not published.strip():
+        raise ValueError(f"legacy 新闻缺少 published 日期：{published!r}")
+    try:
+        day = date.fromisoformat(published.strip())
+    except ValueError as exc:
+        raise ValueError(f"legacy 新闻 published 不是 ISO 日期：{published!r}") from exc
+    return f"{day.isoformat()}T23:59:59Z"
 
 
 def load_inline_json(html_path: Path) -> dict:
@@ -86,8 +101,18 @@ def main(html_file: str) -> None:
     news = []
     for item in data.get("knowledge", []):
         assets = sorted({news_map.get(a, a) for a in item.get("assets", [])})
-        news.append({**item, "assets": assets})
-    write("news_library.json", {"_meta": stamp, "items": news})
+        news.append({**item, "assets": assets,
+                     "publish_ts": legacy_date_to_publish_ts(item.get("published"))})
+    write("news_library.json", {
+        "_meta": {
+            **stamp,
+            "publish_ts_policy": (
+                "legacy 仅有日期；publish_ts 使用当日 23:59:59Z 作为保守日末可见代理，"
+                "不代表真实发布时间"
+            ),
+        },
+        "items": news,
+    })
 
     # 4. 利差台台报 + 风控官报告（挂在旧 debate 下，口径独立可用）
     debate = data.get("debate", {})
@@ -121,7 +146,13 @@ def main(html_file: str) -> None:
 
 
 def write(name: str, obj: dict) -> None:
-    (OUT / name).write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
+    path = OUT / name
+    tmp = path.with_name(f"{path.name}.{os.getpid()}.{uuid.uuid4().hex}.tmp")
+    try:
+        tmp.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
+        os.replace(tmp, path)
+    finally:
+        tmp.unlink(missing_ok=True)
     print(" -", name)
 
 

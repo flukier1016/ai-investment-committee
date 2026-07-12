@@ -135,6 +135,18 @@ pipeline、原子存储与结果账本生命周期，`backtest` 直调 walk-forw
 复苏→过热→复苏确认），月频 PMI/CPI 带发布日（point-in-time），三个 Demo 情景
 在不同 as-of 产生方向不同的真实信号。合成数据仅用于演示，非任何真实行情。
 
+新闻时间边界独立定义在 `domain/news.py::news_asof_filter()`，暂不接入
+MarketSlice、决策指纹或权重链。带有效 `publish_ts` 的文章只有在
+`publish_ts <= asof` 时可见；无时间文章在回测中 fail-closed 剔除，live 模式
+才原样保留；非空但非法的时间戳响亮失败，未来调用方必须降级为 abstain。
+过滤保持输入顺序与重复项，返回深拷贝，不读取当前时间。带 offset 的时间统一
+转 UTC；naive/date-only 按固定 UTC+8 的当日 00:00 解释，不依赖宿主机时区。
+
+`data/demo/legacy/news_library.json` 的 195 条展示资讯只有日期，因此保留
+`published` 并补 `23:59:59Z` 的保守日末 `publish_ts` 代理；该策略不代表真实
+发布时间，并写入 fixture 元数据。接真实新闻/LLM 前的固定顺序必须是
+`news_asof_filter → 编号上下文 → 结构化象限契约`，过滤前文本不得进入 prompt。
+
 
 ## 借鉴 TradingAgents 的工程与产品补强（2026-07）
 
