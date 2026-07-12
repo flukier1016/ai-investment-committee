@@ -140,7 +140,7 @@ def neutral_risk_perspective(asset_turnover_proxy: float, bucket_shift: float) -
             "target": "target_weights",
             "strategic_prior": "prior.w_strategic",
             "bucket_target": "bucket_weights",
-            "bucket_prior": "attribution.*.prior",
+            "bucket_prior": "prior.w_strategic",
         },
     }
 
@@ -196,19 +196,27 @@ def build_risk_perspectives(record: DecisionRecord) -> list[dict]:
     """从不可变记录派生固定顺序的三张风控视角卡，不改记录或裁决。"""
     config = AllocationConfig.model_validate(record.config)
     limit = _tightest_upper_limit(record, config)
-    asset_turnover_proxy = 0.5 * sum(
+    # 换手代理与桶级偏离必须只由落库的 6 位小数权重派生。优化器（Risk Parity ERC /
+    # CVXPY 投影）全精度输出在不同 runner 硬件上有 ±1e-7 差异；这些代理是近似相等
+    # 两量之比（可解释比例 ≈1.0，intra_bucket_churn≈1e-4），会把 1e-7 放大到 1e-5，
+    # 与只存 6 位的固定 fixture 做精确 == 时偶发不等。落到与权重一致的 6 位精度后，
+    # 相同 6 位权重必得逐字节相同的派生值（见 test_risk_perspectives 稳定性防线）。
+    asset_turnover_proxy = _number(0.5 * sum(
         abs(record.target_weights[asset_id] - record.prior.w_strategic[asset_id])
         for asset_id in sorted(record.target_weights)
-    )
+    ))
     missing_prior = [bucket_id for bucket_id in sorted(record.bucket_weights)
                      if "prior" not in record.attribution.get(bucket_id, {})]
     if missing_prior:
         raise ValueError(f"风控换手代理缺少桶级 prior 归因：{missing_prior}")
-    bucket_shift = 0.5 * sum(
-        abs(record.bucket_weights[bucket_id]
-            - record.attribution[bucket_id]["prior"])
+    # 桶级 prior 从落库的 6 位明细战略先验重新聚合并落 6 位，与资产级换手代理同源
+    # 同精度；不直接引用 attribution.*.prior——后者是全精度聚合后再舍入，会把 6 位
+    # 以下的求解器噪声（如 cn_bond 0.299791 vs 0.299792）经比值放大。
+    bucket_prior = universe.aggregate_to_buckets(record.prior.w_strategic)
+    bucket_shift = _number(0.5 * sum(
+        abs(_number(record.bucket_weights[bucket_id]) - _number(bucket_prior[bucket_id]))
         for bucket_id in sorted(record.bucket_weights)
-    )
+    ))
     return [
         aggressive_risk_perspective(
             float(record.checks["portfolio_vol"]), config.target_vol),

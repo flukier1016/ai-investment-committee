@@ -204,10 +204,15 @@ prompt SHA、response schema SHA 与允许引用集合共同做 canonical SHA-25
    中性三视角：激进只读 `portfolio_vol / target_vol`；保守复用
    `guardrails.asset_caps()` 并和中国股票桶、权益大类上限一起找最小绝对余量；
    中性以 `0.5 × Σ|target − Risk Parity prior|` 作为理论单边换手代理，并用
-   `0.5 × Σ|bucket target − attribution.prior|` 量化桶级可解释比例。记录没有
-   漂移后当前持仓，因此该代理不得表述为实际成交。三视角只按硬边界与 1e-6
-   闭合容差分类，不另造经验阈值，不改裁决计分、权重、DecisionRecord 或
-   decision_id；前端只展示后端数值，三卡共用中性色。
+   `0.5 × Σ|bucket target − bucket prior|` 量化桶级可解释比例；两个代理都只由
+   落库的 6 位小数权重派生并落回 6 位精度，桶级 prior 取 `prior.w_strategic` 的
+   桶聚合（而非全精度聚合后再舍入的 `attribution.prior`）。这样相同 6 位权重必得
+   逐字节相同的派生值，避免优化器 1e-7 级硬件差异经近似相等两量的比值放大成
+   1e-5、与只存 6 位的固定 fixture 精确相等时偶发不等（换手代理、桶级偏离、
+   可解释比例、桶内残余全部按落库精度稳定）。记录没有漂移后当前持仓，因此该
+   代理不得表述为实际成交。三视角只按硬边界与 1e-6 闭合容差分类，不另造经验
+   阈值，不改裁决计分、权重、DecisionRecord 或 decision_id；前端只展示后端数值，
+   三卡共用中性色。
 3. **防前视双重断言**：load_slice 末尾对价格/宏观/ERP 三路数据硬断言
    不含未来（不信任上游预过滤）。
 4. **类型化数据错误**：NoData/InsufficientHistory/Stale/ProviderNotConfigured

@@ -105,20 +105,64 @@ def test_record_derivation_is_deterministic_exact_and_non_mutating(record):
     assert conservative["metrics"]["current"] + conservative["metrics"]["headroom"] \
         == pytest.approx(conservative["metrics"]["limit"], abs=1e-6)
 
-    expected_asset_turnover = 0.5 * sum(
+    # 两代理都从落库的 6 位明细权重派生并落回 6 位小数（与权重同精度），
+    # 桶级 prior 取 prior.w_strategic 的桶聚合，而非全精度 attribution.prior。
+    expected_asset_turnover = round(0.5 * sum(
         abs(record.target_weights[asset_id] - record.prior.w_strategic[asset_id])
         for asset_id in sorted(record.target_weights)
-    )
-    expected_bucket_shift = 0.5 * sum(
-        abs(record.bucket_weights[bucket_id]
-            - record.attribution[bucket_id]["prior"])
+    ), 6)
+    bucket_prior = universe.aggregate_to_buckets(record.prior.w_strategic)
+    expected_bucket_shift = round(0.5 * sum(
+        abs(round(record.bucket_weights[bucket_id], 6) - round(bucket_prior[bucket_id], 6))
         for bucket_id in sorted(record.bucket_weights)
-    )
-    assert neutral["metrics"]["asset_turnover_proxy"] == pytest.approx(
-        expected_asset_turnover, abs=1e-6)
-    assert neutral["metrics"]["bucket_shift"] == pytest.approx(
-        expected_bucket_shift, abs=1e-6)
+    ), 6)
+    assert neutral["metrics"]["asset_turnover_proxy"] == expected_asset_turnover
+    assert neutral["metrics"]["bucket_shift"] == expected_bucket_shift
     assert "目标相对 Risk Parity 战略先验" in neutral["text"]
+
+
+def test_neutral_derivation_is_stable_at_persisted_precision(record):
+    """跨 runner 稳定性防线：换手代理/桶级偏离/可解释比例必须只由落库的 6 位
+    小数权重派生，逐字节稳定。
+
+    历史事故：中性视角把 attribution.prior（全精度桶级聚合再舍入）与桶级 target
+    相除，1e-7 级求解器硬件差异经近似相等两量的比值放大成 1e-5 漂移（如
+    0.997117 vs 0.997106），与只存 6 位的固定 fixture 精确 == 时在部分 GitHub
+    Actions runner 上偶发失败（提交 dce9b57 的 CI 曾中招，重跑即绿）。
+    """
+    base = build_risk_perspectives(record)[2]
+    m = base["metrics"]
+
+    # 1) 报告的派生量本身就落在 6 位精度，且可解释比例/桶内残余可由报告的两代理
+    #    精确复算——消费方无需接触任何 6 位以下中间量。
+    for key in ("asset_turnover_proxy", "bucket_shift",
+                "explainable_share", "intra_bucket_churn"):
+        assert m[key] == round(m[key], 6)
+    assert base["value"] == m["explainable_share"]
+    assert m["explainable_share"] == round(
+        m["bucket_shift"] / m["asset_turnover_proxy"], 6)
+    assert m["intra_bucket_churn"] == round(
+        max(m["asset_turnover_proxy"] - m["bucket_shift"], 0.0), 6)
+
+    # 2) 桶级偏离只认 6 位 prior.w_strategic 的聚合，等于用 attribution.prior 会
+    #    把全精度噪声带入。把每个桶的 attribution.prior 污染 1e-6（复刻噪声来源），
+    #    派生视角必须逐字节不变。
+    poisoned = record.model_copy(deep=True)
+    for i, bucket_id in enumerate(sorted(poisoned.attribution)):
+        if "prior" in poisoned.attribution[bucket_id]:
+            poisoned.attribution[bucket_id]["prior"] = round(
+                poisoned.attribution[bucket_id]["prior"]
+                + (1e-6 if i % 2 == 0 else -1e-6), 9)
+    assert build_risk_perspectives(poisoned)[2] == base
+
+    # 3) bucket_weights 落库到 9 位，其 6 位以下尾数不得进入派生：注入 <5e-7 抖动
+    #    （模拟求解器硬件差异残留在 6 位以下）后派生视角逐字节一致——派生把桶级
+    #    target 先落回 6 位再比较。
+    twin = record.model_copy(deep=True)
+    twin.bucket_weights.update({
+        b: v + (4e-7 if i % 2 == 0 else -4e-7)
+        for i, (b, v) in enumerate(sorted(record.bucket_weights.items()))})
+    assert build_risk_perspectives(twin)[2] == base
 
 
 def test_tightest_limit_reuses_configured_asset_risk_cap(record):

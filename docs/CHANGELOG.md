@@ -18,6 +18,16 @@
 
 ## 未发布
 
+- **风控三视角跨平台确定性修复**：中性视角的换手代理、桶级偏离、可解释比例与
+  桶内残余改为只由落库的 6 位小数权重派生并落回 6 位精度（桶级 prior 取
+  `prior.w_strategic` 的桶聚合，不再引用全精度聚合后再舍入的 `attribution.prior`），
+  杜绝 1e-7 级求解器硬件差异经近似相等两量的比值放大成 1e-5、与固定 fixture 精确
+  相等偶发失败；`docs/api_samples/decision_bundle.json` 随新舍入口径同步更新且逐字节
+  确定。仅稳定派生展示值，不改 `decision_id`、权重或裁决计分。
+  验收：`tests/backend/test_risk_perspectives.py::test_neutral_derivation_is_stable_at_persisted_precision`、
+  `tests/backend/test_risk_perspectives.py::test_record_derivation_is_deterministic_exact_and_non_mutating`、
+  `tests/backend/test_risk_perspectives.py::test_committee_and_bundle_add_views_without_changing_record_or_verdict`。
+
 - **可访问性与暗色可见性补强**：利差台策略行改为键盘可达，支持 Enter/Space 展开
   并暴露 `aria-expanded`；技术工作台 dialog 与 tablist 的 `aria-label` 改走 `tf()`，
   读屏在 EN 下不再念中文；情景信号卡与回测委员会高亮行背景改用主题令牌
