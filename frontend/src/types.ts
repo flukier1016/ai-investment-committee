@@ -99,7 +99,62 @@ export interface CommitteeChallenge {
   response: { text: string; refs: Record<string, unknown> }
 }
 
+export type RiskPerspectiveAssessment =
+  | 'capacity_remaining' | 'at_budget' | 'over_budget'
+  | 'headroom' | 'binding' | 'breach'
+  | 'no_turnover' | 'fully_explained' | 'partly_explained'
+  | 'intra_bucket_only' | 'inconsistent'
+
+interface RiskPerspectiveBase {
+  id: string
+  persona: string
+  value: number
+  assessment: RiskPerspectiveAssessment
+  text: string
+  refs: Record<string, string>
+}
+
+export interface AggressiveRiskPerspective extends RiskPerspectiveBase {
+  role: 'aggressive'
+  metric: 'vol_budget_utilization'
+  metrics: {
+    portfolio_vol: number
+    target_vol: number
+    utilization: number
+    remaining_vol: number
+    remaining_budget_share: number
+  }
+}
+
+export interface ConservativeRiskPerspective extends RiskPerspectiveBase {
+  role: 'conservative'
+  metric: 'cap_headroom'
+  metrics: {
+    subject: string
+    current: number
+    limit: number
+    headroom: number
+  }
+}
+
+export interface NeutralRiskPerspective extends RiskPerspectiveBase {
+  role: 'neutral'
+  metric: 'turnover_proportionality'
+  metrics: {
+    asset_turnover_proxy: number
+    bucket_shift: number
+    explainable_share: number
+    intra_bucket_churn: number
+  }
+}
+
+export type CommitteeRiskPerspective =
+  | AggressiveRiskPerspective
+  | ConservativeRiskPerspective
+  | NeutralRiskPerspective
+
 export interface CommitteeReview {
+  risk_perspectives: CommitteeRiskPerspective[]
   challenges: CommitteeChallenge[]
   verdict: { result: string; text: string; score: Record<string, number | boolean> }
   note: string

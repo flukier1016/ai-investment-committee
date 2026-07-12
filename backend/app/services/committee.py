@@ -8,10 +8,216 @@
 
 from __future__ import annotations
 
+from ..domain import universe
+from ..domain.guardrails import asset_caps
 from ..domain.labels import BUCKET_ZH
+from ..schemas.config import AllocationConfig
 from ..schemas.decision import DecisionRecord
 METHOD_NAMES = {"risk_parity": "Risk Parity", "tsmom": "Time Series Momentum",
                 "clock": "Merrill Lynch Investment Clock", "erp": "Equity Risk Premium"}
+
+# 三视角只按约束边界和闭合容差分类，不另造经验阈值；不参与权重或裁决计分。
+RISK_FACT_TOL = 1e-6
+
+
+def _number(value: float) -> float:
+    return round(float(value), 6)
+
+
+def aggressive_risk_perspective(portfolio_vol: float, target_vol: float) -> dict:
+    """激进视角：只读波动预算使用率，不建议或生成任何权重。"""
+    if portfolio_vol < 0 or target_vol <= 0:
+        raise ValueError("波动率必须满足 portfolio_vol >= 0 且 target_vol > 0")
+    utilization = portfolio_vol / target_vol
+    remaining_vol = target_vol - portfolio_vol
+    remaining_share = 1.0 - utilization
+    if utilization < 1.0 - RISK_FACT_TOL:
+        assessment = "capacity_remaining"
+        interpretation = "激进视角认为仍有战术表达空间，但任何增配仍须通过硬约束。"
+    elif utilization <= 1.0 + RISK_FACT_TOL:
+        assessment = "at_budget"
+        interpretation = "激进视角也不支持继续扩张风险，新增表达应先释放现有预算。"
+    else:
+        assessment = "over_budget"
+        interpretation = "组合已超过波动预算，必须升级复核，不能以激进偏好绕过硬约束。"
+    return {
+        "id": "risk_aggressive",
+        "persona": "激进视角",
+        "role": "aggressive",
+        "metric": "vol_budget_utilization",
+        "value": _number(utilization),
+        "assessment": assessment,
+        "text": (f"组合事前波动 {portfolio_vol:.2%}，占目标波动 {target_vol:.2%} 的 "
+                 f"{utilization:.1%}，绝对余量 {remaining_vol:.2%}。{interpretation}"),
+        "metrics": {
+            "portfolio_vol": _number(portfolio_vol),
+            "target_vol": _number(target_vol),
+            "utilization": _number(utilization),
+            "remaining_vol": _number(remaining_vol),
+            "remaining_budget_share": _number(remaining_share),
+        },
+        "refs": {
+            "portfolio_vol": "checks.portfolio_vol",
+            "target_vol": "config.target_vol",
+        },
+    }
+
+
+def conservative_risk_perspective(*, subject: str, current: float, limit: float,
+                                  refs: dict[str, str]) -> dict:
+    """保守视角：评论最紧有效上限的绝对余量。"""
+    if current < 0 or limit <= 0:
+        raise ValueError("上限口径必须满足 current >= 0 且 limit > 0")
+    headroom = limit - current
+    if headroom < -RISK_FACT_TOL:
+        assessment = "breach"
+        interpretation = "保守视角要求阻断放行并升级复核。"
+    elif headroom <= RISK_FACT_TOL:
+        assessment = "binding"
+        interpretation = "保守视角要求将这条约束列为首要复核项。"
+    else:
+        assessment = "headroom"
+        interpretation = "保守视角确认当前仍在硬约束范围内，并保留精确余量供复核。"
+    return {
+        "id": "risk_conservative",
+        "persona": "保守视角",
+        "role": "conservative",
+        "metric": "cap_headroom",
+        "value": _number(headroom),
+        "assessment": assessment,
+        "text": (f"最紧有效上限为“{subject}”：当前 {current:.2%}，上限 {limit:.2%}，"
+                 f"绝对余量 {headroom * 100:+.2f} 个百分点。{interpretation}"),
+        "metrics": {
+            "subject": subject,
+            "current": _number(current),
+            "limit": _number(limit),
+            "headroom": _number(headroom),
+        },
+        "refs": dict(refs),
+    }
+
+
+def neutral_risk_perspective(asset_turnover_proxy: float, bucket_shift: float) -> dict:
+    """中性视角：用桶级可解释比例评价理论换手代理是否相称。"""
+    if asset_turnover_proxy < 0 or bucket_shift < 0:
+        raise ValueError("换手代理与桶级净偏离不得为负")
+    explainable_share = (bucket_shift / asset_turnover_proxy
+                         if asset_turnover_proxy > 1e-12
+                         else (1.0 if bucket_shift <= RISK_FACT_TOL else 0.0))
+    intra_bucket_churn = max(asset_turnover_proxy - bucket_shift, 0.0)
+    if bucket_shift > asset_turnover_proxy + RISK_FACT_TOL:
+        assessment = "inconsistent"
+        interpretation = "桶级净偏离大于资产换手代理，记录需复核，不能静默截断比例。"
+    elif asset_turnover_proxy <= RISK_FACT_TOL:
+        assessment = "no_turnover"
+        interpretation = "目标与战略先验一致，没有需要解释的理论换手。"
+    elif intra_bucket_churn <= RISK_FACT_TOL:
+        assessment = "fully_explained"
+        interpretation = "中性视角确认理论换手由可见的桶级战术偏离完全解释。"
+    elif bucket_shift <= RISK_FACT_TOL:
+        assessment = "intra_bucket_only"
+        interpretation = "中性视角确认理论换手全部来自桶内调整，需要下钻明细归因。"
+    else:
+        assessment = "partly_explained"
+        interpretation = "中性视角同时保留桶级偏离与桶内调整，供实施前逐项复核。"
+    return {
+        "id": "risk_neutral",
+        "persona": "中性视角",
+        "role": "neutral",
+        "metric": "turnover_proportionality",
+        "value": _number(explainable_share),
+        "assessment": assessment,
+        "text": ("这不是实际成交换手：目标相对 Risk Parity 战略先验的资产单边换手代理为 "
+                 f"{asset_turnover_proxy:.2%}，桶级净偏离为 {bucket_shift:.2%}，"
+                 f"可解释比例 {explainable_share:.1%}。{interpretation}"),
+        "metrics": {
+            "asset_turnover_proxy": _number(asset_turnover_proxy),
+            "bucket_shift": _number(bucket_shift),
+            "explainable_share": _number(explainable_share),
+            "intra_bucket_churn": _number(intra_bucket_churn),
+        },
+        "refs": {
+            "target": "target_weights",
+            "strategic_prior": "prior.w_strategic",
+            "bucket_target": "bucket_weights",
+            "bucket_prior": "attribution.*.prior",
+        },
+    }
+
+
+def _tightest_upper_limit(record: DecisionRecord,
+                          config: AllocationConfig) -> dict:
+    """复用风控层资产 cap，并加入桶/大类 cap，选择绝对余量最小者。"""
+    asset_order = sorted(record.target_weights)
+    caps = asset_caps(asset_order, config)
+    asset_meta = {a["id"]: a for a in universe.load_universe()["assets"]}
+    candidates: list[dict] = []
+    for asset_id, cap in zip(asset_order, caps, strict=True):
+        risk_cap = None
+        if asset_id in config.risk_caps_wan and config.principal > 0:
+            risk_cap = config.risk_caps_wan[asset_id] * 10_000 / config.principal
+        base_cap = 1.0 if asset_id == "cash" else config.single_asset_cap
+        # 默认现金技术 cap=100% 不参与“最近配置上限”；显式金额 cap 生效时仍须纳入。
+        if asset_id == "cash" and (risk_cap is None or risk_cap >= base_cap):
+            continue
+        limit_ref = (f"config.risk_caps_wan.{asset_id}"
+                     if risk_cap is not None and risk_cap < base_cap
+                     else "config.single_asset_cap")
+        current = record.target_weights[asset_id]
+        candidates.append({
+            "id": f"asset_cap:{asset_id}",
+            "subject": f"{asset_meta[asset_id]['short_name']}明细资产上限",
+            "current": current,
+            "limit": float(cap),
+            "refs": {"current": f"target_weights.{asset_id}", "limit": limit_ref},
+        })
+    candidates.extend([
+        {
+            "id": "bucket_cap:cn_equity",
+            "subject": "中国股票桶上限",
+            "current": record.bucket_weights["cn_equity"],
+            "limit": config.cn_equity_cap,
+            "refs": {"current": "bucket_weights.cn_equity",
+                     "limit": "config.cn_equity_cap"},
+        },
+        {
+            "id": "class_cap:equity",
+            "subject": "权益大类上限",
+            "current": record.class_weights["equity"],
+            "limit": config.equity_class_cap,
+            "refs": {"current": "class_weights.equity",
+                     "limit": "config.equity_class_cap"},
+        },
+    ])
+    return min(candidates, key=lambda item: (item["limit"] - item["current"], item["id"]))
+
+
+def build_risk_perspectives(record: DecisionRecord) -> list[dict]:
+    """从不可变记录派生固定顺序的三张风控视角卡，不改记录或裁决。"""
+    config = AllocationConfig.model_validate(record.config)
+    limit = _tightest_upper_limit(record, config)
+    asset_turnover_proxy = 0.5 * sum(
+        abs(record.target_weights[asset_id] - record.prior.w_strategic[asset_id])
+        for asset_id in sorted(record.target_weights)
+    )
+    missing_prior = [bucket_id for bucket_id in sorted(record.bucket_weights)
+                     if "prior" not in record.attribution.get(bucket_id, {})]
+    if missing_prior:
+        raise ValueError(f"风控换手代理缺少桶级 prior 归因：{missing_prior}")
+    bucket_shift = 0.5 * sum(
+        abs(record.bucket_weights[bucket_id]
+            - record.attribution[bucket_id]["prior"])
+        for bucket_id in sorted(record.bucket_weights)
+    )
+    return [
+        aggressive_risk_perspective(
+            float(record.checks["portfolio_vol"]), config.target_vol),
+        conservative_risk_perspective(
+            subject=limit["subject"], current=limit["current"], limit=limit["limit"],
+            refs=limit["refs"],
+        ),
+        neutral_risk_perspective(asset_turnover_proxy, bucket_shift),
+    ]
 
 
 def _view_method(record: DecisionRecord, view: dict) -> str:
@@ -22,7 +228,7 @@ def _view_method(record: DecisionRecord, view: dict) -> str:
 
 
 def build_committee_review(record: DecisionRecord) -> dict:
-    """返回 {challenges: [{id, text, refs, response: {text, refs}}], verdict}。"""
+    """返回确定性三视角、质疑回应与不改权重的规则裁决。"""
     views = record.bl_inputs.get("views", [])
     challenges: list[dict] = []
 
@@ -146,7 +352,9 @@ def build_committee_review(record: DecisionRecord) -> dict:
                         + "；质询意见均有据可查，配置有保留地通过。")
         verdict = "pass_with_notes"
     return {
+        "risk_perspectives": build_risk_perspectives(record),
         "challenges": challenges,
         "verdict": {"result": verdict, "text": verdict_text, "score": score},
-        "note": "正反论据由规则从 DecisionRecord 确定性抽取，无 LLM 参与；每条可回跳血缘。",
+        "note": ("三视角点评与正反论据均由规则从 DecisionRecord 确定性抽取，"
+                 "无 LLM 参与；每条可回跳血缘。"),
     }

@@ -4,7 +4,10 @@ import { fmtAsof, fmtBp, fmtDecisionId, fmtPct, fmtPp } from '../meta'
 import { useScenario } from '../scenario'
 import { t, tf, usePrefs } from '../prefs'
 import { ScenarioPicker } from '../components/Layout'
-import type { BLView, BucketStance, DecisionTraceBundle, TracedSignal } from '../types'
+import type {
+  BLView, BucketStance, CommitteeRiskPerspective, DecisionTraceBundle,
+  RiskPerspectiveAssessment, TracedSignal,
+} from '../types'
 
 // ---------- 展示口径（英文全称 + 固定方法色） ----------
 const METHOD_INFO: Record<string, { name: string; color: string }> = {
@@ -25,6 +28,18 @@ const SIGNAL_VALUE_LABELS: Record<string, string> = {
 const STANCE_TONE: Record<BucketStance, 'positive' | 'flat' | 'negative'> = {
   '显著超配': 'positive', '超配': 'positive', '中性': 'flat',
   '低配': 'negative', '显著低配': 'negative',
+}
+const RISK_ROLE_INFO: Record<CommitteeRiskPerspective['role'], { label: string; focus: string }> = {
+  aggressive: { label: '激进视角', focus: '波动预算利用率' },
+  conservative: { label: '保守视角', focus: '距上限余量' },
+  neutral: { label: '中性视角', focus: '换手相称性' },
+}
+const RISK_ASSESSMENT_LABEL: Record<RiskPerspectiveAssessment, string> = {
+  capacity_remaining: '预算尚有余量', at_budget: '预算已用满', over_budget: '预算已超限',
+  headroom: '上限仍有余量', binding: '上限已贴边', breach: '上限已突破',
+  no_turnover: '无理论换手', fully_explained: '桶级完全解释',
+  partly_explained: '桶级部分解释', intra_bucket_only: '仅桶内调整',
+  inconsistent: '换手口径不一致',
 }
 
 interface DrawerState { kind: string; title: string; body: ReactNode }
@@ -612,6 +627,7 @@ export default function TracePage() {
             : bundle.committee_review.verdict.result === 'blocked' ? t('不予放行') : t('有保留通过')}</b>
           <span>{bundle.committee_review.verdict.text}</span>
         </div>
+        <RiskPerspectiveCards perspectives={bundle.committee_review.risk_perspectives} />
         <div className="committee-grid">
           {bundle.committee_review.challenges.slice(0, committeeExpanded ? undefined : 6).map((c) => (
             <details key={c.id} className="attrib-drill" style={{ ['--asset-color' as string]: 'var(--rose)' }}>
@@ -733,6 +749,77 @@ export default function TracePage() {
 }
 
 // ---------- 子组件 ----------
+
+function RiskPerspectiveCards({ perspectives }: { perspectives: CommitteeRiskPerspective[] }) {
+  const ordered = (['aggressive', 'conservative', 'neutral'] as const).flatMap((role) => {
+    const item = perspectives.find((perspective) => perspective.role === role)
+    return item ? [item] : []
+  })
+  return (
+    <section className="risk-perspective-block" data-testid="risk-perspectives">
+      <div className="risk-perspective-title">
+        <div>
+          <h3>{t('风控三视角点评')}</h3>
+          <p className="small">{t('同一组后端风控事实，由三种立场分别复核；点评不改变权重或裁决。')}</p>
+        </div>
+        <span className="risk-perspective-basis">{t('确定性规则直出')}</span>
+      </div>
+      <div className="risk-perspective-grid">
+        {ordered.map((perspective) => {
+          const info = RISK_ROLE_INFO[perspective.role]
+          const primary = perspective.role === 'conservative'
+            ? fmtPp(perspective.value, 2)
+            : fmtPct(perspective.value, 1)
+          return (
+            <article key={perspective.id} className="risk-perspective-card"
+              data-role={perspective.role} data-metric={perspective.metric}
+              data-value={String(perspective.value)}>
+              <div className="risk-perspective-card-head">
+                <div>
+                  <span className="risk-persona">{t(info.label)}</span>
+                  <div className="risk-focus">{t(info.focus)}</div>
+                </div>
+                <span className="risk-assessment">{t(RISK_ASSESSMENT_LABEL[perspective.assessment])}</span>
+              </div>
+              <div className="risk-primary"><strong>{primary}</strong><span>{t(info.focus)}</span></div>
+              <div className="risk-facts">
+                {perspective.role === 'aggressive' && (
+                  <>
+                    <RiskFact label={t('组合事前波动')} value={fmtPct(perspective.metrics.portfolio_vol, 2)} />
+                    <RiskFact label={t('目标波动')} value={fmtPct(perspective.metrics.target_vol, 2)} />
+                    <RiskFact label={t('预算绝对余量')} value={fmtPp(perspective.metrics.remaining_vol, 2)} />
+                  </>
+                )}
+                {perspective.role === 'conservative' && (
+                  <>
+                    <RiskFact label={t('最近有效上限')} value={t(perspective.metrics.subject)} />
+                    <RiskFact label={t('当前占用')} value={fmtPct(perspective.metrics.current, 2)} />
+                    <RiskFact label={t('约束上限')} value={fmtPct(perspective.metrics.limit, 2)} />
+                  </>
+                )}
+                {perspective.role === 'neutral' && (
+                  <>
+                    <RiskFact label={t('资产单边换手代理')} value={fmtPct(perspective.metrics.asset_turnover_proxy, 2)} />
+                    <RiskFact label={t('桶级净偏离')} value={fmtPct(perspective.metrics.bucket_shift, 2)} />
+                    <RiskFact label={t('桶内调整代理')} value={fmtPct(perspective.metrics.intra_bucket_churn, 2)} />
+                  </>
+                )}
+              </div>
+              <p className="risk-perspective-text">{perspective.text}</p>
+              {perspective.role === 'neutral' && (
+                <p className="risk-perspective-note">{t('换手代理，非实际成交')}</p>
+              )}
+            </article>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+function RiskFact({ label, value }: { label: string; value: string }) {
+  return <div className="risk-fact"><span>{label}</span><b>{value}</b></div>
+}
 
 function MethodBadge({ methodId, compact = false }: { methodId: string; compact?: boolean }) {
   const method = METHOD_INFO[methodId] ?? { name: methodId, color: 'var(--teal)' }

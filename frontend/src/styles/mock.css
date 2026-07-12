@@ -13,6 +13,7 @@
       --cyan: #176f9d;
       --red: #b84c48;
       --slate: #59666f;
+      --risk-perspective-accent: var(--slate);
       --cash: #4f5964;
       --method-risk-parity: #16806b;
       --method-cta: #247da8;
@@ -1539,6 +1540,145 @@
       font-weight: 760;
     }
 
+    .risk-perspective-block {
+      margin: 14px 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface-2);
+    }
+
+    .risk-perspective-title,
+    .risk-perspective-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 10px;
+    }
+
+    .risk-perspective-title {
+      margin-bottom: 10px;
+    }
+
+    .risk-perspective-title h3 {
+      margin: 0 0 3px;
+      font-size: .9rem;
+    }
+
+    .risk-perspective-title p {
+      margin: 0;
+    }
+
+    .risk-perspective-basis,
+    .risk-assessment {
+      flex: 0 0 auto;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: var(--surface-3);
+      color: var(--risk-perspective-accent);
+      padding: 4px 8px;
+      font-size: .68rem;
+      font-weight: 760;
+      white-space: nowrap;
+    }
+
+    .risk-perspective-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .risk-perspective-card {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--risk-perspective-accent);
+      border-radius: 8px;
+      background: var(--surface-1);
+      padding: 11px;
+      overflow-wrap: anywhere;
+    }
+
+    .risk-perspective-card-head > div {
+      min-width: 0;
+    }
+
+    .risk-persona {
+      color: var(--risk-perspective-accent);
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+
+    .risk-focus {
+      margin-top: 3px;
+      color: var(--ink);
+      font-size: .84rem;
+      font-weight: 760;
+    }
+
+    .risk-primary {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      margin: 12px 0 9px;
+    }
+
+    .risk-primary strong {
+      color: var(--risk-perspective-accent);
+      font-family: var(--mono);
+      font-size: 1.35rem;
+    }
+
+    .risk-primary span {
+      color: var(--muted);
+      font-size: .7rem;
+    }
+
+    .risk-facts {
+      display: grid;
+      gap: 5px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface-2);
+    }
+
+    .risk-fact {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: .7rem;
+    }
+
+    .risk-fact b {
+      color: var(--ink);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .risk-perspective-text {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: .72rem;
+      line-height: 1.6;
+    }
+
+    .risk-perspective-note {
+      margin: auto 0 0;
+      padding-top: 8px;
+      color: var(--risk-perspective-accent);
+      font-size: .68rem;
+      font-weight: 760;
+    }
+
+    .committee-grid {
+      display: grid;
+      gap: 8px;
+    }
+
     .checks {
       display: grid;
       gap: 8px;
@@ -1953,6 +2093,7 @@
       .step-rail { grid-template-columns: 1fr; }
       .bl-assembly { grid-template-columns: minmax(0, 1.25fr) 18px minmax(0, 1fr) 18px minmax(0, .75fr); }
       .formula-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .risk-perspective-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 720px) {
@@ -1990,6 +2131,9 @@
       .view-card-head,
       .trace-view-head { display: grid; grid-template-columns: 1fr; }
       .view-impact { min-width: 0; text-align: left; }
+      .risk-perspective-title { display: grid; }
+      .risk-perspective-basis { justify-self: start; }
+      .risk-perspective-grid { grid-template-columns: 1fr; }
       .matrix-intro { flex-direction: column; }
       .metric-row { grid-template-columns: 1fr; }
       .prior-row { grid-template-columns: 82px 1fr; }

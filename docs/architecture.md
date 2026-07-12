@@ -152,7 +152,14 @@ pipeline、原子存储与结果账本生命周期，`backtest` 直调 walk-forw
 2. **委员会正反检验**（`services/committee.py`，bundle.committee_review）：
    TradingAgents 辩论形态的去 LLM 化——质疑/回应论据全部由规则从
    DecisionRecord 抽取（截断/未采纳/方向冲突/风控触发/输入降级），
-   每条可回跳血缘，裁决由计分规则给出。
+   每条可回跳血缘，裁决由计分规则给出。论据池同时派生固定顺序的激进/保守/
+   中性三视角：激进只读 `portfolio_vol / target_vol`；保守复用
+   `guardrails.asset_caps()` 并和中国股票桶、权益大类上限一起找最小绝对余量；
+   中性以 `0.5 × Σ|target − Risk Parity prior|` 作为理论单边换手代理，并用
+   `0.5 × Σ|bucket target − attribution.prior|` 量化桶级可解释比例。记录没有
+   漂移后当前持仓，因此该代理不得表述为实际成交。三视角只按硬边界与 1e-6
+   闭合容差分类，不另造经验阈值，不改裁决计分、权重、DecisionRecord 或
+   decision_id；前端只展示后端数值，三卡共用中性色。
 3. **防前视双重断言**：load_slice 末尾对价格/宏观/ERP 三路数据硬断言
    不含未来（不信任上游预过滤）。
 4. **类型化数据错误**：NoData/InsufficientHistory/Stale/ProviderNotConfigured
