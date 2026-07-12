@@ -4,14 +4,14 @@ import { api } from '../api'
 import { useScenario } from '../scenario'
 import { ScenarioPicker } from '../components/Layout'
 import Chart from '../components/Chart'
-import { BUCKET_META, BUCKET_ORDER, fmtAsof, fmtDecisionId, fmtPct, fmtSignedPct } from '../meta'
+import { BUCKET_META, BUCKET_ORDER, SOLID, chartTheme, fmtAsof, fmtDecisionId, fmtPct, fmtSignedPct } from '../meta'
 import { t, tf, usePrefs } from '../prefs'
 
-// 与 meta.ts SOLID 同值的图表实色
-const C_COMMITTEE = '#405d88' // 委员会组合（--bl）
-const C_BM = '#66706c' // 60·40 基准（muted）
-const C_BAND = '#8a5b06' // 免交易带（amber）
-const C_REBAL = '#9f6500' // 调仓日高亮（金）
+// 图表实色统一取自 meta.ts SOLID，避免与 CSS 令牌漂移
+const C_COMMITTEE = SOLID.bl // 委员会组合（--bl）
+const C_BM = SOLID.muted // 60·40 基准（muted）
+const C_BAND = SOLID.amber // 免交易带（amber）
+const C_REBAL = SOLID.methodClock // 调仓日高亮（金）
 
 interface SnapshotRow {
   id: string
@@ -46,7 +46,7 @@ function BucketTag({ bucket }: { bucket: string }) {
 }
 
 function CockpitBody({ data }: { data: Record<string, any> }) {
-  const { lang } = usePrefs() // 语言切换时重建 ECharts option
+  const { lang, theme } = usePrefs() // 语言/主题切换时重建 ECharts option
   const staleDays: number = data.data_freshness?.macro_staleness_days ?? 0
   const macroStale = staleDays > 35
   const driftHistory: DriftDay[] = data.drift?.history ?? []
@@ -72,7 +72,7 @@ function CockpitBody({ data }: { data: Record<string, any> }) {
       type: 'value',
       scale: true,
       axisLabel: { formatter: (v: number) => v.toFixed(2) },
-      splitLine: { lineStyle: { color: '#dde4db' } },
+      splitLine: { lineStyle: { color: chartTheme(theme).grid } },
     },
     series: [
       {
@@ -92,7 +92,7 @@ function CockpitBody({ data }: { data: Record<string, any> }) {
         itemStyle: { color: C_BM },
       },
     ],
-  }), [data, lang])
+  }), [data, lang, theme])
 
   const driftOption = useMemo<EChartsOption>(() => ({
     tooltip: {
@@ -109,7 +109,7 @@ function CockpitBody({ data }: { data: Record<string, any> }) {
     yAxis: {
       type: 'value',
       axisLabel: { formatter: (v: number) => `${(v * 100).toFixed(1)}%` },
-      splitLine: { lineStyle: { color: '#dde4db' } },
+      splitLine: { lineStyle: { color: chartTheme(theme).grid } },
     },
     series: [
       {
@@ -136,7 +136,7 @@ function CockpitBody({ data }: { data: Record<string, any> }) {
       },
     ],
   // driftHistory/band 均由 data 派生，依赖 data 即可
-  }), [data, lang]) // eslint-disable-line react-hooks/exhaustive-deps
+  }), [data, lang, theme]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="page-grid">

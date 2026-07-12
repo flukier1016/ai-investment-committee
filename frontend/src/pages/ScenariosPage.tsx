@@ -3,7 +3,7 @@ import type { EChartsOption } from 'echarts'
 import { api } from '../api'
 import type { DecisionTraceBundle, Scenario, TracedSignal } from '../types'
 import {
-  BUCKET_META, BUCKET_ORDER, CLASS_META, CLASS_ORDER, METHOD_META,
+  BUCKET_META, BUCKET_ORDER, CLASS_META, CLASS_ORDER, METHOD_META, SOLID, chartTheme,
   fmtAsof, fmtDecisionId, fmtPct,
 } from '../meta'
 import { t, tf, usePrefs } from '../prefs'
@@ -141,7 +141,7 @@ function ScenarioCard({ bundle, scenarioMeta, role, bucketMax }: {
 }
 
 export default function ScenariosPage() {
-  const { lang } = usePrefs()  // 订阅语言/主题切换以触发重渲染
+  const { lang, theme } = usePrefs()  // 订阅语言/主题切换以触发重渲染
   const [scenarios, setScenarios] = useState<Scenario[]>([])
   const [baseId, setBaseId] = useState('recovery_2026')
   const [otherId, setOtherId] = useState('stagflation_2022')
@@ -190,7 +190,7 @@ export default function ScenariosPage() {
         type: 'value',
         name: t('个百分点'),
         axisLabel: { formatter: (v: number) => `${v > 0 ? '+' : ''}${v}` },
-        splitLine: { lineStyle: { color: '#dde4db' } },
+        splitLine: { lineStyle: { color: chartTheme(theme).grid } },
       },
       yAxis: {
         type: 'category',
@@ -203,7 +203,7 @@ export default function ScenariosPage() {
         name: t('base − other 桶权重差'),
         data: values.map((v) => ({
           value: v,
-          itemStyle: { color: v >= 0 ? '#b84c48' : '#247a54' },
+          itemStyle: { color: v >= 0 ? SOLID.red : SOLID.green },
         })),
         barWidth: 16,
         label: {
@@ -214,7 +214,7 @@ export default function ScenariosPage() {
         },
       }],
     }
-  }, [data, lang])
+  }, [data, lang, theme])
 
   return (
     <>

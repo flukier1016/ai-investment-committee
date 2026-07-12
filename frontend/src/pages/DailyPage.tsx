@@ -4,14 +4,14 @@ import { api } from '../api'
 import { useScenario } from '../scenario'
 import { ScenarioPicker } from '../components/Layout'
 import Chart from '../components/Chart'
-import { BUCKET_META, BUCKET_ORDER, fmtAsof, fmtPct, fmtSignedPct } from '../meta'
+import { BUCKET_META, BUCKET_ORDER, SOLID, chartTheme, fmtAsof, fmtPct, fmtSignedPct } from '../meta'
 import { t, tf, usePrefs } from '../prefs'
 
-// 与 meta.ts SOLID 同值的图表实色
-const C_IDEAL = '#405d88' // 理想权重（--bl）
-const C_HELD = '#0b7668' // 当前持仓（--teal）
-const C_BAND = '#8a5b06' // 免交易带（amber）
-const C_REBAL = '#9f6500' // 调仓日（金）
+// 图表实色统一取自 meta.ts SOLID，避免与 CSS 令牌漂移
+const C_IDEAL = SOLID.bl // 理想权重（--bl）
+const C_HELD = SOLID.teal // 当前持仓（--teal）
+const C_BAND = SOLID.amber // 免交易带（amber）
+const C_REBAL = SOLID.methodClock // 调仓日（金）
 
 const FREQ_ZH: Record<string, string> = { daily: '每日', weekly: '每周', monthly: '每月', quarterly: '每季' }
 
@@ -35,7 +35,7 @@ const subNote: CSSProperties = { fontSize: 11.5, color: 'var(--muted)', marginTo
 const DEFAULT_ROWS = 8
 
 function DailyBody({ data, assets }: { data: Record<string, any>; assets: AssetInfo[] }) {
-  const { lang } = usePrefs() // 语言切换时重建 ECharts option
+  const { lang, theme } = usePrefs() // 语言/主题切换时重建 ECharts option
   const [showAll, setShowAll] = useState(false)
 
   const history: DriftDay[] = data.history ?? []
@@ -59,7 +59,7 @@ function DailyBody({ data, assets }: { data: Record<string, any>; assets: AssetI
     yAxis: {
       type: 'value',
       axisLabel: { formatter: (v: number) => `${(v * 100).toFixed(1)}%` },
-      splitLine: { lineStyle: { color: '#dde4db' } },
+      splitLine: { lineStyle: { color: chartTheme(theme).grid } },
     },
     series: [
       {
@@ -87,7 +87,7 @@ function DailyBody({ data, assets }: { data: Record<string, any>; assets: AssetI
       },
     ],
   // history/band 均由 data 派生，依赖 data 即可
-  }), [data, lang]) // eslint-disable-line react-hooks/exhaustive-deps
+  }), [data, lang, theme]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const bucketOption = useMemo<EChartsOption>(() => ({
     tooltip: {
@@ -104,7 +104,7 @@ function DailyBody({ data, assets }: { data: Record<string, any>; assets: AssetI
     yAxis: {
       type: 'value',
       axisLabel: { formatter: (v: number) => `${(v * 100).toFixed(0)}%` },
-      splitLine: { lineStyle: { color: '#dde4db' } },
+      splitLine: { lineStyle: { color: chartTheme(theme).grid } },
     },
     series: [
       {
@@ -122,7 +122,7 @@ function DailyBody({ data, assets }: { data: Record<string, any>; assets: AssetI
         itemStyle: { color: C_HELD },
       },
     ],
-  }), [data, lang])
+  }), [data, lang, theme])
 
   const assetRows = useMemo(() => {
     return [...assets]

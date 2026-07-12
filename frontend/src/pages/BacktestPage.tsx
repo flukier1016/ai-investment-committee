@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { EChartsOption, LineSeriesOption } from 'echarts'
 import { api, savedConfig } from '../api'
-import { BUCKET_META, BUCKET_ORDER, BUCKET_SOLID, fmtAsof, fmtPct, fmtSignedPct } from '../meta'
+import { BUCKET_META, BUCKET_ORDER, BUCKET_SOLID, SOLID, chartTheme, fmtAsof, fmtPct, fmtSignedPct } from '../meta'
 import { t, tf, usePrefs } from '../prefs'
 import Chart from '../components/Chart'
 
@@ -15,11 +15,11 @@ const STRATEGY_ZH: Record<string, string> = {
 
 // 净值曲线样式：委员会粗实线，基准虚线，现金点线
 const NAV_SERIES: Array<{ key: string; name: string; color: string; width: number; dash?: 'dashed' | 'dotted' }> = [
-  { key: 'committee', name: '委员会组合', color: '#405d88', width: 2.6 },
-  { key: 'risk_parity_only', name: '纯 Risk Parity', color: '#16806b', width: 1.4 },
-  { key: 'bm_6040', name: '60·40 基准', color: '#66706c', width: 1.4, dash: 'dashed' },
-  { key: 'bm_equal', name: '等权基准', color: '#9f6500', width: 1.4, dash: 'dashed' },
-  { key: 'cash', name: '现金', color: '#4f5964', width: 1.2, dash: 'dotted' },
+  { key: 'committee', name: '委员会组合', color: SOLID.bl, width: 2.6 },
+  { key: 'risk_parity_only', name: '纯 Risk Parity', color: SOLID.methodRiskParity, width: 1.4 },
+  { key: 'bm_6040', name: '60·40 基准', color: SOLID.muted, width: 1.4, dash: 'dashed' },
+  { key: 'bm_equal', name: '等权基准', color: SOLID.methodClock, width: 1.4, dash: 'dashed' },
+  { key: 'cash', name: '现金', color: SOLID.cash, width: 1.2, dash: 'dotted' },
 ]
 
 const btnStyle: React.CSSProperties = {
@@ -28,7 +28,7 @@ const btnStyle: React.CSSProperties = {
 }
 
 export default function BacktestPage() {
-  const { lang } = usePrefs()  // 订阅语言/主题切换以触发重渲染
+  const { lang, theme } = usePrefs()  // 订阅语言/主题切换以触发重渲染
   const [data, setData] = useState<Record<string, any> | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -62,10 +62,10 @@ export default function BacktestPage() {
       legend: { top: 4, textStyle: { fontSize: 11.5 } },
       tooltip: { trigger: 'axis', valueFormatter: (v) => Number(v).toFixed(4) },
       xAxis: { type: 'category', data: data.dates ?? [], boundaryGap: false, axisLabel: { fontSize: 10.5 } },
-      yAxis: { type: 'value', scale: true, axisLabel: { formatter: (v: number) => v.toFixed(2) }, splitLine: { lineStyle: { color: '#dde4db' } } },
+      yAxis: { type: 'value', scale: true, axisLabel: { formatter: (v: number) => v.toFixed(2) }, splitLine: { lineStyle: { color: chartTheme(theme).grid } } },
       series,
     }
-  }, [data, lang])
+  }, [data, lang, theme])
 
   const drawdownOption = useMemo<EChartsOption>(() => {
     if (!data) return {}
@@ -73,19 +73,19 @@ export default function BacktestPage() {
       grid: { left: 56, right: 18, top: 20, bottom: 26 },
       tooltip: { trigger: 'axis', valueFormatter: (v) => `${(Number(v) * 100).toFixed(2)}%` },
       xAxis: { type: 'category', data: data.dates ?? [], boundaryGap: false, axisLabel: { fontSize: 10.5 } },
-      yAxis: { type: 'value', axisLabel: { formatter: (v: number) => `${(v * 100).toFixed(0)}%` }, splitLine: { lineStyle: { color: '#dde4db' } } },
+      yAxis: { type: 'value', axisLabel: { formatter: (v: number) => `${(v * 100).toFixed(0)}%` }, splitLine: { lineStyle: { color: chartTheme(theme).grid } } },
       series: [{
         type: 'line',
         name: t('委员会组合回撤'),
         data: data.drawdown ?? [],
         showSymbol: false,
         sampling: 'lttb',
-        lineStyle: { width: 1.2, color: '#b84c48' },
-        itemStyle: { color: '#b84c48' },
-        areaStyle: { color: 'rgba(184, 76, 72, 0.22)' },
+        lineStyle: { width: 1.2, color: SOLID.red },
+        itemStyle: { color: SOLID.red },
+        areaStyle: { color: SOLID.red, opacity: 0.18 },
       }],
     }
-  }, [data, lang])
+  }, [data, lang, theme])
 
   const weightsOption = useMemo<EChartsOption>(() => {
     if (!data) return {}
@@ -107,10 +107,10 @@ export default function BacktestPage() {
       legend: { top: 4, textStyle: { fontSize: 11.5 } },
       tooltip: { trigger: 'axis', valueFormatter: (v) => `${Number(v).toFixed(1)}%` },
       xAxis: { type: 'category', data: dates, boundaryGap: false, axisLabel: { fontSize: 10.5 } },
-      yAxis: { type: 'value', max: 100, axisLabel: { formatter: '{value}%' }, splitLine: { lineStyle: { color: '#dde4db' } } },
+      yAxis: { type: 'value', max: 100, axisLabel: { formatter: '{value}%' }, splitLine: { lineStyle: { color: chartTheme(theme).grid } } },
       series,
     }
-  }, [data, lang])
+  }, [data, lang, theme])
 
   const sortedMetrics = useMemo(() => {
     const list: Array<Record<string, any>> = [...(data?.metrics ?? [])]

@@ -3,7 +3,7 @@ import { api } from '../api'
 import Chart from '../components/Chart'
 import { ScenarioPicker } from '../components/Layout'
 import { useScenario } from '../scenario'
-import { CLASS_META, CLASS_ORDER, SOLID, fmtAsof, fmtPct, fmtSignedPct } from '../meta'
+import { CLASS_META, CLASS_ORDER, SOLID, chartTheme, fmtAsof, fmtPct, fmtSignedPct } from '../meta'
 import { t, tf, usePrefs } from '../prefs'
 
 // ---- 本页局部类型（字段以 docs/api_samples/spread_desk.json 为准） ----
@@ -93,7 +93,7 @@ function StateBadge({ state }: { state: string }) {
 const fmtBps = (v: number) => `${v >= 0 ? '+' : ''}${v.toFixed(1)} bp`
 
 export default function SpreadDeskPage() {
-  usePrefs()  // 订阅语言/主题切换以触发重渲染
+  const { theme } = usePrefs()  // 订阅语言/主题切换以触发重渲染
   const { scenarioId } = useScenario()
   const [data, setData] = useState<DeskData | null>(null)
   const [err, setErr] = useState<Error | null>(null)
@@ -246,27 +246,28 @@ export default function SpreadDeskPage() {
                   },
                   xAxis: {
                     type: 'value',
-                    axisLabel: { color: SOLID.muted, fontSize: 10.5 },
-                    splitLine: { lineStyle: { color: SOLID.line } },
+                    axisLabel: { color: chartTheme(theme).axisLabel, fontSize: 10.5 },
+                    splitLine: { lineStyle: { color: chartTheme(theme).grid } },
                   },
                   yAxis: {
                     type: 'category',
                     inverse: true,
                     data: [...data.scoreboard].sort((a, b) => b.sharpe - a.sharpe).map((r) => t(r.name)),
-                    axisLabel: { color: SOLID.muted, fontSize: 11 },
+                    axisLabel: { color: chartTheme(theme).axisLabel, fontSize: 11 },
                   },
                   series: [{
                     type: 'bar',
                     barWidth: 14,
+                    // 红涨绿跌：正 Sharpe 记红、负 Sharpe 记绿，与本页收益列和全站方向一致
                     data: [...data.scoreboard].sort((a, b) => b.sharpe - a.sharpe).map((r) => ({
                       value: r.sharpe,
-                      itemStyle: { color: r.sharpe >= 0 ? '#16806b' : '#b84c48', borderRadius: 3 },
+                      itemStyle: { color: r.sharpe >= 0 ? SOLID.red : SOLID.green, borderRadius: 3 },
                     })),
                     label: {
                       show: true,
                       position: 'right',
                       fontSize: 10.5,
-                      color: SOLID.muted,
+                      color: chartTheme(theme).axisLabel,
                       formatter: (p: any) => Number(p.value).toFixed(2),
                     },
                   }],
@@ -284,13 +285,13 @@ export default function SpreadDeskPage() {
                   xAxis: {
                     type: 'category',
                     data: data.overlay_ledger.dates,
-                    axisLabel: { color: SOLID.muted, fontSize: 10 },
+                    axisLabel: { color: chartTheme(theme).axisLabel, fontSize: 10 },
                   },
                   yAxis: {
                     type: 'value',
                     scale: true,
-                    axisLabel: { color: SOLID.muted, fontSize: 10.5 },
-                    splitLine: { lineStyle: { color: SOLID.line } },
+                    axisLabel: { color: chartTheme(theme).axisLabel, fontSize: 10.5 },
+                    splitLine: { lineStyle: { color: chartTheme(theme).grid } },
                   },
                   series: [{
                     name: t('叠加净值'),

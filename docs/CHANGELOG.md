@@ -18,6 +18,14 @@
 
 ## 未发布
 
+- **前端图表配色纪律**：五个含 ECharts 的页面（回测、组合驾驶舱、日更、情景、
+  利差台）的图表颜色统一取自 `meta.ts` 的 SOLID 常量与随主题取值的
+  `chartTheme()`，暗色主题不再被写死的亮色网格线（旧 `#dde4db`）刺穿；利差台
+  策略记分牌 Sharpe 柱改为红涨绿跌方向，与本页收益列及全站一致。前端只改渲染
+  配色，不触碰任何后端业务数字。
+  验收：`frontend/e2e/chart-palette.spec.ts::图表页颜色只走 SOLID / chartTheme，无写死 hex 与亮色网格`、
+  `frontend/e2e/chart-palette.spec.ts::图表在暗色主题下正常渲染（网格随主题重构未破坏图表）`。
+
 - **LLM 客户端瘦身基建**：固定三类 provider 共用一套惰性
   OpenAI-compatible transport；默认路径零可选 SDK，安全运行身份进入有效配置
   指纹。内容寻址 trace 以私有权限原子落盘，同调用 first-write-wins 并可重放；

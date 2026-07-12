@@ -50,7 +50,19 @@ export const METHOD_SOLID: Record<string, string> = {
   risk_parity: '#16806b', tsmom: '#247da8', clock: '#9f6500', erp: '#aa4168', black_litterman: '#405d88',
 }
 
-import { tf } from './prefs'
+// ECharts 网格线/轴标签的随主题取值：echarts 渲染到 canvas，读不到 CSS 变量，
+// 这里镜像 mock.css 的 --line / --muted 双主题 token；改 token 时必须同步。
+// 目的：暗色主题不再被写死的亮色网格线（旧 #dde4db）刺穿。
+const CHART_THEME = {
+  light: { grid: '#dde4db', axisLabel: '#66706c' },
+  dark: { grid: '#29323b', axisLabel: '#93a09a' },
+} as const
+
+export function chartTheme(theme: Theme): { grid: string; axisLabel: string } {
+  return CHART_THEME[theme]
+}
+
+import { tf, type Theme } from './prefs'
 
 export const fmtPct = (v: number | null | undefined, digits = 1): string =>
   v === null || v === undefined || Number.isNaN(v) ? '—' : `${(v * 100).toFixed(digits)}%`
