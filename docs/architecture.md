@@ -71,6 +71,7 @@ backend/app/api       FastAPI 端点
 backend/app/cli.py    Typer 直调命令行（run/backtest/trace/report）
 backend/app/schemas   Pydantic 数据契约（TracedSignal/View/DecisionRecord/Config）
 backend/app/services  DecisionRecord 存储 / bundle 组装 / 决策纪要 / 周报
+Dockerfile/compose     Node 构建 + Python/uv 非 root 单服务及运行卷
 data/demo             Demo 输入与情景（+ legacy/ 旧页迁移 fixture）
 data/runs             运行期决策记录与派生缓存（gitignore，可重算）
 frontend/src/pages    9 个模块页面（TracePage 为旗舰）
@@ -110,6 +111,22 @@ pipeline、原子存储与结果账本生命周期，`backtest` 直调 walk-forw
 回测；两者都不通过 HTTP。`trace` 和 `report` 只读已落库的不可变
 `DecisionRecord`，前者按桶归因 → 观点 → 信号 → 输入哈希下钻，后者
 原样复用确定性 Markdown 纪要，两者都不重查行情或重跑引擎。
+
+## 容器化
+
+`Dockerfile` 保留引擎的仓库相对路径契约：`/app/backend/app` 向上回到
+`/app`，同根读取 `data/demo`、`frontend/dist`，仅向 `data/runs` 写入。
+前端由 Node 22 阶段构建，运行阶段为 Python 3.12 slim + 官方固定版本 uv；
+项目保持 editable 源码安装，避免 `__file__` 落到 site-packages 后破坏上述路径。
+
+运行用户固定 UID/GID 10001，根文件系统只读，`data/runs` 预建为可写目录并
+由 Compose 本地命名卷持久化（不挂载整个 `data`，防止遮住 Demo 输入）。健康
+检查同时验证 `/api/health`、Demo manifest 可读与运行卷可写。构建参数
+`APP_REVISION` 经格式校验后进入 `code_version`，即使构建上下文排除 `.git`
+也保留提交血缘。
+
+前端生产托管的 SPA fallback 仅适用于 GET/HEAD、非 `/api/`、无扩展名路由；
+缺失静态资源与未知 API 仍返回 404，不会被 `index.html` 伪装成成功。
 
 ## Demo 数据
 

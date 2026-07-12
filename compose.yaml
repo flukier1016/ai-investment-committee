@@ -1,0 +1,28 @@
+services:
+  committee:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_REVISION: ${APP_REVISION:-unknown}
+    image: ${IMAGE_NAME:-ai-investment-committee:local}
+    init: true
+    restart: unless-stopped
+    read_only: true
+    ports:
+      - "127.0.0.1:${PORT:-8000}:8000"
+    volumes:
+      - type: volume
+        source: decision-runs
+        target: /app/data/runs
+        volume:
+          nocopy: false
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  decision-runs:

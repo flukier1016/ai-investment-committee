@@ -37,6 +37,36 @@ uv run invest report DECISION_ID
 `run` 会原子落库并维护结果账本；`trace` 按“七桶归因 → 观点 → 信号 →
 输入哈希”下钻；`report` 把第二项的确定性 Markdown 原样写到标准输出。
 
+## Docker 一键复现
+
+需安装 Docker Engine/Desktop 与 Compose V2。在仓库根目录执行：
+
+```bash
+APP_REVISION="$(git rev-parse HEAD)" docker compose up --build -d --wait --wait-timeout 300
+curl http://127.0.0.1:8000/api/health
+```
+
+打开 `http://127.0.0.1:8000`；FastAPI 在同一端口托管前端，`/trace` 等路由可直接
+刷新。镜像用 UID/GID `10001` 非 root 运行，只把不可变决策与派生缓存写入
+`decision-runs` 命名卷：
+
+```bash
+docker compose exec committee id -u
+docker compose exec committee invest run
+docker compose down
+```
+
+`docker compose down` 保留命名卷；只有明确要删除所有本地决策记录时才使用
+`docker compose down -v`。若曾用 root 容器创建同名旧卷导致权限错误，也需先用
+`down -v` 重建空卷。改端口可使用
+`APP_REVISION="$(git rev-parse HEAD)" PORT=8080 docker compose up --build -d --wait --wait-timeout 300`。
+
+完整容器烟测（构建、健康、SPA 路由、非 root、落库与卷重启持久化）：
+
+```bash
+RUN_DOCKER_SMOKE=1 uv run --project backend pytest tests/backend/test_docker.py -q
+```
+
 ## 九个模块
 
 | # | 模块 | 说明 |
@@ -86,6 +116,8 @@ backend/app/api       FastAPI 端点（交互文档 /docs）
 backend/app/cli.py    Typer 命令行（run / backtest / trace / report）
 backend/app/schemas   Pydantic 契约（TracedSignal / View / DecisionRecord / Config）
 backend/app/services  DecisionRecord 存储 / bundle 组装 / 决策纪要 / 周报
+Dockerfile             Node 构建前端 → Python slim + uv 非 root 运行镜像
+compose.yaml           单服务、本地端口、健康检查与 decision-runs 命名卷
 frontend/src          React + Vite + TS + ECharts，9 页面 + 主题/i18n
 data/demo             确定性合成数据与情景（scripts/generate_demo_data.py 固定种子）
 data/demo/legacy      旧静态页迁移 fixture（见 docs/data_migration.md）

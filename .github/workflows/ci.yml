@@ -14,10 +14,18 @@ jobs:
       - uses: astral-sh/setup-uv@v4
       - name: 安装依赖
         run: uv sync --project backend
-      - name: 验收测试（59 项）
+      - name: 验收测试
         run: uv run --project backend pytest tests/backend -q
       - name: Lint（错误级）
         run: uv run --project backend --with ruff ruff check backend --select E9,F63,F7,F82
+      - name: Docker 一键复现烟测
+        env:
+          RUN_DOCKER_SMOKE: "1"
+          APP_REVISION: ${{ github.sha }}
+        run: >-
+          uv run --project backend pytest
+          tests/backend/test_docker.py::test_compose_build_run_non_root_health_and_volume_persistence
+          -q
 
   determinism:
     name: 确定性承诺
