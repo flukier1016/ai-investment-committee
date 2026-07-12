@@ -68,6 +68,7 @@ decision_id 与相同结果；配置默认值也经 Pydantic 类型校验，避�
 ```
 backend/app/domain    信号、BL、优化、风控、回测、日更、利差台
 backend/app/api       FastAPI 端点
+backend/app/cli.py    Typer 直调命令行（run/backtest/trace/report）
 backend/app/schemas   Pydantic 数据契约（TracedSignal/View/DecisionRecord/Config）
 backend/app/services  DecisionRecord 存储 / bundle 组装 / 决策纪要 / 周报
 data/demo             Demo 输入与情景（+ legacy/ 旧页迁移 fixture）
@@ -101,6 +102,14 @@ docs                  本文档、数据迁移说明、API 样例
 行情、不重跑引擎、不写文件。报告顺序固定为摘要 → 5 大类/7 桶/27 资产三层
 权重 → 逐观点 P/Q/置信度与归因 → 风控与闭合 → 完整血缘索引，相同记录输出
 逐字节一致。桶/大类中文名由 `domain/labels.py` 单一定义。
+
+## CLI
+
+`invest` 由 `backend/pyproject.toml` 注册到 `app.cli:app`。`run` 与 API 使用同一
+pipeline、原子存储与结果账本生命周期，`backtest` 直调 walk-forward
+回测；两者都不通过 HTTP。`trace` 和 `report` 只读已落库的不可变
+`DecisionRecord`，前者按桶归因 → 观点 → 信号 → 输入哈希下钻，后者
+原样复用确定性 Markdown 纪要，两者都不重查行情或重跑引擎。
 
 ## Demo 数据
 

@@ -9,9 +9,14 @@ dependencies = [
     "pydantic>=2.8",
     "numpy>=1.26",
     "pandas>=2.2",
+    "rich>=13.7",
     "scipy>=1.13",
+    "typer>=0.12",
     "cvxpy>=1.5",
 ]
+
+[project.scripts]
+invest = "app.cli:app"
 
 [dependency-groups]
 dev = [

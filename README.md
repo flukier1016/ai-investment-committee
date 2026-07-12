@@ -20,6 +20,23 @@ make build     # 构建 frontend/dist（后端同端口托管，单进程部署�
 
 依赖：Python ≥3.11 + [uv](https://docs.astral.sh/uv/)、Node ≥20。
 
+## 命令行
+
+`make install` 后可以不启动 HTTP 服务，直接调用确定性引擎：
+
+```bash
+cd backend
+uv run invest run
+uv run invest run --scenario stagflation_2022 --asof 2022-10-14
+uv run invest backtest
+uv run invest trace DECISION_ID
+uv run invest trace DECISION_ID --view VIEW_ID
+uv run invest report DECISION_ID
+```
+
+`run` 会原子落库并维护结果账本；`trace` 按“七桶归因 → 观点 → 信号 →
+输入哈希”下钻；`report` 把第二项的确定性 Markdown 原样写到标准输出。
+
 ## 九个模块
 
 | # | 模块 | 说明 |
@@ -66,12 +83,13 @@ LLM 不参与任何数字生成。详细架构与构造纪律见 [docs/architect
 ```
 backend/app/domain    信号、Black-Litterman、优化、风控、回测、日更、利差台
 backend/app/api       FastAPI 端点（交互文档 /docs）
+backend/app/cli.py    Typer 命令行（run / backtest / trace / report）
 backend/app/schemas   Pydantic 契约（TracedSignal / View / DecisionRecord / Config）
 backend/app/services  DecisionRecord 存储 / bundle 组装 / 决策纪要 / 周报
 frontend/src          React + Vite + TS + ECharts，9 页面 + 主题/i18n
 data/demo             确定性合成数据与情景（scripts/generate_demo_data.py 固定种子）
 data/demo/legacy      旧静态页迁移 fixture（见 docs/data_migration.md）
-tests/backend         15 项核心验收 + API 测试；frontend/e2e Playwright
+tests/backend         后端验收与 API/CLI 防线；frontend/e2e Playwright
 docs/reference        权威规格：Agent Skill V3 · 前端交接 · 三层 mock
 ```
 
