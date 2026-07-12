@@ -170,7 +170,7 @@ export default function BacktestPage() {
                     {sortedMetrics.map((m) => {
                       const isCommittee = m.strategy === 'committee'
                       return (
-                        <tr key={m.strategy} style={isCommittee ? { background: 'rgba(64, 93, 136, .09)', fontWeight: 600 } : undefined}>
+                        <tr key={m.strategy} style={isCommittee ? { background: 'var(--surface-3)', fontWeight: 600 } : undefined}>
                           <td>{t(STRATEGY_ZH[m.strategy] ?? m.strategy)}</td>
                           <td className={m.ann_return >= 0 ? 'pos' : 'neg'}>{fmtSignedPct(m.ann_return, 2)}</td>
                           <td>{fmtPct(m.ann_vol, 2)}</td>

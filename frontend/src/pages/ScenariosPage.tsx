@@ -69,7 +69,7 @@ function ScenarioCard({ bundle, scenarioMeta, role, bucketMax }: {
           return (
             <div key={s.signal_id} style={{
               borderLeft: `3px solid ${meta?.color ?? 'var(--teal)'}`,
-              padding: '4px 8px', background: 'rgba(29,41,37,.025)', borderRadius: '0 6px 6px 0',
+              padding: '4px 8px', background: 'var(--surface-2)', borderRadius: '0 6px 6px 0',
             }}>
               <div style={{ fontSize: 12.5 }}>
                 <b>{s.method_name}</b>

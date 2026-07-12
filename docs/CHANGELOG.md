@@ -18,6 +18,14 @@
 
 ## 未发布
 
+- **可访问性与暗色可见性补强**：利差台策略行改为键盘可达，支持 Enter/Space 展开
+  并暴露 `aria-expanded`；技术工作台 dialog 与 tablist 的 `aria-label` 改走 `tf()`，
+  读屏在 EN 下不再念中文；情景信号卡与回测委员会高亮行背景改用主题令牌
+  （`--surface-2/3`），替换暗色下几乎不可见的写死 rgba。
+  验收：`frontend/e2e/a11y-visibility.spec.ts::利差台策略行键盘可达并可回车展开（M4）`、
+  `frontend/e2e/a11y-visibility.spec.ts::技术工作台 aria-label 走 tf 而非硬编码中文（M3）`、
+  `frontend/e2e/a11y-visibility.spec.ts::信号卡与高亮行背景走主题令牌而非写死 rgba（M1）`。
+
 - **界面文案国际化补全**：英文模式下 Black-Litterman Model 一律保留完整全称，不再
   被截成 "Assembly / fusion / views / Bayesian"；组合驾驶舱「未来事件带」事件名改走
   `t()`，EN 下不再残留中文短标签；月均 α 与利差台基点单位随语言取值（基点 / bp）；

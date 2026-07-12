@@ -713,7 +713,7 @@ export default function TracePage() {
       </aside>
 
       {/* ===== 技术工作台 ===== */}
-      <div className={`modal ${modalOpen ? 'open' : ''}`} role="dialog" aria-modal="true" aria-label="Black-Litterman Model 技术细节"
+      <div className={`modal ${modalOpen ? 'open' : ''}`} role="dialog" aria-modal="true" aria-label={tf('Black-Litterman Model 技术细节', 'Black-Litterman Model technical details')}
         onClick={(e) => { if ((e.target as HTMLElement).classList.contains('modal')) setModalOpen(false) }}>
         <div className="modal-card">
           <div className="modal-head">
@@ -722,7 +722,7 @@ export default function TracePage() {
               <b>{t('观点矩阵、计算过程与完整血缘')}</b>
             </div>
             <div className="modal-head-actions">
-              <div className="modal-tabs" role="tablist" aria-label="技术细节视图">
+              <div className="modal-tabs" role="tablist" aria-label={tf('技术细节视图', 'Technical detail views')}>
                 <button className={`tab-btn ${modalTab === 'matrix' ? 'active' : ''}`} role="tab" aria-selected={modalTab === 'matrix'}
                   onClick={() => { setModalTab('matrix'); setFocusViewId('') }}>{t('观点矩阵')}</button>
                 <button className={`tab-btn ${modalTab === 'trace' ? 'active' : ''}`} role="tab" aria-selected={modalTab === 'trace'}

@@ -168,7 +168,18 @@ export default function SpreadDeskPage() {
                     const legKeys = [...new Set([s.long, s.short, ...Object.keys(s.legs)])].filter((k) => s.legs[k] !== undefined)
                     return (
                       <Fragment key={s.id}>
-                        <tr onClick={() => setOpenRow(expanded ? null : s.id)} style={{ cursor: 'pointer' }}>
+                        <tr
+                          onClick={() => setOpenRow(expanded ? null : s.id)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault()
+                              setOpenRow(expanded ? null : s.id)
+                            }
+                          }}
+                          tabIndex={0}
+                          aria-expanded={expanded}
+                          style={{ cursor: 'pointer' }}
+                        >
                           <td>
                             <span style={{ color: 'var(--muted)', marginRight: 5 }}>{expanded ? '▾' : '▸'}</span>
                             <b>{t(s.name)}</b>
