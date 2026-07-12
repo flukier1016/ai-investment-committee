@@ -15,6 +15,11 @@ dependencies = [
     "cvxpy>=1.5",
 ]
 
+[project.optional-dependencies]
+llm = [
+    "openai>=2.0,<3",
+]
+
 [project.scripts]
 invest = "app.cli:app"
 

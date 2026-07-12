@@ -11,7 +11,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -37,6 +37,8 @@ CONFIDENCE_BAND_VALUE: dict[str, float] = {"low": 0.40, "medium": 0.60, "high": 
 
 class QuadrantCall(BaseModel):
     """LLM 象限判断的唯一合法输出形状。字段描述即模型指令。"""
+
+    model_config = {"extra": "forbid"}
 
     quadrant: RegimeCall = Field(
         description="四象限判断，只能是 recovery/overheat/stagflation/recession；"
@@ -69,6 +71,8 @@ class QuadrantCall(BaseModel):
 class ViewExplanation(BaseModel):
     """LLM 为某条观点生成的叙事解释（数字全部来自 DecisionRecord，LLM 只组织语言）。"""
 
+    model_config = {"extra": "forbid"}
+
     view_id: str
     narrative: str = Field(description="三句以内中文解释，引用给定事实块，不得新增数字")
     cited_evidence: list[str] = Field(default_factory=list)
@@ -79,13 +83,32 @@ class LLMTrace(BaseModel):
     DecisionRecord.llm_traces 字段）。"""
 
     trace_id: str
+    persisted: bool = False
+    schema_version: int = 0
+    call_key: str = ""
+    call_fingerprint: str = ""
+    provider: str = "unknown"
+    provider_spec_version: str = ""
+    endpoint: str = ""
     model: str
+    temperature: float = 0.0
+    max_retries: int = 0
+    timeout_seconds: float = 0.0
     prompt_sha256: str
+    prompt: str = ""
+    response_schema: str = ""
+    response_schema_sha256: str = ""
+    allowed_citations_sha256: str = ""
+    structured_output: dict[str, Any] | None = None
+    output_sha256: str = ""
     tokens_in: int = 0
     tokens_out: int = 0
     latency_ms: float = 0.0
+    response_id: str = ""
+    response_model: str = ""
     degraded: bool = False
     degraded_reason: str = ""
+    error_type: str = ""
     created_at: str = ""
 
 

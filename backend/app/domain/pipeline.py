@@ -12,8 +12,6 @@
 
 from __future__ import annotations
 
-import hashlib
-import json
 import time
 from datetime import datetime, timezone
 from functools import lru_cache
@@ -21,7 +19,12 @@ from functools import lru_cache
 import numpy as np
 
 from ..schemas.config import AllocationConfig
-from ..schemas.decision import DecisionRecord, PriorBlock, TracedSignal, View
+from ..schemas.decision import DecisionRecord, PriorBlock, TracedSignal
+from ..llm.config import (
+    LLMRuntimeConfig,
+    effective_config_digest,
+    effective_config_payload,
+)
 from . import signals as sig_mod
 from . import universe
 from .black_litterman import run_bl
@@ -33,9 +36,11 @@ from .stance import bucket_stances_from_weights, stance_direction
 from .versioning import code_version
 
 
-def _decision_id(slice_: MarketSlice, scenario_id: str, config: AllocationConfig) -> str:
-    cfg_fp = hashlib.sha256(
-        json.dumps(config.fingerprint_payload(), sort_keys=True).encode()).hexdigest()[:6]
+def _decision_id(slice_: MarketSlice, scenario_id: str, config: AllocationConfig,
+                 llm_runtime: LLMRuntimeConfig | None = None) -> str:
+    digest = effective_config_digest(config.fingerprint_payload(), llm_runtime)
+    # 默认路径保留历史 6 位口径；启用 LLM 后扩大配置摘要，降低模型字符串碰撞面。
+    cfg_fp = digest[:12] if llm_runtime and llm_runtime.enabled else digest[:6]
     return f"dec_{slice_.asof.strftime('%Y%m%d')}_{scenario_id}_{slice_.fingerprint[:6]}{cfg_fp}"
 
 
@@ -67,7 +72,8 @@ def _conclusion(prior_b: dict[str, float], target_b: dict[str, float],
 
 
 def run_decision(scenario_id: str, asof: str, config: AllocationConfig,
-                 mode: str = "demo") -> DecisionRecord:
+                 mode: str = "demo",
+                 llm_runtime: LLMRuntimeConfig | None = None) -> DecisionRecord:
     t0 = time.perf_counter()
     slice_ = load_slice(asof)
     asset_order = universe.asset_ids()
@@ -191,10 +197,10 @@ def run_decision(scenario_id: str, asof: str, config: AllocationConfig,
 
     runtime_ms = (time.perf_counter() - t0) * 1000
     record = DecisionRecord(
-        decision_id=_decision_id(slice_, scenario_id, config),
+        decision_id=_decision_id(slice_, scenario_id, config, llm_runtime),
         asof=slice_.asof.strftime("%Y-%m-%dT09:30:00+08:00"),
         scenario_id=scenario_id, mode=mode,
-        config=config.model_dump(),
+        config=effective_config_payload(config.model_dump(), llm_runtime),
         input_fingerprint=slice_.fingerprint,
         input_signals=[s.signal_id for s in signals.values()],
         signals_by_id={s.signal_id: s for s in signals.values()},
@@ -226,12 +232,17 @@ def prior_bucket_weights(record: DecisionRecord) -> dict[str, float]:
 
 
 @lru_cache(maxsize=512)
-def _run_cached(scenario_id: str, asof: str, config_json: str, mode: str) -> DecisionRecord:
+def _run_cached(scenario_id: str, asof: str, config_json: str, mode: str,
+                llm_runtime_json: str) -> DecisionRecord:
     return run_decision(scenario_id, asof,
-                        AllocationConfig.model_validate_json(config_json), mode)
+                        AllocationConfig.model_validate_json(config_json), mode,
+                        LLMRuntimeConfig.model_validate_json(llm_runtime_json))
 
 
 def run_decision_cached(scenario_id: str, asof: str, config: AllocationConfig,
-                        mode: str = "demo") -> DecisionRecord:
+                        mode: str = "demo",
+                        llm_runtime: LLMRuntimeConfig | None = None) -> DecisionRecord:
     """进程内缓存版：相同输入直接复用（结果本就确定性）。"""
-    return _run_cached(scenario_id, asof, config.model_dump_json(), mode)
+    runtime = llm_runtime or LLMRuntimeConfig()
+    return _run_cached(
+        scenario_id, asof, config.model_dump_json(), mode, runtime.model_dump_json())

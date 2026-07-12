@@ -18,7 +18,17 @@
 
 ## 未发布
 
-当前无未发布能力。
+- **LLM 客户端瘦身基建**：固定三类 provider 共用一套惰性
+  OpenAI-compatible transport；默认路径零可选 SDK，安全运行身份进入有效配置
+  指纹。内容寻址 trace 以私有权限原子落盘，同调用 first-write-wins 并可重放；
+  本阶段不接真实新闻或决策权重链。
+  验收：`tests/backend/test_llm_foundation.py::test_registry_is_frozen_and_contains_exactly_three_provider_types`、
+  `tests/backend/test_llm_foundation.py::test_effective_config_fingerprint_preserves_default_and_tracks_llm_identity`、
+  `tests/backend/test_llm_foundation.py::test_sdk_factory_receives_fixed_endpoint_timeout_and_native_max_retries`、
+  `tests/backend/test_llm_foundation.py::test_runtime_mock_call_persists_then_replays_without_factory_or_sdk`、
+  `tests/backend/test_llm_foundation.py::test_runtime_replay_rejects_schema_valid_cache_with_bogus_citation`、
+  `tests/backend/test_llm_foundation.py::test_public_api_cannot_enable_llm_or_spend_server_credentials`、
+  `tests/backend/test_llm_foundation.py::test_replay_serializes_same_call_and_concurrent_distinct_calls_survive`。
 
 ## 2026-07-12 · 交付队列 1–7
 

@@ -20,6 +20,27 @@ make build     # 构建 frontend/dist（后端同端口托管，单进程部署�
 
 依赖：Python ≥3.11 + [uv](https://docs.astral.sh/uv/)、Node ≥20。
 
+### 可选 LLM 基建（尚未接入决策链）
+
+默认 `make install` 不安装也不导入任何 LLM SDK。只在开发 Phase 3 接入时安装
+同一套 OpenAI-compatible transport：
+
+```bash
+cd backend
+uv sync --extra llm
+```
+
+provider 注册表固定为 `openai_compatible`（`OPENAI_API_KEY`）、`deepseek`
+（`DEEPSEEK_API_KEY`）和无真实密钥的本地 `ollama` 三类；endpoint 固定，不能由
+请求覆盖。model 不设默认值。SDK 原生接收有界 timeout 与 `max_retries`，外层不再
+自写重试循环。结构化调用只取 JSON，再由本地 Pydantic 契约校验；任何失败仍由
+服务层降级为 abstain，绝不回退自由文本。
+
+provider/model/temperature 等非秘密身份只在启用时进入有效配置指纹；API key
+不进入配置、DecisionRecord 或 trace。调用 trace 以内容寻址 ID 原子落到
+`data/runs/llm_traces/`，相同调用先重放已验证的结构化结果。第 8 项只完成这些
+基础设施；真实新闻上下文和象限接入属于下一项。
+
 ## 命令行
 
 `make install` 后可以不启动 HTTP 服务，直接调用确定性引擎：
@@ -114,6 +135,7 @@ LLM 不参与任何数字生成。详细架构与构造纪律见 [docs/architect
 backend/app/domain    信号、Black-Litterman、优化、风控、回测、日更、利差台
 backend/app/api       FastAPI 端点（交互文档 /docs）
 backend/app/cli.py    Typer 命令行（run / backtest / trace / report）
+backend/app/llm       三 provider 注册表 / 惰性 client / 内容寻址 trace
 backend/app/schemas   Pydantic 契约（TracedSignal / View / DecisionRecord / Config）
 backend/app/services  DecisionRecord 存储 / bundle 组装 / 决策纪要 / 周报
 Dockerfile             Node 构建前端 → Python slim + uv 非 root 运行镜像

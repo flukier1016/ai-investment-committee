@@ -42,8 +42,10 @@ data/demo（合成行情 / 宏观(point-in-time 发布日) / ERP 输入）
 
 **确定性承诺**：所有数字由代码计算；相同输入（数据指纹 + 配置指纹）产生相同
 decision_id 与相同结果；配置默认值也经 Pydantic 类型校验，避免直跑/缓存
-路径因 int/float 表示差异产生不同指纹。LLM 不参与任何数字生成（Demo 中
-`llm_used: false`）。
+路径因 int/float 表示差异产生不同指纹。默认关闭 LLM 时有效配置 payload 与历史
+字节完全相同；启用时 provider/model/temperature 及重试、超时、固定 endpoint
+版本进入配置指纹，但 API key 永不进入。LLM 不直接生成任何权重、收益率或 Ω
+数字（Demo 中 `llm_used: false`）。
 
 ### 记录的构造纪律（非教科书部分，全部落库可审计）
 
@@ -69,6 +71,7 @@ decision_id 与相同结果；配置默认值也经 Pydantic 类型校验，避�
 backend/app/domain    信号、BL、优化、风控、回测、日更、利差台
 backend/app/api       FastAPI 端点
 backend/app/cli.py    Typer 直调命令行（run/backtest/trace/report）
+backend/app/llm       固定 provider 注册表 / 惰性 transport / 内容寻址 trace
 backend/app/schemas   Pydantic 数据契约（TracedSignal/View/DecisionRecord/Config）
 backend/app/services  DecisionRecord 存储 / bundle 组装 / 决策纪要 / 周报
 Dockerfile/compose     Node 构建 + Python/uv 非 root 单服务及运行卷
@@ -147,6 +150,39 @@ MarketSlice、决策指纹或权重链。带有效 `publish_ts` 的文章只有�
 发布时间，并写入 fixture 元数据。接真实新闻/LLM 前的固定顺序必须是
 `news_asof_filter → 编号上下文 → 结构化象限契约`，过滤前文本不得进入 prompt。
 
+## LLM 客户端瘦身基建（Phase 3 前置）
+
+`backend/app/llm/` 只保留一套 OpenAI-compatible Chat Completions transport，
+provider 注册表是不可变的三项：`openai_compatible`、`deepseek`、`ollama`。
+三者 endpoint 固定，不开放请求级 `base_url`，避免第四类隐式 provider 与 SSRF；
+云端 key 只从约定环境变量读取，本地 Ollama 使用其官方兼容层要求但会忽略的占位
+key。默认 `uv sync` 不安装 OpenAI SDK，只有 `uv sync --extra llm` 才安装；SDK
+在 build client 时惰性导入，`max_retries` 和有界 timeout 原样透传，外层不重试。
+
+共同兼容面选择 `response_format={"type":"json_object"}`，client 不暗加 system
+prompt；JSON 内容随后必须通过调用方给定的 Pydantic schema。这个取舍低于 OpenAI
+专属 JSON Schema 的服务端严格度，但同时覆盖 DeepSeek/Ollama 明确承诺的 JSON
+mode；空内容、截断、自由文本、非法 JSON 或 schema 不符均抛类型化错误，统一进入
+既有 abstain 边界。参考：[OpenAI Chat Completions JSON mode](https://platform.openai.com/docs/api-reference/chat)、
+[DeepSeek JSON Output](https://api-docs.deepseek.com/guides/json_mode/)、
+[Ollama OpenAI compatibility](https://docs.ollama.com/api/openai-compatibility)。
+
+可信 `LLMRuntimeConfig` 不属于公开 `AllocationConfig`，防止匿名 API 请求借服务器
+密钥触发计费；只有 provider/model/temperature/max_retries/timeout 与 ProviderSpec
+版本合并进 effective config。关闭时不增加任何字段，保留旧配置 hash、默认
+decision_id 与旧记录 JSON 形状；启用时使用更长配置摘要降低模型字符串碰撞面。
+
+每个逻辑调用的 `trace_id` 由 provider/spec/model/temperature/retry/timeout、调用键、
+prompt SHA、response schema SHA 与允许引用集合共同做 canonical SHA-256，禁止 UUID
+和墙钟进入 ID。`data/runs/llm_traces/` 使用 0700 目录、0600 文件、同目录完整 UUID
+临时名 + `os.replace`；同 trace 跨线程/进程锁住“读缓存 → 调用 → 写入”，首次结果
+胜出，后续直接重放。trace 仅保存脱敏 prompt 与已验证结构化输出，不保存 SDK 原始
+自由文本、隐藏推理或密钥；同 ID 不同输出响亮报碰撞，损坏文件不覆盖。
+
+本阶段仍不从 pipeline 发起任何 LLM 网络请求，DecisionRecord 的 `llm_traces` 继续
+为空。下一项接入真实象限时必须复用 trace cache，并把所选 trace/output SHA 纳入
+决策输入血缘；否则空缓存机器上的首次非确定响应仍可能与既有 decision_id 冲突。
+
 
 ## 借鉴 TradingAgents 的工程与产品补强（2026-07）
 
@@ -178,9 +214,11 @@ MarketSlice、决策指纹或权重链。带有效 `publish_ts` 的文章只有�
    异常树；API 按类型返回结构化 400。
 5. **核心/可选数据分级**：价格（核心）缺失整次中止；战术信号（可选）缺失
    显式弃权、BL 退回先验、`degraded_inputs` 入记录并在前端标注。
-6. **LLM 结构化输出契约预埋**（`schemas/llm.py` + `services/llm_views.py`）：
+6. **LLM 结构化输出契约与可选客户端基建**（`schemas/llm.py`、
+   `services/llm_views.py`、`llm/`）：
    象限枚举 + 置信度档位（数值由代码映射进 Ω）+ citations 防幻觉校验；
-   任何失败降级为 abstain，绝不回退自由文本。当前零 LLM 依赖。
+   任何失败降级为 abstain，绝不回退自由文本。默认路径零 LLM 依赖；可选 SDK
+   只提供固定三 provider 的 JSON transport，本阶段不接决策链。
 7. **测试盲区补强**：+31 项（输入变坏弃权、参数微扰有界、不可行约束
    响亮失败、回测口径不变量、存储容错、同形异义字对抗样本）。
 8. **CI 门禁**（`.github/workflows/ci.yml`）：后端验收 / 前端构建+e2e /
