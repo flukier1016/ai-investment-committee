@@ -4,7 +4,7 @@
 1. 每次决策落库时写一条 pending 结果条目（幂等，decision_id 为键）；
 2. 任意后续运行调用 resolve_pending()：对「as-of + 持有期」已有价格数据的
    条目，用 point-in-time 价格解算——组合实现收益、vs 等权/60·40 基准 α、
-   逐观点方向命中、宏观象限命中；
+   逐观点方向命中、桶立场方向命中、宏观象限命中；
 3. JSON 原子写（tmp + os.replace），永不删除 pending；
 4. backfill_from_backtest() 用 walk-forward 回测的逐期决策一次性回填全历史，
    立即得到有统计意义的命中率。
@@ -17,18 +17,32 @@ from __future__ import annotations
 
 import json
 import os
+import threading
 import uuid
+from contextlib import contextmanager
 from pathlib import Path
+
+try:
+    import fcntl
+except ImportError:  # pragma: no cover - Windows 退化为进程内线程锁
+    fcntl = None
 
 import numpy as np
 import pandas as pd
 
 from ..domain import universe
 from ..domain.market_data import _prices, trading_dates
+from ..domain.stance import (
+    STANCE_5_TIER,
+    STANCE_NEUTRAL,
+    resolve_bucket_stances,
+    stance_direction,
+)
 from ..schemas.decision import DecisionRecord
 
 ROOT = Path(__file__).resolve().parents[3]
 OUTCOMES_PATH = ROOT / "data" / "runs" / "outcomes.json"
+_OUTCOMES_THREAD_LOCK = threading.RLock()
 
 HORIZON_DAYS = 21  # 结果解算持有期（约一个月）
 
@@ -39,6 +53,22 @@ REGIME_FAVORED = {
     "滞胀": ["commodity"],
     "衰退": ["cn_bond", "foreign_bond"],
 }
+
+
+@contextmanager
+def _outcomes_lock():
+    """串行化账本 read-modify-replace；Unix 下同时覆盖多进程写者。"""
+    lock_path = OUTCOMES_PATH.with_name(f"{OUTCOMES_PATH.name}.lock")
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    with _OUTCOMES_THREAD_LOCK:
+        with lock_path.open("a+b") as lock_file:
+            if fcntl is not None:
+                fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+            try:
+                yield
+            finally:
+                if fcntl is not None:
+                    fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
 
 
 def _atomic_write(path: Path, payload: dict) -> None:
@@ -83,6 +113,17 @@ def _view_tilt_sign(view: dict, pi: dict[str, float]) -> int:
     return 1 if tilt > 0 else (-1 if tilt < 0 else 0)
 
 
+def _record_bucket_stances(record: DecisionRecord) -> dict[str, str]:
+    """兼容旧 DecisionRecord：缺失立场时由同一中央规则从落库权重补齐。"""
+    prior = universe.aggregate_to_buckets(record.prior.w_strategic)
+    return resolve_bucket_stances(
+        record.bucket_stances,
+        prior,
+        record.bucket_weights,
+        universe.bucket_ids(),
+    )
+
+
 def make_pending(record: DecisionRecord) -> dict:
     """从 DecisionRecord 提取解算所需的最小快照（不依赖记录文件长期存在）。"""
     clock_sig = next((s for s in record.signals_by_id.values() if s.method == "clock"), None)
@@ -96,6 +137,7 @@ def make_pending(record: DecisionRecord) -> dict:
         "asof": record.asof[:10],
         "status": "pending",
         "target_weights": record.target_weights,
+        "bucket_stances": _record_bucket_stances(record),
         "regime": regime,
         "views": [
             {"view_id": v["view_id"],
@@ -109,13 +151,50 @@ def make_pending(record: DecisionRecord) -> dict:
     }
 
 
+def _merge_snapshot_stances(entry: dict, snapshot: dict) -> bool:
+    """保留账本已有桶，并从确定性快照补齐旧/部分立场字段。"""
+    current = entry.get("bucket_stances") or {}
+    completed = {**snapshot["bucket_stances"], **current}
+    if completed == current:
+        return False
+    entry["bucket_stances"] = completed
+    return True
+
+
 def store_pending(record: DecisionRecord) -> None:
     """决策落库后追加 pending 条目（幂等：已存在即跳过，绝不覆盖已解算条目）。"""
-    data = _load()
-    if record.decision_id in data["entries"]:
-        return
-    data["entries"][record.decision_id] = make_pending(record)
-    _atomic_write(OUTCOMES_PATH, data)
+    snapshot = make_pending(record)
+    with _outcomes_lock():
+        data = _load()
+        if record.decision_id in data["entries"]:
+            entry = data["entries"][record.decision_id]
+            if _merge_snapshot_stances(entry, snapshot):
+                _atomic_write(OUTCOMES_PATH, data)
+            return
+        data["entries"][record.decision_id] = snapshot
+        _atomic_write(OUTCOMES_PATH, data)
+
+
+def _bucket_stance_hits(entry: dict, rel: pd.Series, benchmark_return: float) -> list[dict]:
+    """按最终桶立场检验未来方向；中性不计分，零超额严格不算命中。"""
+    hits = []
+    for bucket, stance in entry.get("bucket_stances", {}).items():
+        direction = stance_direction(stance)
+        if stance == STANCE_NEUTRAL or direction == 0:
+            continue
+        members = universe.assets_in_bucket(bucket)
+        if not members or any(asset not in rel.index for asset in members):
+            continue
+        bucket_return = float(np.mean([float(rel[asset]) for asset in members]))
+        realized_excess = bucket_return - benchmark_return
+        hits.append({
+            "bucket": bucket,
+            "stance": stance,
+            "stance_direction": direction,
+            "realized_excess": round(realized_excess, 5),
+            "hit": direction * realized_excess > 0,
+        })
+    return hits
 
 
 def _resolve_entry(entry: dict, prices: pd.DataFrame,
@@ -152,6 +231,8 @@ def _resolve_entry(entry: dict, prices: pd.DataFrame,
         favored_ret = float(np.mean([float(rel[a]) for a in favored]))
         regime_hit = favored_ret > bench["bm_equal"]
 
+    bucket_stance_hits = _bucket_stance_hits(entry, rel, bench["bm_equal"])
+
     return {
         **entry,
         "status": "resolved",
@@ -161,25 +242,49 @@ def _resolve_entry(entry: dict, prices: pd.DataFrame,
         "alpha_vs_equal": round(port - bench["bm_equal"], 5),
         "alpha_vs_6040": round(port - bench["bm_6040"], 5),
         "view_hits": view_hits,
+        "bucket_stance_hits": bucket_stance_hits,
         "regime_hit": regime_hit,
     }
 
 
+def _enrich_resolved_stance_hits(entry: dict, prices: pd.DataFrame) -> bool:
+    """为旧 resolved 条目补算立场命中；无法可靠重算时保持原样。"""
+    if "bucket_stance_hits" in entry or not entry.get("bucket_stances"):
+        return False
+    span = entry.get("resolved_span")
+    if not isinstance(span, dict) or not span.get("start") or not span.get("end"):
+        return False
+    try:
+        start, end = pd.Timestamp(span["start"]), pd.Timestamp(span["end"])
+        rel = prices.loc[end] / prices.loc[start] - 1.0
+        benchmark_return = _period_return(_bench_weights()["bm_equal"], start, end, prices)
+    except (KeyError, TypeError, ValueError):
+        return False
+    entry["bucket_stance_hits"] = _bucket_stance_hits(entry, rel, benchmark_return)
+    return True
+
+
 def resolve_pending() -> int:
     """解算所有到期 pending 条目，返回解算数量。幂等：已 resolved 不重算。"""
-    data = _load()
     prices = _prices()
     dates = trading_dates()
-    resolved = 0
-    for did, entry in data["entries"].items():
-        if entry.get("status") != "pending":
-            continue
-        result = _resolve_entry(entry, prices, dates)
-        if result is not None:
-            data["entries"][did] = result
-            resolved += 1
-    if resolved:
-        _atomic_write(OUTCOMES_PATH, data)
+    with _outcomes_lock():
+        data = _load()
+        resolved = 0
+        changed = False
+        for did, entry in data["entries"].items():
+            if entry.get("status") == "resolved":
+                changed = _enrich_resolved_stance_hits(entry, prices) or changed
+                continue
+            if entry.get("status") != "pending":
+                continue
+            result = _resolve_entry(entry, prices, dates)
+            if result is not None:
+                data["entries"][did] = result
+                resolved += 1
+                changed = True
+        if changed:
+            _atomic_write(OUTCOMES_PATH, data)
     return resolved
 
 
@@ -188,15 +293,28 @@ def backfill_from_backtest(config) -> int:
     from ..domain.backtest import _rebalance_dates
     from ..domain.pipeline import run_decision_cached
 
-    data = _load()
-    added = 0
+    snapshots = []
     for d in _rebalance_dates(config.rebalance):
         record = run_decision_cached("backtest", d.date().isoformat(), config, mode="backtest")
-        if record.decision_id not in data["entries"]:
-            data["entries"][record.decision_id] = make_pending(record)
-            added += 1
-    if added:
-        _atomic_write(OUTCOMES_PATH, data)
+        snapshots.append((record.decision_id, make_pending(record)))
+
+    # 快照计算不占锁；只在 fresh load 后合并与原子替换，避免覆盖并发新增条目。
+    with _outcomes_lock():
+        data = _load()
+        added = 0
+        changed = False
+        for decision_id, snapshot in snapshots:
+            if decision_id not in data["entries"]:
+                data["entries"][decision_id] = snapshot
+                added += 1
+                changed = True
+            else:
+                changed = _merge_snapshot_stances(
+                    data["entries"][decision_id], snapshot) or changed
+        if changed:
+            _atomic_write(OUTCOMES_PATH, data)
+
+    # 不在持锁区递归取锁；resolve_pending 会自行 fresh load 并锁住完整 RMW。
     resolve_pending()
     return added
 
@@ -217,6 +335,25 @@ def summarize() -> dict:
     for s in method_stats.values():
         s["hit_rate"] = round(s["hits"] / s["total"], 4) if s["total"] else None
 
+    stance_stats = {
+        stance: {"hits": 0, "total": 0, "hit_rate": None}
+        for stance in STANCE_5_TIER
+    }
+    stance_hits = 0
+    stance_total = 0
+    for entry in resolved:
+        for result in entry.get("bucket_stance_hits", []):
+            stance = result.get("stance")
+            if stance not in stance_stats or stance == STANCE_NEUTRAL:
+                continue
+            stance_stats[stance]["total"] += 1
+            stance_stats[stance]["hits"] += 1 if result.get("hit") else 0
+            stance_total += 1
+            stance_hits += 1 if result.get("hit") else 0
+    for stats in stance_stats.values():
+        stats["hit_rate"] = round(stats["hits"] / stats["total"], 4) \
+            if stats["total"] else None
+
     regime_calls = [e for e in resolved if e.get("regime_hit") is not None]
     alphas_eq = [e["alpha_vs_equal"] for e in resolved]
     alphas_6040 = [e["alpha_vs_6040"] for e in resolved]
@@ -229,6 +366,9 @@ def summarize() -> dict:
         "alpha_win_rate_vs_equal": round(float(np.mean([a > 0 for a in alphas_eq])), 4)
         if alphas_eq else None,
         "method_hit_rates": method_stats,
+        "stance_hit_rates": stance_stats,
+        "bucket_stance_hit_rate": round(stance_hits / stance_total, 4)
+        if stance_total else None,
         "regime_hit_rate": round(float(np.mean([e["regime_hit"] for e in regime_calls])), 4)
         if regime_calls else None,
         "regime_calls": len(regime_calls),
@@ -236,5 +376,6 @@ def summarize() -> dict:
         "pending": [{"decision_id": e["decision_id"], "asof": e["asof"],
                      "scenario_id": e["scenario_id"]} for e in pending],
         "note": f"持有期 {HORIZON_DAYS} 个交易日；观点命中 = P 加权超额收益方向 vs 观点倾斜方向；"
+                "桶立场命中 = 桶内资产等权超额收益方向 vs 最终立场方向（中性不计）；"
                 "全部由确定性代码从 point-in-time 价格解算。",
     }

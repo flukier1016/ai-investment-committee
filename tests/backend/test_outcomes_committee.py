@@ -95,24 +95,39 @@ def test_committee_counts_match_record(config):
     assert score["guardrails_triggered"] == sum(1 for a in record.guardrail_actions if a.triggered)
 
 
-def test_outcomes_concurrent_writes(isolated_outcomes, config):
-    """并发写结果账本不互抢临时文件（CI 竞态回归）。"""
+def test_outcomes_concurrent_writes(isolated_outcomes, config, monkeypatch):
+    """不同决策并发追加必须全保留，防 read-modify-replace 丢更新。"""
     import threading
+    import time
 
-    record = run_decision("stagflation_2022", "2022-10-14", config)
+    base = run_decision("stagflation_2022", "2022-10-14", config)
+    records = [base.model_copy(update={
+        "decision_id": f"{base.decision_id}_concurrent_{i}",
+        "scenario_id": f"concurrent_{i}",
+    }) for i in range(8)]
+    barrier = threading.Barrier(len(records))
     errors: list[Exception] = []
+    original_atomic_write = outcomes._atomic_write
 
-    def worker():
+    def delayed_atomic_write(path, payload):
+        # 放大无锁实现中“所有线程读到同一旧快照后依次覆盖”的竞态窗口。
+        time.sleep(0.02)
+        original_atomic_write(path, payload)
+
+    monkeypatch.setattr(outcomes, "_atomic_write", delayed_atomic_write)
+
+    def worker(record):
         try:
-            for _ in range(10):
-                outcomes.store_pending(record)
-                outcomes.resolve_pending()
+            barrier.wait(timeout=5)
+            outcomes.store_pending(record)
         except Exception as exc:  # noqa: BLE001
             errors.append(exc)
 
-    threads = [threading.Thread(target=worker) for _ in range(6)]
+    threads = [threading.Thread(target=worker, args=(record,)) for record in records]
     for th in threads:
         th.start()
     for th in threads:
-        th.join()
+        th.join(timeout=10)
+    assert all(not th.is_alive() for th in threads), "并发写线程未按期结束"
     assert not errors, f"并发写账本异常: {errors[:2]}"
+    assert {record.decision_id for record in records}.issubset(outcomes._load()["entries"])

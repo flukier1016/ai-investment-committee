@@ -38,6 +38,8 @@ export const dictCore: Record<string, string> = {
   '概率': 'Probability', '分位': 'Percentile', '股债利差': 'Equity-Bond Gap',
   '中国股票相对中国债券': 'CN Equity vs CN Bonds',
   '看多': 'Long', '看空': 'Short', '中性': 'Neutral',
+  '显著超配': 'Strong Overweight', '超配': 'Overweight',
+  '低配': 'Underweight', '显著低配': 'Strong Underweight',
 
   // ---- 决策溯源页 ----
   '决策溯源 · 一页式三层看板': 'Decision Trace · One-Page Three-Layer Board',

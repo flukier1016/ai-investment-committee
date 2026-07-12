@@ -13,7 +13,7 @@ make install   # backend: uv sync；frontend: npm install
 make data      # 重新生成确定性 Demo 数据（可选，仓库已含生成结果）
 make dev       # 后端 8000 + 前端 5173
 # 打开 http://localhost:5173
-make test      # 后端 28 项测试（含 15 项核心数据验收）
+make test      # 后端完整验收测试
 make e2e       # Playwright 交互测试（自动拉起前后端）
 make build     # 构建 frontend/dist（backend 同端口托管，单进程部署）
 ```
@@ -36,11 +36,14 @@ data/demo（合成行情 / 宏观(point-in-time 发布日) / ERP 输入）
     （long-only/单资产/桶/大类/债券底仓/波动预算）    guardrails.py (CVXPY)
   → 27 明细资产 → 7 桶 → 5 大类（严格闭合）
   → 归因：prior + Σ观点段 + 风控段 = target          pipeline.py
+  → 桶立场：target − Risk Parity prior 映射为五档      stance.py
   → 不可变 DecisionRecord（JSON 落库，输入指纹幂等）  services/store.py
 ```
 
 **确定性承诺**：所有数字由代码计算；相同输入（数据指纹 + 配置指纹）产生相同
-decision_id 与相同结果。LLM 不参与任何数字生成（Demo 中 `llm_used: false`）。
+decision_id 与相同结果；配置默认值也经 Pydantic 类型校验，避免直跑/缓存
+路径因 int/float 表示差异产生不同指纹。LLM 不参与任何数字生成（Demo 中
+`llm_used: false`）。
 
 ### 记录的构造纪律（非教科书部分，全部落库可审计）
 
@@ -54,6 +57,11 @@ decision_id 与相同结果。LLM 不参与任何数字生成（Demo 中 `llm_us
 5. **预算中性归因**：c_k = λ_k(P_k − ΣP_k·w_prior)，每条观点贡献预算中性，
    prior + Σc_k 严格加总为 1。
 6. **风控段入账**：投影产生的裁剪量作为归因的 `guardrail` 段，闭合不被破坏。
+7. **五档立场单一口径**：以落库精度的 `target − Risk Parity prior` 为唯一
+   输入，在 ±0.4pp / ±2pp 处映射为显著超配/超配/中性/低配/显著低配；
+   权重先按落库十进制值相减，边界值进入外档。映射只定义在 `stance.py`，
+   周报、L3 与结果账本只消费
+   `DecisionRecord.bucket_stances`；旧记录缺字段时由同一函数确定性补算。
 
 ## 目录
 
@@ -106,7 +114,9 @@ docs                  本文档、数据迁移说明、API 样例
 1. **决策-结果闭环账本**（`services/outcomes.py`，`GET /api/outcomes`）：
    pending→resolved 生命周期；到期用 point-in-time 价格解算实现收益、
    vs 等权/60·40 α、逐观点方向命中（P 加权超额收益方向 vs 观点倾斜方向）、
-   象限命中；回测 55 期一键回填。对应 V3 7.4 outcomes analysis。
+   五档桶立场方向命中（中性不计分）与象限命中；回测 55 期一键回填。
+   账本读-改-原子替换全段由线程锁 + Unix 文件锁串行化，防止并发不同决策
+   相互覆盖。对应 V3 7.4 outcomes analysis。
 2. **委员会正反检验**（`services/committee.py`，bundle.committee_review）：
    TradingAgents 辩论形态的去 LLM 化——质疑/回应论据全部由规则从
    DecisionRecord 抽取（截断/未采纳/方向冲突/风控触发/输入降级），

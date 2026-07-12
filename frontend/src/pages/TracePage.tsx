@@ -4,7 +4,7 @@ import { fmtAsof, fmtBp, fmtDecisionId, fmtPct, fmtPp } from '../meta'
 import { useScenario } from '../scenario'
 import { t, tf, usePrefs } from '../prefs'
 import { ScenarioPicker } from '../components/Layout'
-import type { BLView, DecisionTraceBundle, TracedSignal } from '../types'
+import type { BLView, BucketStance, DecisionTraceBundle, TracedSignal } from '../types'
 
 // ---------- 展示口径（英文全称 + 固定方法色） ----------
 const METHOD_INFO: Record<string, { name: string; color: string }> = {
@@ -21,6 +21,10 @@ const VIEW_TYPE_LABELS: Record<string, string> = {
 const SIGNAL_VALUE_LABELS: Record<string, string> = {
   regime: '宏观象限', probability: '概率', percentile: '分位', gap: '股债利差',
   cn_equity_vs_cn_bond: '中国股票相对中国债券',
+}
+const STANCE_TONE: Record<BucketStance, 'positive' | 'flat' | 'negative'> = {
+  '显著超配': 'positive', '超配': 'positive', '中性': 'flat',
+  '低配': 'negative', '显著低配': 'negative',
 }
 
 interface DrawerState { kind: string; title: string; body: ReactNode }
@@ -492,9 +496,13 @@ export default function TracePage() {
             <div className="row-stack">
               {bundle.display_buckets.map((b) => {
                 const delta = target[b.id] - prior[b.id]
+                const stance = bundle.bucket_stances[b.id]
                 return (
-                  <div key={b.id} className="weight-row" style={{ ['--asset-color' as string]: b.color }}>
-                    <b style={{ color: b.color }}>{t(b.label)}</b>
+                  <div key={b.id} className="weight-row" data-bucket={b.id} style={{ ['--asset-color' as string]: b.color }}>
+                    <div className="weight-heading">
+                      <b style={{ color: b.color }}>{t(b.label)}</b>
+                      {stance && <span className={`stance-badge ${STANCE_TONE[stance]}`}>{t(stance)}</span>}
+                    </div>
                     <div className="barline">
                       <div className="bar" title={`${t('战略底仓')} ${fmtPct(prior[b.id])}`}><span style={{ width: `${prior[b.id] * 100}%`, opacity: 0.45 }}></span></div>
                       <div className="bar" title={`${t('目标')} ${fmtPct(target[b.id])}`}><span style={{ width: `${target[b.id] * 100}%` }}></span></div>

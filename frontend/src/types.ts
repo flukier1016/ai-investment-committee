@@ -18,6 +18,8 @@ export interface DisplayBucket {
   note: string
 }
 
+export type BucketStance = '显著超配' | '超配' | '中性' | '低配' | '显著低配'
+
 export interface AssetClass {
   id: string
   label: string
@@ -127,6 +129,7 @@ export interface DecisionTraceBundle {
   posterior_ER: Record<string, number>
   target_weights: Record<string, number>
   bucket_weights: Record<string, number>
+  bucket_stances: Record<string, BucketStance>
   class_weights: Record<string, number>
   attribution: Record<string, Record<string, number>>
   guardrail_actions: GuardrailAction[]

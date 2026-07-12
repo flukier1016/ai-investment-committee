@@ -97,6 +97,8 @@ class DecisionRecord(BaseModel):
     posterior_ER: dict[str, float]
     target_weights: dict[str, float]  # 27 明细资产
     bucket_weights: dict[str, float]  # 7 桶
+    bucket_stances: dict[str, str] = Field(
+        default_factory=dict, description="目标权重相对 Risk Parity 先验的五档立场")
     class_weights: dict[str, float]  # 5 大类
     attribution: dict[str, dict[str, float]]  # bucket -> {prior, view_id..., guardrail?}
     guardrail_actions: list[GuardrailAction]

@@ -100,7 +100,9 @@ def run(req: RunRequest) -> dict:
         raise HTTPException(400, detail={"error_type": type(exc).__name__, "message": str(exc)}) from exc
     except InfeasibleConstraintsError as exc:  # 约束集不自洽：配置问题
         raise HTTPException(400, detail={"error_type": "InfeasibleConstraints", "message": str(exc)}) from exc
-    store.save(record)
+    # 不可变记录已存在时，以落库版本为准；避免 schema 演进后
+    # 同一 decision_id 的 POST 新内存结果与随后 GET 旧记录不一致。
+    record = store.save(record)
     outcomes.store_pending(record)
     outcomes.resolve_pending()
     return to_bundle(record)
@@ -132,7 +134,7 @@ def overview(scenario_id: str = "recovery_2026") -> dict:
     scenario = _scenario(scenario_id)
     config = AllocationConfig()
     record = run_decision_cached(scenario_id, scenario["asof"], config)
-    store.save(record)
+    record = store.save(record)
     bundle = to_bundle(record)
     daily = run_daily(scenario["asof"], config)
     return {
@@ -272,7 +274,7 @@ def compare(base: str = "recovery_2026", other: str = "stagflation_2022") -> dic
     for key, sid in [("base", base), ("other", other)]:
         sc = _scenario(sid)
         record = run_decision_cached(sid, sc["asof"], config)
-        store.save(record)
+        record = store.save(record)
         res[key] = to_bundle(record)
     diff = {b: round(res["base"]["bucket_weights"][b] - res["other"]["bucket_weights"][b], 6)
             for b in res["base"]["bucket_weights"]}

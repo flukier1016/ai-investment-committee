@@ -1231,16 +1231,41 @@
 
     .weight-row {
       display: grid;
-      grid-template-columns: 88px minmax(0, 1fr);
+      grid-template-columns: 116px minmax(0, 1fr);
       gap: 6px 10px;
       align-items: center;
       min-height: 44px;
       font-size: .82rem;
     }
 
-    .weight-row > b {
+    .weight-heading {
       grid-row: 1 / span 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      min-width: 0;
     }
+
+    .stance-badge {
+      display: inline-flex;
+      align-items: center;
+      max-width: 100%;
+      min-height: 20px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      padding: 2px 7px;
+      background: var(--surface-1);
+      color: var(--muted);
+      font-size: .65rem;
+      font-weight: 740;
+      line-height: 1.15;
+      white-space: normal;
+    }
+
+    .stance-badge.positive { color: var(--red); }
+    .stance-badge.negative { color: var(--green); }
+    .stance-badge.flat { color: var(--muted); }
 
     .barline {
       display: grid;
@@ -1969,7 +1994,12 @@
       .metric-row { grid-template-columns: 1fr; }
       .prior-row { grid-template-columns: 82px 1fr; }
       .weight-row { grid-template-columns: 1fr; }
-      .weight-row > b { grid-row: auto; }
+      .weight-heading {
+        grid-row: auto;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+      }
       .weight-row .barline,
       .weight-numbers { grid-column: 1; }
       .weight-meta { grid-column: 2; text-align: left; }

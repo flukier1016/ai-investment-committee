@@ -10,6 +10,7 @@ import pandas as pd
 from ..domain import universe
 from ..domain.market_data import _prices, trading_dates
 from ..domain.pipeline import run_decision_cached as run_decision
+from ..domain.stance import STANCE_NEUTRAL, resolve_bucket_stances
 from ..schemas.config import AllocationConfig
 
 BUCKET_ZH = {"cn_equity": "中国股票", "foreign_equity": "外国股票", "cn_bond": "中国债券",
@@ -55,9 +56,11 @@ def build_weekly(scenario_id: str, asof: str, config: AllocationConfig) -> dict:
 
     triggered = [a.model_dump() for a in record.guardrail_actions if a.triggered]
     prior_b = universe.aggregate_to_buckets(record.prior.w_strategic)
+    bucket_stances = resolve_bucket_stances(
+        record.bucket_stances, prior_b, record.bucket_weights, universe.bucket_ids())
     tactical = {b: round(record.bucket_weights[b] - prior_b[b], 4)
                 for b in universe.bucket_ids()
-                if abs(record.bucket_weights[b] - prior_b[b]) > 0.002}
+                if bucket_stances[b] != STANCE_NEUTRAL}
 
     report = {
         "week_of": this_day.date().isoformat(),
@@ -68,6 +71,7 @@ def build_weekly(scenario_id: str, asof: str, config: AllocationConfig) -> dict:
         "signals": signals,
         "strategic_base": {b: round(v, 4) for b, v in prior_b.items()},
         "tactical_tilts": tactical,
+        "bucket_stances": bucket_stances,
         "target_classes": record.class_weights,
         "target_buckets": record.bucket_weights,
         "weight_changes": changes,
@@ -117,7 +121,9 @@ def _to_markdown(r: dict) -> str:
         "",
     ]
     if r["tactical_tilts"]:
-        lines += [f"- {BUCKET_ZH[b]}：{v * 100:+.1f} 个百分点" for b, v in r["tactical_tilts"].items()]
+        lines += [f"- {BUCKET_ZH[b]}：{r['bucket_stances'][b]}"
+                  f"（{v * 100:+.1f} 个百分点）"
+                  for b, v in r["tactical_tilts"].items()]
     else:
         lines.append("- 本周战术观点接近中性")
     lines += [

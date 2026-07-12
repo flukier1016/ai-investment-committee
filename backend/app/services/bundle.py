@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 from ..domain import universe
+from ..domain.stance import resolve_bucket_stances
 from ..schemas.decision import DecisionRecord
 from .committee import build_committee_review
 
@@ -15,6 +16,8 @@ def to_bundle(record: DecisionRecord) -> dict:
     prior_assets = record.prior.w_strategic
     prior_buckets = universe.aggregate_to_buckets(prior_assets)
     prior_classes = universe.aggregate_to_classes(prior_buckets)
+    bucket_stances = resolve_bucket_stances(
+        record.bucket_stances, prior_buckets, record.bucket_weights, universe.bucket_ids())
 
     # 桶级先验隐含收益（桶内按先验权重加权）
     pi_buckets: dict[str, float] = {}
@@ -55,6 +58,7 @@ def to_bundle(record: DecisionRecord) -> dict:
         "posterior_ER": record.posterior_ER,
         "target_weights": record.target_weights,
         "bucket_weights": record.bucket_weights,
+        "bucket_stances": bucket_stances,
         "class_weights": record.class_weights,
         "attribution": record.attribution,
         "guardrail_actions": [a.model_dump() for a in record.guardrail_actions],

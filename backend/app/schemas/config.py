@@ -10,6 +10,10 @@ from pydantic import BaseModel, Field
 
 
 class AllocationConfig(BaseModel):
+    # 默认值也必须经类型校验：否则 principal 的整数默认值在直跑路径是 int，
+    # 而 cached 路径经 JSON 回转后是 float，语义相同配置会产生不同指纹。
+    model_config = {"validate_default": True}
+
     principal: float = Field(default=50_000_000, gt=0, description="账户本金（元）")
     currency: str = Field(default="CNY", pattern="^(CNY|USD)$")
     target_vol: float = Field(default=0.08, gt=0, le=0.4, description="目标年化波动")

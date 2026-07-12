@@ -28,6 +28,7 @@ from .black_litterman import run_bl
 from .covariance import shrunk_covariance
 from .guardrails import apply_guardrails
 from .market_data import DataError, MarketSlice, load_slice
+from .stance import bucket_stances_from_weights, stance_direction
 from .versioning import code_version
 
 BUCKET_ZH = {"cn_equity": "中国股票", "foreign_equity": "外国股票", "cn_bond": "中国债券",
@@ -46,17 +47,21 @@ def _bucket_agg(vec: np.ndarray, asset_order: list[str]) -> dict[str, float]:
 
 
 def _conclusion(prior_b: dict[str, float], target_b: dict[str, float],
-                regime: str | None) -> str:
+                regime: str | None, bucket_stances: dict[str, str]) -> str:
     deltas = {b: target_b[b] - prior_b[b] for b in target_b}
-    over = sorted((b for b in deltas if deltas[b] > 0.004), key=lambda b: -deltas[b])
-    under = sorted((b for b in deltas if deltas[b] < -0.004), key=lambda b: deltas[b])
+    over = sorted((b for b in deltas if stance_direction(bucket_stances[b]) > 0),
+                  key=lambda b: -deltas[b])
+    under = sorted((b for b in deltas if stance_direction(bucket_stances[b]) < 0),
+                   key=lambda b: deltas[b])
     parts = []
     if regime:
         parts.append(f"宏观象限判定为{regime}")
     if over:
-        parts.append("超配" + "、".join(f"{BUCKET_ZH[b]}（{deltas[b]:+.1%}）" for b in over[:3]))
+        parts.append("、".join(
+            f"{bucket_stances[b]}{BUCKET_ZH[b]}（{deltas[b]:+.1%}）" for b in over[:3]))
     if under:
-        parts.append("低配" + "、".join(f"{BUCKET_ZH[b]}（{deltas[b]:+.1%}）" for b in under[:3]))
+        parts.append("、".join(
+            f"{bucket_stances[b]}{BUCKET_ZH[b]}（{deltas[b]:+.1%}）" for b in under[:3]))
     if not over and not under:
         parts.append("战术观点接近中性，目标权重贴近 Risk Parity 战略底仓")
     parts.append(f"现金保留 {target_b['cash']:.1%} 作为流动性缓冲")
@@ -105,6 +110,8 @@ def run_decision(scenario_id: str, asof: str, config: AllocationConfig,
 
     # L2 Black-Litterman 融合
     w_prior = np.array([w_strategic_map[a] for a in asset_order])
+    # 立场口径与落库先验一致：先将明细先验舍入到 6 位，再聚合到桶。
+    prior_map = {a: round(float(w), 6) for a, w in zip(asset_order, w_prior)}
     bl = run_bl(w_prior, sigma, views, asset_order, config.risk_aversion,
                 config.tau, config.max_view_tilt)
     annotated = []
@@ -132,6 +139,9 @@ def run_decision(scenario_id: str, asof: str, config: AllocationConfig,
     # 归因：prior + Σ 观点段 + 风控段 = target（按桶严格闭合）
     prior_b = _bucket_agg(w_prior, asset_order)
     target_b = universe.aggregate_to_buckets(target_map)
+    persisted_prior_b = universe.aggregate_to_buckets(prior_map)
+    bucket_stances = bucket_stances_from_weights(
+        persisted_prior_b, target_b, universe.bucket_ids())
     uncon_b = _bucket_agg(bl.w_uncon, asset_order)
     attribution: dict[str, dict[str, float]] = {}
     for bi, b in enumerate(universe.bucket_ids()):
@@ -191,7 +201,7 @@ def run_decision(scenario_id: str, asof: str, config: AllocationConfig,
         input_signals=[s.signal_id for s in signals.values()],
         signals_by_id={s.signal_id: s for s in signals.values()},
         prior=PriorBlock(
-            w_strategic={a: round(float(w), 6) for a, w in zip(asset_order, w_prior)},
+            w_strategic=prior_map,
             pi={a: round(float(p), 6) for a, p in zip(asset_order, bl.pi)},
             delta=config.risk_aversion, tau=config.tau),
         bl_inputs={"asset_order": asset_order,
@@ -199,10 +209,11 @@ def run_decision(scenario_id: str, asof: str, config: AllocationConfig,
         posterior_ER=posterior_b,
         target_weights=target_map,
         bucket_weights={b: round(v, 9) for b, v in target_b.items()},
+        bucket_stances=bucket_stances,
         class_weights={c: round(v, 9) for c, v in class_w.items()},
         attribution=attribution,
         guardrail_actions=actions,
-        conclusion=_conclusion(prior_b, target_b, regime),
+        conclusion=_conclusion(persisted_prior_b, target_b, regime, bucket_stances),
         checks=checks,
         degraded_inputs=degraded_inputs,
         engine_runtime_ms=round(runtime_ms, 1),
