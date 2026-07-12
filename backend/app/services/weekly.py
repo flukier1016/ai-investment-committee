@@ -8,13 +8,12 @@ from __future__ import annotations
 import pandas as pd
 
 from ..domain import universe
+from ..domain.labels import BUCKET_ZH
 from ..domain.market_data import _prices, trading_dates
 from ..domain.pipeline import run_decision_cached as run_decision
 from ..domain.stance import STANCE_NEUTRAL, resolve_bucket_stances
 from ..schemas.config import AllocationConfig
 
-BUCKET_ZH = {"cn_equity": "中国股票", "foreign_equity": "外国股票", "cn_bond": "中国债券",
-             "foreign_bond": "外国债券", "commodity": "商品", "fx": "外汇", "cash": "现金"}
 METHOD_ORDER = ["risk_parity", "tsmom", "clock", "erp"]
 
 

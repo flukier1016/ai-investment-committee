@@ -13,8 +13,8 @@
 ```bash
 make install   # backend: uv sync；frontend: npm install
 make dev       # 后端 http://localhost:8000 · 前端 http://localhost:5173
-make test      # 后端 59 项测试（含 15 项核心数据验收）
-make e2e       # Playwright 23 项交互测试（自动拉起前后端）
+make test      # 后端完整验收测试
+make e2e       # Playwright 交互测试（自动拉起前后端）
 make build     # 构建 frontend/dist（后端同端口托管，单进程部署）
 ```
 
@@ -40,6 +40,8 @@ make build     # 构建 frontend/dist（后端同端口托管，单进程部署�
 [docs/architecture.md](docs/architecture.md)）：**决策-结果闭环账本**
 （逐观点方向命中率、象限命中率、月均 α，`GET /api/outcomes`）与
 **委员会正反检验**（质疑/回应论据由规则从决策记录抽取、可回跳血缘）。
+单次不可变决策还可通过 `GET /api/decisions/{id}/report` 导出确定性 Markdown
+纪要，包含三层权重、逐观点参数与归因、护栏及完整血缘索引。
 
 ## 端到端计算链路
 
@@ -63,9 +65,9 @@ LLM 不参与任何数字生成。详细架构与构造纪律见 [docs/architect
 
 ```
 backend/app/domain    信号、Black-Litterman、优化、风控、回测、日更、利差台
-backend/app/api       FastAPI 11 端点（交互文档 /docs）
+backend/app/api       FastAPI 端点（交互文档 /docs）
 backend/app/schemas   Pydantic 契约（TracedSignal / View / DecisionRecord / Config）
-backend/app/services  DecisionRecord 存储 / bundle 组装 / 周报
+backend/app/services  DecisionRecord 存储 / bundle 组装 / 决策纪要 / 周报
 frontend/src          React + Vite + TS + ECharts，9 页面 + 主题/i18n
 data/demo             确定性合成数据与情景（scripts/generate_demo_data.py 固定种子）
 data/demo/legacy      旧静态页迁移 fixture（见 docs/data_migration.md）

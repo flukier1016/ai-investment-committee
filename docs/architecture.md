@@ -67,9 +67,9 @@ decision_id 与相同结果；配置默认值也经 Pydantic 类型校验，避�
 
 ```
 backend/app/domain    信号、BL、优化、风控、回测、日更、利差台
-backend/app/api       FastAPI 11 端点
+backend/app/api       FastAPI 端点
 backend/app/schemas   Pydantic 数据契约（TracedSignal/View/DecisionRecord/Config）
-backend/app/services  DecisionRecord 存储 / bundle 组装 / 周报
+backend/app/services  DecisionRecord 存储 / bundle 组装 / 决策纪要 / 周报
 data/demo             Demo 输入与情景（+ legacy/ 旧页迁移 fixture）
 data/runs             运行期决策记录与派生缓存（gitignore，可重算）
 frontend/src/pages    9 个模块页面（TracePage 为旗舰）
@@ -88,6 +88,7 @@ docs                  本文档、数据迁移说明、API 样例
 |---|---|
 | POST /api/decisions/run | 执行完整链路，落 DecisionRecord，返回 DecisionTraceBundle |
 | GET /api/decisions[/{id}[/record]] | 决策索引 / bundle / 原始记录 |
+| GET /api/decisions/{id}/report | 从不可变记录导出确定性 Markdown 决策纪要 |
 | GET /api/overview · /api/cockpit | 总览 / 驾驶舱（与溯源同数据源） |
 | POST /api/backtest/run | walk-forward 回测（按配置指纹缓存） |
 | GET /api/daily | 日更模拟（免交易带） |
@@ -95,6 +96,11 @@ docs                  本文档、数据迁移说明、API 样例
 | GET /api/spread-desk | 利差台 + 风控官（独立叠加账本） |
 | GET /api/scenarios/compare | 双情景 as-of 重算对比 |
 | GET /api/meta · /api/config/defaults · /api/health | 元数据 |
+
+决策纪要由 `services/report.py` 只读 `DecisionRecord` 与静态资产宇宙生成，不重查
+行情、不重跑引擎、不写文件。报告顺序固定为摘要 → 5 大类/7 桶/27 资产三层
+权重 → 逐观点 P/Q/置信度与归因 → 风控与闭合 → 完整血缘索引，相同记录输出
+逐字节一致。桶/大类中文名由 `domain/labels.py` 单一定义。
 
 ## Demo 数据
 

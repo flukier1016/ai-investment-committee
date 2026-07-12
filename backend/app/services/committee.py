@@ -8,10 +8,8 @@
 
 from __future__ import annotations
 
+from ..domain.labels import BUCKET_ZH
 from ..schemas.decision import DecisionRecord
-
-BUCKET_ZH = {"cn_equity": "中国股票", "foreign_equity": "外国股票", "cn_bond": "中国债券",
-             "foreign_bond": "外国债券", "commodity": "商品", "fx": "外汇", "cash": "现金"}
 METHOD_NAMES = {"risk_parity": "Risk Parity", "tsmom": "Time Series Momentum",
                 "clock": "Merrill Lynch Investment Clock", "erp": "Equity Risk Premium"}
 

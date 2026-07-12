@@ -15,6 +15,7 @@ import numpy as np
 from ..schemas.config import AllocationConfig
 from ..schemas.decision import TracedSignal, View
 from . import universe
+from .labels import BUCKET_ZH
 
 # Q 校准尺度（年化观点收益 / 单位信号分数），Demo 校准值并写入推导
 TSMOM_Q_SCALE = 0.005
@@ -22,10 +23,6 @@ CLOCK_Q_SCALE = {"cn_equity": 0.027, "foreign_equity": 0.020, "cn_bond": 0.0136,
                  "foreign_bond": 0.0136, "commodity": 0.0214, "cash": 0.005}
 ERP_Q_SCALE = 0.0143
 Q_CAP = 0.012
-
-BUCKET_ZH = {"cn_equity": "中国股票", "foreign_equity": "外国股票", "cn_bond": "中国债券",
-             "foreign_bond": "外国债券", "commodity": "商品", "fx": "外汇", "cash": "现金"}
-
 
 def _leg(entries: dict[str, float], sign: int = 1) -> dict[str, float]:
     total = sum(abs(v) for v in entries.values())

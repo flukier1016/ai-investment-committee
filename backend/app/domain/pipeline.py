@@ -27,12 +27,10 @@ from . import universe
 from .black_litterman import run_bl
 from .covariance import shrunk_covariance
 from .guardrails import apply_guardrails
+from .labels import BUCKET_ZH
 from .market_data import DataError, MarketSlice, load_slice
 from .stance import bucket_stances_from_weights, stance_direction
 from .versioning import code_version
-
-BUCKET_ZH = {"cn_equity": "中国股票", "foreign_equity": "外国股票", "cn_bond": "中国债券",
-             "foreign_bond": "外国债券", "commodity": "商品", "fx": "外汇", "cash": "现金"}
 
 
 def _decision_id(slice_: MarketSlice, scenario_id: str, config: AllocationConfig) -> str:

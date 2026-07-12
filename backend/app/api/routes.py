@@ -7,7 +7,7 @@ from functools import lru_cache
 from pathlib import Path
 
 import pandas as pd
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Response
 from pydantic import BaseModel
 
 from ..domain import universe
@@ -21,6 +21,7 @@ from ..schemas.config import AllocationConfig
 from ..services import store
 from ..services.bundle import to_bundle
 from ..services import outcomes
+from ..services.report import write_decision_report
 from ..services.weekly import build_weekly
 
 router = APIRouter(prefix="/api")
@@ -127,6 +128,17 @@ def decision_record(decision_id: str) -> dict:
     if record is None:
         raise HTTPException(404, "决策记录不存在")
     return json.loads(record.model_dump_json())
+
+
+@router.get("/decisions/{decision_id}/report")
+def decision_report(decision_id: str) -> Response:
+    record = store.get(decision_id)
+    if record is None:
+        raise HTTPException(404, "决策记录不存在")
+    return Response(
+        content=write_decision_report(record),
+        media_type="text/markdown",
+    )
 
 
 @router.get("/overview")
