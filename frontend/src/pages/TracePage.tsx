@@ -133,10 +133,10 @@ export default function TracePage() {
         <>
           <MethodBadge methodId={viewMethodId(view)} />
           <Kv k={t('汇总桶')} v={t(bucketById[bucketId].label)} />
-          <Kv k="观点ID" v={viewId} />
+          <Kv k={t('观点ID')} v={viewId} />
           <Kv k={t('贡献')} v={fmtPp(value)} />
           <Kv k={t('汇总桶目标')} v={fmtPct(target[bucketId])} />
-          <Kv k={t('闭合')} v={`${fmtPct(Object.values(bundle.attribution[bucketId]).reduce((s, x) => s + x, 0))} 由先验 + 观点贡献 + 风控段闭合`} />
+          <Kv k={t('闭合')} v={`${fmtPct(Object.values(bundle.attribution[bucketId]).reduce((s, x) => s + x, 0))}${tf(' 由先验 + 观点贡献 + 风控段闭合', ' = prior + view contributions + guardrail')}`} />
           <Kv k={t('来源信号')} v={view.source_signal_ids.join(', ')} />
           <div className="codebox">{JSON.stringify({ attribution_for_bucket: bundle.attribution[bucketId], view }, null, 2)}</div>
         </>

@@ -66,7 +66,7 @@ export const dictCore: Record<string, string> = {
     'Base + view contributions + guardrail segment equals bucket targets',
   '触发规则': 'Triggered rules', '条': '', '；本批次未发生硬约束裁剪': '; no hard-constraint clipping this batch',
   '四方法信号': 'Four-Method Signals',
-  '观点与 Black-Litterman Model 装配': 'Views & Black-Litterman Assembly',
+  '观点与 Black-Litterman Model 装配': 'Views & Black-Litterman Model Assembly',
   '权重归因': 'Weights & Attribution',
   'Risk Parity 负责战略底仓；其余三种方法形成战术观点。': 'Risk Parity owns the strategic base; the other three form tactical views.',
   '战略先验与战术观点经 Black-Litterman Model 融合为后验收益。': 'Prior and views fuse into posterior returns via the Black-Litterman Model.',
@@ -75,14 +75,14 @@ export const dictCore: Record<string, string> = {
     'Risk Parity builds the strategic base independently; Time Series Momentum, Merrill Lynch Investment Clock and Equity Risk Premium form tactical views.',
   'Risk Parity 是唯一战略方法，直接生成组合底仓先验。': 'Risk Parity is the only strategic method, producing the portfolio base prior.',
   'Time Series Momentum、Merrill Lynch Investment Clock、Equity Risk Premium 生成阶段性 Black-Litterman Model 观点。':
-    'Time Series Momentum, Merrill Lynch Investment Clock and Equity Risk Premium generate periodic Black-Litterman views.',
+    'Time Series Momentum, Merrill Lynch Investment Clock and Equity Risk Premium generate periodic Black-Litterman Model views.',
   '置信度': 'Confidence',
   '信号去向 · 到观点层': 'Signal Routing · Into the View Layer',
   '进入战略底仓': 'Enters strategic base',
   '直接形成 Risk Parity 先验': 'directly forms the Risk Parity prior',
   '底仓': 'Base',
   '本批次弃权或中性': 'abstained or neutral this batch',
-  '战术观点与 Black-Litterman Model 装配': 'Tactical Views & Black-Litterman Assembly',
+  '战术观点与 Black-Litterman Model 装配': 'Tactical Views & Black-Litterman Model Assembly',
   '直观看见战略先验与战术观点如何经贝叶斯融合，形成后验收益并推动目标权重。':
     'See how the prior and tactical views fuse (Bayesian) into posterior returns that drive target weights.',
   'Black-Litterman Model 如何起作用': 'How the Black-Litterman Model Works',
@@ -194,7 +194,7 @@ export const dictCore: Record<string, string> = {
   'P 定义资产暴露，Q 锚定先验隐含收益再加信号倾斜，置信度经校准映射为不确定性 Ω。':
     'P defines exposure; Q anchors on the implied prior plus a signal tilt; confidence maps to uncertainty Ω.',
   '议案': 'Proposals ', '置信度区间': 'Confidence range',
-  'Black-Litterman Model 贝叶斯融合': 'Black-Litterman Bayesian Fusion',
+  'Black-Litterman Model 贝叶斯融合': 'Black-Litterman Model Bayesian Fusion',
   '观点与先验按不确定性加权融合；置信度越低，观点对后验收益与权重推力的话语权越小。':
     'Views and prior fuse weighted by uncertainty; lower confidence means less say over posterior returns and weight pushes.',
   '推力合成与风控投影': 'Compose Pushes & Project Through Risk',

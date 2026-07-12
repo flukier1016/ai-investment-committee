@@ -4,7 +4,7 @@ import { api } from '../api'
 import { useScenario } from '../scenario'
 import { ScenarioPicker } from '../components/Layout'
 import Chart from '../components/Chart'
-import { BUCKET_META, BUCKET_ORDER, SOLID, chartTheme, fmtAsof, fmtDecisionId, fmtPct, fmtSignedPct } from '../meta'
+import { BUCKET_META, BUCKET_ORDER, SOLID, chartTheme, fmtAsof, fmtBp, fmtDecisionId, fmtPct, fmtSignedPct } from '../meta'
 import { t, tf, usePrefs } from '../prefs'
 
 // 图表实色统一取自 meta.ts SOLID，避免与 CSS 令牌漂移
@@ -213,7 +213,7 @@ function CockpitBody({ data }: { data: Record<string, any> }) {
                 <div className="mono" style={{ color: ev.days_to === 0 ? 'var(--red)' : 'var(--muted)' }}>
                   {ev.days_to === 0 ? t('今日') : tf(`${ev.days_to} 天后`, `in ${ev.days_to}d`)}
                 </div>
-                <div style={{ fontSize: 12.5, marginTop: 3 }}>{ev.name}</div>
+                <div style={{ fontSize: 12.5, marginTop: 3 }}>{t(ev.name)}</div>
                 <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{ev.date}</div>
               </div>
             ))}
@@ -341,7 +341,7 @@ function OutcomesCard() {
         <div>
           <div className="kpi-label">{t('月均α（vs 等权）')}</div>
           <div className={`kpi-value ${(data.avg_alpha_vs_equal ?? 0) >= 0 ? 'pos' : 'neg'}`}>
-            {data.avg_alpha_vs_equal != null ? `${(data.avg_alpha_vs_equal * 10000).toFixed(0)}bp` : '—'}
+            {data.avg_alpha_vs_equal != null ? fmtBp(data.avg_alpha_vs_equal) : '—'}
           </div>
           <div className="small">{t('胜率')} {data.alpha_win_rate_vs_equal != null ? `${(data.alpha_win_rate_vs_equal * 100).toFixed(0)}%` : '—'}</div>
         </div>

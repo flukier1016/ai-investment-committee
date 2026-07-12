@@ -76,7 +76,7 @@ export const dictA: Record<string, string> = {
   '＋ 新增一行': '+ Add Row',
   '重新计算': 'Recompute',
   '保存当前配置后重新执行完整决策链路：数据输入 → 四方法信号 → 观点 → Black-Litterman Model 整合 → 风控投影。':
-    'Save the current config and rerun the full pipeline: data inputs → four-method signals → views → Black-Litterman fusion → risk projection.',
+    'Save the current config and rerun the full pipeline: data inputs → four-method signals → views → Black-Litterman Model fusion → risk projection.',
   '正在执行完整计算链路…': 'Running full pipeline…',
   '保存配置并重新计算': 'Save & Recompute',
   '恢复默认': 'Reset to Defaults',

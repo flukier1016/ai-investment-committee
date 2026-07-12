@@ -18,6 +18,14 @@
 
 ## 未发布
 
+- **界面文案国际化补全**：英文模式下 Black-Litterman Model 一律保留完整全称，不再
+  被截成 "Assembly / fusion / views / Bayesian"；组合驾驶舱「未来事件带」事件名改走
+  `t()`，EN 下不再残留中文短标签；月均 α 与利差台基点单位随语言取值（基点 / bp）；
+  决策溯源归因抽屉「观点ID」与闭合尾串补齐中英。
+  验收：`frontend/e2e/i18n-consistency.spec.ts::EN 词典里 Black-Litterman 始终带 Model 全称`、
+  `frontend/e2e/i18n-consistency.spec.ts::组合驾驶舱未来事件名随语言翻译（H3）`、
+  `frontend/e2e/i18n-consistency.spec.ts::基点单位随语言取值，不写死 bp（M5）`。
+
 - **前端图表配色纪律**：五个含 ECharts 的页面（回测、组合驾驶舱、日更、情景、
   利差台）的图表颜色统一取自 `meta.ts` 的 SOLID 常量与随主题取值的
   `chartTheme()`，暗色主题不再被写死的亮色网格线（旧 `#dde4db`）刺穿；利差台

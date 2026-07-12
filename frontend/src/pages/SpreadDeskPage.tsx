@@ -90,7 +90,7 @@ function StateBadge({ state }: { state: string }) {
   )
 }
 
-const fmtBps = (v: number) => `${v >= 0 ? '+' : ''}${v.toFixed(1)} bp`
+const fmtBps = (v: number) => `${v >= 0 ? '+' : ''}${v.toFixed(1)} ${tf('基点', 'bp')}`
 
 export default function SpreadDeskPage() {
   const { theme } = usePrefs()  // 订阅语言/主题切换以触发重渲染
@@ -241,7 +241,7 @@ export default function SpreadDeskPage() {
                     formatter: (params: any) => {
                       const p = Array.isArray(params) ? params[0] : params
                       const row = [...data.scoreboard].sort((a, b) => b.sharpe - a.sharpe)[p.dataIndex]
-                      return `${t(row.name)}<br/>Sharpe ${row.sharpe.toFixed(2)} · ${tf('年化', 'Ann.')} ${row.ann_bps} bp<br/>${tf(`交易 ${row.trades} 次`, `${row.trades} trades`)} · ${t(row.state)}`
+                      return `${t(row.name)}<br/>Sharpe ${row.sharpe.toFixed(2)} · ${tf('年化', 'Ann.')} ${row.ann_bps} ${tf('基点', 'bp')}<br/>${tf(`交易 ${row.trades} 次`, `${row.trades} trades`)} · ${t(row.state)}`
                     },
                   },
                   xAxis: {
