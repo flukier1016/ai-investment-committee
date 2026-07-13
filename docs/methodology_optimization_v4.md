@@ -1,6 +1,7 @@
 # 资产配置方法论优化方案 V4（实施规格）
 
 > 状态：Proposal，尚未替代 V3 权威规格。  
+> 文档方法版本：4.1.0。
 > 目标读者：负责修改战略底仓、风控投影、配置契约和回测门禁的工程 Agent。  
 > 核心目标：解决低波动中国债券吸收过多资本、权益资本权重长期过低、问卷可放宽治理上限，以及真实数据接入后协方差被平滑行情放大的问题。
 
@@ -10,7 +11,7 @@
 
 本次优化分两阶段：
 
-1. **Phase A：Bounded Risk Parity**。保持现有 Risk Parity 和 Black-Litterman 主链，补齐治理约束、政策权重区间、压力协方差和战术偏离上限。该阶段优先落地。
+1. **Phase A：Bounded Risk Parity**。保持现有 Risk Parity 和 Black-Litterman 主链，补齐治理约束、政策权重区间、黄金防御子袖、压力协方差和战术偏离上限。该阶段优先落地。
 2. **Phase B：Macro-Balanced Strategic Allocation**。把“股票/债券/商品/外汇各分风险”改为“增长上行/增长下行/通胀上行/通胀下行四类环境分风险”。该阶段通过 feature flag 并行回测，不直接覆盖旧模型。
 
 不应只修改 `RISK_BUDGETS`。单纯提高权益风险预算仍可能得到很低的权益资本权重，也无法解决债券行情平滑、期货权重语义和治理上限被问卷覆盖的问题。
@@ -46,6 +47,10 @@ Bridgewater 对 All Weather 的公开描述是平衡四类经济意外，而不�
 - [Bridgewater: The All Weather Story](https://www.bridgewater.com/research-and-insights/the-all-weather-story)
 - [Bridgewater: Investing in a New World](https://www.bridgewater.com/research-and-insights/investing-in-a-new-world-capturing-opportunity-and-weathering-uncertainty)
 - [Bridgewater: A New Era of Higher Inflation Risks](https://www.bridgewater.com/research-and-insights/a-new-era-of-higher-inflation-risks)
+- [World Gold Council: Gold as a strategic asset](https://www.gold.org/goldhub/research/relevance-of-gold-as-a-strategic-asset-2025)
+- [NBER: The Golden Dilemma](https://www.nber.org/papers/w18706)
+
+黄金行业研究强调其流动性和分散作用，但 NBER 的长期研究也提醒：黄金在实用投资期限内并不是稳定、机械的通胀对冲。因此本方案只把黄金定义为**有上限的防御分散器**，不把它写成必然上涨的通胀资产，也不根据单个年份的事后收益反推长期权重。
 
 本方案只能称为 **All Weather-inspired macro balance**。
 
@@ -116,6 +121,19 @@ effective_cap = min(governance_cap, profile_cap, asset_specific_cap)
 
 数据质量门禁必须先于任何优化器调整。
 
+### 3.5 黄金被普通商品桶稀释
+
+当前商品桶包含螺纹钢、铜、原油、黄金和白银等不同经济暴露。若商品政策中枢为 10% 并在六项资产内等权展开，黄金的战略中枢只有约 1.67%；TSMOM 又先把资产分数平均成商品桶方向，强黄金信号可能被弱原油或黑色商品稀释。
+
+对提供的 v3 历史数据做严格 point-in-time 检查，截点为 2023-12-29：
+
+- 黄金 12-1 动量约 `+12.36%`；
+- 60 日年化波动约 `14.00%`；
+- 标准化动量分数约 `+0.88`，在六项商品中最高；
+- 近 504 个观测中，黄金与沪深 300、标普 500 的相关系数约为 `0.11`、`0.08`，与三项中国债券约为 `-0.10` 至 `-0.06`。
+
+这些都是 2024-01-01 当时可见的信息，足以支持“黄金具有不同于工业品和能源的组合角色”。黄金在 2024 年随后上涨约 27.5% 只能作为事后验证，禁止进入政策中枢、阈值或回测筛选条件，也不能证明 3% 是普适最优权重。
+
 ## 4. Phase A：Bounded Risk Parity
 
 ### 4.1 推荐的初始政策区间
@@ -127,6 +145,7 @@ effective_cap = min(governance_cap, profile_cap, asset_specific_cap)
 | 权益大类 | 30% | 20% | 45% |
 | 债券大类 | 45% | 30% | 60% |
 | 商品大类 | 10% | 5% | 20% |
+| 黄金防御子袖 | 3% | 1% | 5% |
 | 外汇风险 | 10% | 0% | 15% |
 | 现金 | 5% | 5% | 15% |
 | 中国债券桶 | — | — | 40% |
@@ -145,13 +164,19 @@ fx              10%
 cash             5%
 ```
 
-`policy_bucket_targets` 必须完整覆盖当前 universe 的展示桶并严格加总为 1。V4 第一版固定按桶内等权展开，不开放资产级政策覆盖，避免又引入一套未经治理的权重入口。展开结果必须经过同一套硬约束投影，得到真正可行的 `w_policy`。不得因为某桶资产数量不足而临时提高单资产上限。
+表中的黄金是商品大类内部子袖，不是额外大类；预检大类下限合计时只能计入商品一次，禁止把商品 10% 与黄金 3% 相加成 13%。
+
+`policy_bucket_targets` 必须完整覆盖当前 universe 的展示桶并严格加总为 1。V4 第一版原则上按桶内等权展开，但增加唯一、版本化的黄金防御子袖例外：先从 `commodity` 目标中分配 `gold_policy_target` 给 universe 中唯一标记为 `strategic_role=defensive_gold` 的资产，再把剩余商品目标等权分配给非黄金商品。第一版不开放任意资产级覆盖字典，避免形成未经治理的权重入口。
+
+默认商品目标为 10% 时，展开结果为黄金 3%，其余五项商品合计 7%（每项 1.4%）。若黄金角色缺失、重复，或剩余商品目标在单资产上限下不可行，V4 必须失败；不得回退到按资产 ID 猜测，也不得临时提高单资产上限。展开结果仍须经过同一套硬约束投影，得到真正可行的 `w_policy`。
 
 说明：
 
 - “外汇风险”不是外币现金余额，也不应机械获得 25% 风险预算；货币配置与资产 Beta 应分开记录。
 - 若账户明确是固收增强型，应通过一套命名场景覆盖上述区间，而不是让问卷临时放宽集中度红线。
 - 三只中国债券在 10% 单资产上限下最多合计 30%；如果希望桶上限为 40%，应增加真正不同风险来源的债券工具，而不是放宽单券上限。
+- 黄金是商品大类中的独立治理子袖，不新增第八个展示桶；白银具有更强工业属性，第一版仍归入普通商品，不得自动并入黄金子袖。
+- `gold_floor/gold_cap` 同时作用于战略政策投影和最终战术投影；黄金仍受更严格的有效单资产上限约束。
 - 非现金资产受 10% 单资产上限约束；基础货币现金不受该上限约束，但受现金上下限约束。
 - 如果一个现金桶包含多个币种，默认现金中枢只能分配给 `AllocationConfig.currency` 对应的基础货币现金；其他币种现金属于外汇风险，必须显式配置。
 
@@ -177,7 +202,7 @@ class MethodologyV4Config(BaseModel):
     model_config = {"validate_default": True}
 
     schema_version: Literal["v4"] = "v4"
-    method_version: Literal["4.0.0"] = "4.0.0"
+    method_version: Literal["4.1.0"] = "4.1.0"
     strategic_model: Literal["bounded_risk_parity", "macro_balanced"] = \
         "bounded_risk_parity"
     governance_single_asset_cap: float = Field(default=0.10, gt=0, le=1)
@@ -188,6 +213,9 @@ class MethodologyV4Config(BaseModel):
     equity_class_cap: float = Field(default=0.45, gt=0, le=1)
     commodity_floor: float = Field(default=0.05, ge=0, le=1)
     commodity_cap: float = Field(default=0.20, gt=0, le=1)
+    gold_policy_target: float = Field(default=0.03, ge=0, le=1)
+    gold_floor: float = Field(default=0.01, ge=0, le=1)
+    gold_cap: float = Field(default=0.05, ge=0, le=1)
     fx_floor: float = Field(default=0.00, ge=0, le=1)
     fx_cap: float = Field(default=0.15, gt=0, le=1)
     cash_hard_floor: float = Field(default=0.05, ge=0, le=1)
@@ -207,7 +235,7 @@ class AllocationConfig(BaseModel):
     methodology_v4: MethodologyV4Config | None = None
 ```
 
-`MethodologyV4Config` 必须使用 `model_validator(mode="after")` 校验各组 floor/cap、政策目标加总和基础字段关系；不要只依赖 CVXPY 才发现显然错误的配置。
+`MethodologyV4Config` 必须使用 `model_validator(mode="after")` 校验各组 floor/cap、政策目标加总和基础字段关系；还必须校验 `gold_floor ≤ gold_policy_target ≤ gold_cap ≤ commodity_cap`、`gold_policy_target ≤ policy_bucket_targets["commodity"]`，以及剩余商品目标的容量。不要只依赖 CVXPY 才发现显然错误的配置。
 
 兼容纪律：
 
@@ -251,6 +279,7 @@ s.t.
     Σw = 1
     w ≥ 0
     单资产、桶、大类上下限
+    gold_floor ≤ w_gold ≤ gold_cap
     cash ≥ cash_hard_floor
 ```
 
@@ -300,8 +329,11 @@ s.t.
 | 重复序列 | 相关系数近 1 且收益逐点相同 | 拒绝重复风险来源 |
 | 交易日历 | 使用资产日历对齐策略 | 禁止无记录的全局前值填充 |
 | 期货语义 | 合约乘数、保证金、展期、目标名义敞口完整 | 不完整则不可投资 |
+| 黄金币种与载体 | 明确本币总回报、外币未对冲或期货连续合约口径 | 口径不明则黄金子袖不可投资 |
 
 所有门禁结果进入 DecisionRecord 的输入血缘或独立 `data_quality` 区块。
+
+对于 CNY 账户，禁止把未换算的美元黄金价格与人民币资产直接拼成“人民币组合收益”。黄金输入必须选择以下一种并写入血缘：人民币可投资总回报载体；美元黄金收益叠加明确的 USD/CNY 敞口；或带抵押品、展期和保证金账本的期货收益。独立外汇桶不得与黄金载体中的同一货币风险重复计算。
 
 协方差输入的第一版对齐规则固定为：
 
@@ -357,6 +389,23 @@ Black-Litterman 继续负责观点融合，但最终战术偏离必须满足：
 
 这样可以防止多条各自合规的观点叠加后共同重写战略底仓。
 
+黄金 TSMOM 在进入 BL 前单独构造一条确定性观点，不再参与非黄金商品桶的分数平均：
+
+```text
+P_gold = {gold_asset: 1.0}
+tilt_gold = clip(score_gold, -2, 2) × TSMOM_Q_SCALE
+Q_gold = P_gold · π + tilt_gold
+Ω_gold = 与现有 TSMOM 相同的 confidence → view variance 规则
+```
+
+- `score_gold` 仍使用现有 12-1 动量和 60 日波动率，不新增黄金专用回看期或阈值；
+- `|score_gold| < 0.25` 时黄金战术观点弃权；
+- 非黄金商品桶的 TSMOM 分数、P 腿和归因必须排除黄金，避免同一信号重复进入两条观点；
+- 只新增一条 P 行，不修改现有 BL 的 Q/Ω、联合求解、方向纪律或单观点倾斜公式；
+- 最终黄金权重仍受 `gold_floor/gold_cap`、商品大类边界、单桶偏离和全组合总偏离共同约束。
+
+这样既能响应 2024-01-01 当时已经存在的黄金强趋势，又不会因为 2024 年事后上涨而永久提高整个商品桶。
+
 这里的第二项是“目标相对战略底仓的理论单边偏离”，不是目标相对漂移后真实持仓的成交换手；字段和前端都不得使用 `turnover` 命名。
 
 ### 4.8 约束预检、求解与落库修复
@@ -370,6 +419,7 @@ Black-Litterman 继续负责观点融合，但最终战术偏离必须满足：
 - 每个桶/大类的下限不超过其成员单资产 cap 之和；
 - `cn_bond_cap ≤ bond_class_cap`；
 - `policy_bucket_targets` 的键与当前 universe 完全一致且加总误差小于 `1e-9`；
+- universe 中 `strategic_role=defensive_gold` 必须唯一，且黄金目标、上下限和商品剩余容量可行；
 - 基础货币现金资产唯一可识别；
 - 资产级风险金额上限换算后仍能满足各类下限。
 
@@ -408,7 +458,7 @@ round_with_constraints(...)
 
 ### 4.9 当前 Demo universe 的可行性快照
 
-在当前 27 资产 universe、2026-07-09 的现有收缩协方差上，对本文默认政策目标和 Phase A 约束做只读原型求解，结果为：
+在当前 27 资产 universe、2026-07-09 的现有收缩协方差上，对 V4.0 默认政策目标和 Phase A 约束做过只读原型求解，基线结果为：
 
 ```text
 policy projection status   optimal
@@ -424,7 +474,24 @@ target vol 7% / 8% / 15%   均为 optimal
 30% 压力协方差混合后       仍为 optimal，组合波动约 5.23%
 ```
 
-该快照只证明当前 Demo universe 的结构约束可行，不代表真实数据、压力协方差或未来资产池一定可行，也不构成收益表现证据。正式实现必须把同类检查写成自动测试，不能依赖此处静态数字。
+V4.1 新增黄金 3% 政策中枢和 1%—5% 边界后，政策权重的结构容量仍然可行：黄金 3%，其余五项商品各 1.4%，商品合计 10%，均低于单资产上限。但上面的 5.06%/5.23% 数字属于 V4.0 基线，不得冒充 V4.1 的数值验证；实现提交必须用 4.1 配置重新生成固定 fixture，并把黄金权重、组合波动和约束利用率写入测试。
+
+该快照只证明结构约束存在可行候选，不代表真实数据、压力协方差或未来资产池一定可行，也不构成收益表现证据。正式实现必须把同类检查写成自动测试，不能依赖此处静态数字。
+
+### 4.10 2024-01-01 时点审计与收益口径
+
+使用提供的 v3 历史导出、严格截断到 2023-12-29，并按 V4.0 price-only 目标（Risk Parity + TSMOM，Clock/ERP 因缺输入弃权）计算：
+
+```text
+2024-01-01 事前有效协方差波动率       约 5.04%
+2024 年固定目标、月度再平衡累计收益   约 6.27%
+按日历天数折算年化收益                约 6.21%
+2024 年实现年化波动率                 约 4.07%
+```
+
+上述 6.21%/4.07% 是 2024 年事后、样本外观察，不是 2024-01-01 可知的预期收益和预期波动。V4 当前没有经过治理的长期收益预测器，因此决策日不得展示“预期年化收益”；BL 的 `π` 或 `μ_BL` 只用于权重融合，也不得直接包装成客户收益承诺。
+
+该历史导出明确写有“价格未做货币折算”，并混合 ETF、指数、商品/外汇价格和合成现金净值；上述组合收益未计交易成本、税费、期货展期、保证金和人民币汇兑，因此只可作为算法审计近似，不能作为 CNY 实盘业绩。V4.1 黄金子袖实现后必须重新生成同一时点 fixture，并同时报告 V4.0/V4.1 的黄金权重、收益、波动、最大回撤和成本后差异；禁止只展示黄金上涨带来的收益改善。
 
 ## 5. Phase B：宏观环境平衡
 
@@ -435,13 +502,14 @@ target vol 7% / 8% / 15%   均为 optimal
 | 环境 | 主要受益资产 | 当前资产池的结构性缺口 |
 |---|---|---|
 | 增长上行 | 中国/海外权益、部分商品、信用 | 信用与权益风险可能重复 |
-| 增长下行 | 高质量名义国债、现金 | 久期和现金不能视为同一风险 |
+| 增长下行 | 高质量名义国债、现金、有限黄金 | 久期、现金和黄金不能视为同一风险 |
 | 通胀上行 | 商品、黄金、通胀挂钩债券 | 当前缺少通胀挂钩债券 |
 | 通胀下行 | 名义国债、部分高质量信用 | 与增长下行 sleeve 重叠 |
 
 关键纪律：
 
 - 资产可以服务多个环境，但重复暴露必须显式计算，不能按桶名去重。
+- 黄金可以同时服务增长下行和通胀上行 sleeve，但合成后的黄金资产权重必须先聚合，再统一受 `gold_cap` 约束；不得因跨 sleeve 重复出现而绕过上限。
 - 外汇不再作为固定 25% 风险类别；货币风险单独决定是否对冲。
 - 在缺少通胀挂钩债券时，系统必须显示“通胀上行保护不完整”，不能声称实现完整 All Weather。
 
@@ -494,7 +562,8 @@ Bridgewater 风格的风险平衡通常通过衍生品提高低波动 sleeve 的
    - 新增可选 `methodology_v4` 嵌套配置、校验器和稳定序列化入口。
    - 性格画像只能收紧治理上限。
 2. `data/demo/assets.json` 与真实 universe schema
-   - 增加 `instrument_type`、`currency`、`base_currency_cash`、交易日历、数据质量阈值、期货合约乘数和连续合约处理标识。
+   - 增加 `instrument_type`、`currency`、`base_currency_cash`、`strategic_role`、交易日历、数据质量阈值、期货合约乘数和连续合约处理标识。
+   - 黄金载体必须且只能有一个 `strategic_role=defensive_gold`；不得在算法中硬编码 `gold` 资产 ID。
 3. `backend/app/domain/market_data.py`
    - 增加真实数据质量报告、类型化失败和 v1/v2 双版本输入指纹。
 4. `backend/app/domain/covariance.py`
@@ -505,29 +574,34 @@ Bridgewater 风格的风险平衡通常通过衍生品提高低波动 sleeve 的
    - 约束必须同时用于战略底仓投影和最终目标投影。
 6. `backend/app/domain/risk_parity.py`
    - 保留 legacy 路径。
-   - 新增政策目标构造、可行政策锚和 bounded 路径。
-7. `backend/app/domain/macro_balance.py`
+   - 新增政策目标构造、黄金子袖展开、可行政策锚和 bounded 路径。
+7. `backend/app/domain/signals.py`
+   - legacy TSMOM 保持逐字节不变；V4 把黄金分数作为独立子袖输出，并用排除黄金后的成员计算普通商品桶方向。
+8. `backend/app/domain/views.py`
+   - 从普通商品 TSMOM 观点中排除黄金，使用完全相同的 Q/Ω 规则构造独立黄金 P 行。
+9. `backend/app/domain/macro_balance.py`
    - 新文件，承载版本化四环境 sleeve 矩阵；不得塞入 `signals.py`。
-8. `backend/app/domain/pipeline.py`
+10. `backend/app/domain/pipeline.py`
    - `methodology_v4 is None` 走原路径；非空时按嵌套 `strategic_model` 选择新模型。
    - 使用同一配置序列化入口，保持归因闭合。
-9. `backend/app/schemas/decision.py`
-   - 新增战略模型版本、数据质量、环境贡献和约束利用率字段。
-10. `frontend/src/pages/ConfigPage.tsx`
+11. `backend/app/schemas/decision.py`
+   - 新增战略模型版本、数据质量、黄金子袖归因、环境贡献和约束利用率字段。
+12. `frontend/src/pages/ConfigPage.tsx`
    - 分开展示风险偏好与治理红线；问卷不能覆盖治理字段。
-11. `frontend/src/pages/TracePage.tsx`
-    - 展示原始 RP、政策锚、环境贡献、战略投影、战术偏离和最终风控。
+13. `frontend/src/pages/TracePage.tsx`
+    - 展示原始 RP、政策锚、黄金战略/战术贡献、环境贡献、战略投影、战术偏离和最终风控。
 
-### 6.1 建议拆成六个可独立回滚的提交
+### 6.1 建议拆成七个可独立回滚的提交
 
 1. **Config compatibility**：只加可选嵌套配置、序列化测试和问卷 cap 修复，不改变默认权重。
 2. **Constraint engine**：共享约束构造器、预检、债券/权益/现金边界和精度安全落库；仍由 legacy RP 提供目标。
 3. **Data quality report**：先通过独立诊断端点或影子结果报告真实数据质量，不写入 legacy DecisionRecord、不 fail-closed、不改变权重。
 4. **Bounded strategic model**：政策锚、标准化目标函数和压力协方差，通过 V4 feature flag 启用。
-5. **Shadow comparison**：API/前端并列展示 legacy 与 bounded，不切默认。
-6. **Macro sleeves**：最后增加 `macro_balanced` 影子模型。
+5. **Gold defensive sleeve**：universe 角色、3% 政策展开、1%—5% 边界、独立 TSMOM P 行和确定性测试；不改 BL 数学。
+6. **Shadow comparison**：API/前端并列展示 legacy 与 bounded，不切默认。
+7. **Macro sleeves**：最后增加 `macro_balanced` 影子模型。
 
-禁止把上述六项压成一次提交，否则出现权重变化时无法区分是序列化、约束、协方差还是战略模型导致。
+禁止把上述七项压成一次提交，否则出现权重变化时无法区分是序列化、约束、协方差、黄金子袖还是战略模型导致。
 
 引擎行为改变后同步更新：
 
@@ -545,18 +619,21 @@ Bridgewater 风格的风险平衡通常通过衍生品提高低波动 sleeve 的
 - 中国债券桶不超过 `cn_bond_cap`。
 - 债券大类不超过 `bond_class_cap`。
 - 权益大类不低于 `equity_class_floor`。
+- 黄金权重位于 `gold_floor/gold_cap`，且黄金与其余商品之和仍满足商品大类边界。
 - 现金不低于 `cash_hard_floor`。
 - 不可行约束必须抛 `InfeasibleConstraintsError`。
 - 性格问卷对单资产上限只能收紧，不能放宽。
 - 求解结果经过修复与 6 位落库后仍满足全部约束。
 - `optimal_inaccurate` 但后验校验失败时必须拒绝结果。
 - 对当前 27 资产 universe，本文默认政策目标和约束必须通过结构预检与 CVXPY 可行性求解。
+- 缺失或重复 `strategic_role=defensive_gold`、黄金目标超过商品目标、非黄金商品剩余容量不足时必须预检失败。
 
 ### 7.2 数据质量测试
 
 - 连续零价格、连续零收益、缺失、重复列、未来数据、陈旧数据分别有明确失败路径。
 - 中国/海外节假日错位不会因静默前值填充制造零波动。
 - 期货连续合约换月异常在进入协方差前被识别。
+- 美元黄金未转换为基础币种且没有独立 FX/抵押品账本时，不得报告基础币种组合收益。
 - 压力协方差必须对称、PSD、确定性可复现。
 - legacy `fingerprint_v1` 保持固定 fixture 不变；修改历史消费窗口中的任意一个价格值都会改变 V4 `fingerprint_v2`、V4 decision ID 和 V4 缓存键。
 
@@ -566,6 +643,8 @@ Bridgewater 风格的风险平衡通常通过衍生品提高低波动 sleeve 的
 - `methodology_v4` 非空时，其全部字段进入配置摘要，任一字段变化都会改变缓存键/decision ID。
 - `bounded_risk_parity` 保存 raw RP、policy anchor、strategic projection 三段且闭合。
 - `macro_balanced` 四环境贡献可加总回战略权重。
+- 黄金政策中枢能从商品桶确定性展开；黄金 TSMOM 只生成一条 P 行，普通商品 P 行不再包含黄金。
+- 固定截至 2023-12-29 的 point-in-time fixture 应复算 `score_gold≈0.883`，并证明修改任意 2024 年价格不会改变 2024-01-01 决策。
 - 战术桶偏离和总偏离均不超过配置。
 - 最终 `prior + views + guardrail = target` 继续在 1e-6 内闭合。
 - 同一输入跨 direct/cached/API 三条路径得到完全相同结果。
@@ -581,6 +660,7 @@ Bridgewater 风格的风险平衡通常通过衍生品提高低波动 sleeve 的
 - 换手和交易成本；
 - 参数微扰后的桶权重 L1 变化；
 - 相对旧模型的环境暴露集中度。
+- 黄金战略/战术权重、黄金对组合风险和压力窗口损失的边际贡献；不得只比较加入黄金后的历史收益。
 
 新模型只有在集中度显著改善、压力风险没有恶化、换手可控且确定性测试通过后，才允许成为默认值。历史收益更高不是必要条件，也不是充分条件。
 
@@ -593,6 +673,7 @@ tests/backend/test_v4_solution_rounding.py
 tests/backend/test_data_quality_real_inputs.py
 tests/backend/test_stress_covariance.py
 tests/backend/test_bounded_risk_parity.py
+tests/backend/test_gold_defensive_sleeve.py
 tests/backend/test_macro_balance.py
 tests/backend/test_v4_walk_forward.py
 ```
@@ -665,7 +746,7 @@ git status --short
 按以下顺序工作，不要一次性实现全部 V4：
 
 1. 先提交 Phase A 的配置契约、硬约束和测试。
-2. 不改 Black-Litterman 的 P/Q/Ω 和归因逻辑。
+2. 不改 Black-Litterman 的 Q/Ω、联合求解和归因数学；黄金只按第 4.7 节增加一条确定性 P 行，并从普通商品 P 行排除。
 3. 不删除 legacy Risk Parity；所有新行为置于 feature flag 后。
 4. 性格问卷不得再提高单资产治理上限。
 5. 所有新约束必须同时进入战略投影和最终投影。
@@ -682,6 +763,7 @@ Phase A 最小完成定义：
 债券大类 ≤ 60%
 权益大类 ≥ 20%
 现金 ≥ 5%
+黄金战略/最终权重位于 1%—5%，且商品大类总权重仍满足 5%—20%
 问卷不能放宽上述治理红线
 战术单桶相对战略底仓偏离 ≤ 5pp
 目标相对战略底仓的理论单边偏离 ≤ 15%
@@ -697,11 +779,13 @@ methodology_v4=None 时历史默认 payload/ID/权重不变
 - [ ] `methodology_v4=None` 是唯一且可测试的 legacy 路径。
 - [ ] 所有 V4 默认值都在嵌套对象内，没有污染旧配置 payload。
 - [ ] 政策桶目标加总为 1，并能在当前 universe 下投影为可行资产权重。
+- [ ] 黄金角色唯一，3% 政策中枢从商品桶内扣除，普通商品剩余目标仍可行。
 - [ ] 共享约束构造器同时服务战略和最终投影。
 - [ ] V4 不会通过问卷、个性画像或风险金额配置放宽治理上限。
 - [ ] 协方差矩阵经过真实 PSD 检查，而不是只用 `psd_wrap` 声明。
 - [ ] 求解后没有无条件归一化；落库舍入不会造成二次越界。
 - [ ] `max_total_tactical_deviation` 没有被错误表述为实际成交换手。
+- [ ] 黄金 TSMOM 与普通商品 TSMOM 没有重复使用黄金分数，2024 年事后价格没有进入 2024-01-01 fixture。
 - [ ] 期货的名义敞口、资金占用和 DV01 没有混用。
 - [ ] 影子模型失败不会阻断 legacy 主决策或污染结果账本。
 - [ ] Phase B 使用 `V'ΣV` 的四 sleeve 可复算方法，不靠人工合并重叠资产。
