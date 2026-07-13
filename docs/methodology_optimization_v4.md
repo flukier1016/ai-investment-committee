@@ -1,7 +1,7 @@
 # 资产配置方法论优化方案 V4（实施规格）
 
 > 状态：Proposal，尚未替代 V3 权威规格。  
-> 文档方法版本：4.1.0。
+> 文档方法版本：4.2.0。
 > 目标读者：负责修改战略底仓、风控投影、配置契约和回测门禁的工程 Agent。  
 > 核心目标：解决低波动中国债券吸收过多资本、权益资本权重长期过低、问卷可放宽治理上限，以及真实数据接入后协方差被平滑行情放大的问题。
 
@@ -9,12 +9,12 @@
 
 当前实现是“资产类别风险预算 ERC + 桶内逆波动率”，不是严格意义上的宏观环境平衡。低波动中国债券为了取得与股票相近的风险贡献，会自然获得很高的资本权重；当前约束又只有债券下限、没有债券上限和权益下限，因此该偏置可以一直放大。
 
-本次优化分两阶段：
+本次优化分两阶段，但必须区分“治理止血”和“方法修复”：
 
-1. **Phase A：Bounded Risk Parity**。保持现有 Risk Parity 和 Black-Litterman 主链，补齐治理约束、政策权重区间、黄金防御子袖、压力协方差和战术偏离上限。该阶段优先落地。
-2. **Phase B：Macro-Balanced Strategic Allocation**。把“股票/债券/商品/外汇各分风险”改为“增长上行/增长下行/通胀上行/通胀下行四类环境分风险”。该阶段通过 feature flag 并行回测，不直接覆盖旧模型。
+1. **Phase A：Bounded Risk Parity**。保持现有 Risk Parity 和 Black-Litterman 主链，补齐治理约束、政策权重区间、黄金防御子袖、压力协方差和战术偏离上限。该阶段优先止血，但中国债券最终落在 30% 不能被表述为方法论成功；如果去掉 cap 又回到 60%，说明只是约束在替模型做决定。
+2. **Phase B：Macro-Factor & Risk-Source Balance**。把“资产桶等风险”改为“宏观环境风险平衡 + 独立风险源去重 + 资本分散软正则”。中国债券权重必须由久期、曲线、信用、流动性和环境贡献共同生成，而不是由 `cn_bond_cap` 生成。该阶段通过 feature flag 并行回测，验证通过后才是 V4 的目标战略模型。
 
-不应只修改 `RISK_BUDGETS`。单纯提高权益风险预算仍可能得到很低的权益资本权重，也无法解决债券行情平滑、期货权重语义和治理上限被问卷覆盖的问题。
+不应只修改 `RISK_BUDGETS`，也不应把“中国债券刚好等于 30%”当作验收目标。单纯提高权益风险预算仍可能得到很低的权益资本权重，也无法解决债券行情平滑、同类债券被误认成多个独立机会、期货权重语义和治理上限被问卷覆盖的问题。
 
 ## 2. 方法论目标与边界
 
@@ -49,10 +49,27 @@ Bridgewater 对 All Weather 的公开描述是平衡四类经济意外，而不�
 - [Bridgewater: A New Era of Higher Inflation Risks](https://www.bridgewater.com/research-and-insights/a-new-era-of-higher-inflation-risks)
 - [World Gold Council: Gold as a strategic asset](https://www.gold.org/goldhub/research/relevance-of-gold-as-a-strategic-asset-2025)
 - [NBER: The Golden Dilemma](https://www.nber.org/papers/w18706)
+- [Roncalli & Weisang: Risk Parity Portfolios with Risk Factors](https://www.thierry-roncalli.com/download/risk-factor-parity.pdf)
+- [Getmansky, Lo & Makarov: Serial Correlation and Illiquidity](https://www.nber.org/papers/w9571)
+- [BIS: Interest-rate risk, duration and PV01](https://www.bis.org/basel_framework/chapter/SRP/98.htm)
+- [López de Prado: Hierarchical Risk Parity](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2708678)
+- [Meucci, Santangelo & Deguest: Effective Number of Bets](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2276632)
 
 黄金行业研究强调其流动性和分散作用，但 NBER 的长期研究也提醒：黄金在实用投资期限内并不是稳定、机械的通胀对冲。因此本方案只把黄金定义为**有上限的防御分散器**，不把它写成必然上涨的通胀资产，也不根据单个年份的事后收益反推长期权重。
 
 本方案只能称为 **All Weather-inspired macro balance**。
+
+### 2.4 核心方法选择
+
+V4.2 的目标方法不是“给资产桶做更多硬约束”，而是以下三层：
+
+```text
+真实风险层      债券 DV01/关键期限/信用/流动性 + 去平滑收益 + 压力情景
+结构配置层      四宏观环境 sleeve 等风险 + 重复风险源只计一次
+资本选择层      在贴近环境平衡解的前提下，最大化独立资本来源的有效数量
+```
+
+硬约束继续存在，但只承担投资授权、极端输入和求解错误的最后防线。正常月份中 `cn_bond_cap`、总债券上限和单资产上限应保持明显松弛；若长期贴边，模型不得继续标记为“方法已修复”。
 
 ## 3. 当前问题的确定性定位
 
@@ -134,6 +151,32 @@ effective_cap = min(governance_cap, profile_cap, asset_specific_cap)
 
 这些都是 2024-01-01 当时可见的信息，足以支持“黄金具有不同于工业品和能源的组合角色”。黄金在 2024 年随后上涨约 27.5% 只能作为事后验证，禁止进入政策中枢、阈值或回测筛选条件，也不能证明 3% 是普适最优权重。
 
+### 3.6 三只中国债券不是三个独立风险来源
+
+`tbond_fut`、`cgb_1_3`、`credit_aaa` 虽是三个资产 ID，但主要共同暴露于中国利率曲线；信用债只是在共同久期之外增加信用利差与流动性暴露。按资产数或桶内逆波动率分配，会把“多了两个载体”误判成“多了两个独立风险机会”。
+
+V4.2 必须同时维护：
+
+- 多重因子暴露矩阵 `B`：资产可以同时加载中国曲线 level/slope、信用利差、权益增长、工业通胀、黄金货币属性和外汇因子；
+- 唯一主风险源映射 `G`：每项资产只归属一个用于资本分散统计的 `primary_risk_source`，避免一个资产重复增加资本有效赌注数。
+
+风险预算使用 `B` 和宏观 sleeve；资本分散使用 `G`。两者不能用“资产桶名称”代替。
+
+### 3.7 无杠杆等风险与低债券资本不可同时免费获得
+
+Bridgewater 的公开例子明确说明：低波动债券需要更多名义敞口，若要在保持收益目标的同时平衡风险，通常还需适度杠杆。当前项目是 long-only、无杠杆资金权重模型，因此不可能同时保证：
+
+1. 四环境严格等风险；
+2. 中国债券资本很低；
+3. 组合仍达到与高风险资产相近的收益/波动目标。
+
+V4.2 必须显式选择运行模式：
+
+- `unlevered_capital_balanced`：接受环境风险贡献存在容差，用资本分散软正则避免低波动资产吞噬资金；
+- `notional_risk_balanced`：允许受治理的期货/衍生品名义敞口，在 exposure 空间平衡风险，再单独核算保证金和抵押现金。
+
+禁止在无杠杆模式下声称完全复现 All Weather，也禁止把高债券名义敞口直接显示成同等比例的资金占用。
+
 ## 4. Phase A：Bounded Risk Parity
 
 ### 4.1 推荐的初始政策区间
@@ -163,6 +206,8 @@ commodity       10%
 fx              10%
 cash             5%
 ```
+
+以上 `cn_bond=30%` 只属于 `bounded_risk_parity` 的过渡政策锚和可行性基线，不是 `macro_factor_balanced` 的目标、下限或期望输出。Phase B 不把任何中国债券资本中枢写入目标函数；页面也必须把它标注为“Fallback policy”，不能展示成模型发现。
 
 表中的黄金是商品大类内部子袖，不是额外大类；预检大类下限合计时只能计入商品一次，禁止把商品 10% 与黄金 3% 相加成 13%。
 
@@ -202,9 +247,18 @@ class MethodologyV4Config(BaseModel):
     model_config = {"validate_default": True}
 
     schema_version: Literal["v4"] = "v4"
-    method_version: Literal["4.1.0"] = "4.1.0"
-    strategic_model: Literal["bounded_risk_parity", "macro_balanced"] = \
+    method_version: Literal["4.2.0"] = "4.2.0"
+    strategic_model: Literal["bounded_risk_parity", "macro_factor_balanced"] = \
         "bounded_risk_parity"
+    implementation_mode: Literal["unlevered_capital_balanced", "notional_risk_balanced"] = \
+        "unlevered_capital_balanced"
+    risk_source_schema_version: Literal["source_v1"] = "source_v1"
+    bond_risk_model: Literal["factor_scenario_hac"] = "factor_scenario_hac"
+    bond_hac_lags: int = Field(default=5, ge=1, le=21)
+    scenario_cov_weight: float = Field(default=0.30, ge=0, le=1)
+    capital_regularizer: Literal["max_entropy_tracking"] = "max_entropy_tracking"
+    max_strategic_tracking_error: float = Field(default=0.015, gt=0, le=0.10)
+    min_effective_capital_sources: float = Field(default=5.0, ge=1)
     governance_single_asset_cap: float = Field(default=0.10, gt=0, le=1)
     cn_bond_cap: float = Field(default=0.40, gt=0, le=1)
     bond_class_floor: float = Field(default=0.30, ge=0, le=1)
@@ -219,6 +273,7 @@ class MethodologyV4Config(BaseModel):
     fx_floor: float = Field(default=0.00, ge=0, le=1)
     fx_cap: float = Field(default=0.15, gt=0, le=1)
     cash_hard_floor: float = Field(default=0.05, ge=0, le=1)
+    cash_policy_target: float = Field(default=0.05, ge=0, le=1)
     cash_cap: float = Field(default=0.15, gt=0, le=1)
     policy_anchor_weight: float = Field(default=0.50, ge=0, le=1)
     max_bucket_tactical_tilt: float = Field(default=0.05, ge=0, le=0.30)
@@ -235,11 +290,14 @@ class AllocationConfig(BaseModel):
     methodology_v4: MethodologyV4Config | None = None
 ```
 
-`MethodologyV4Config` 必须使用 `model_validator(mode="after")` 校验各组 floor/cap、政策目标加总和基础字段关系；还必须校验 `gold_floor ≤ gold_policy_target ≤ gold_cap ≤ commodity_cap`、`gold_policy_target ≤ policy_bucket_targets["commodity"]`，以及剩余商品目标的容量。不要只依赖 CVXPY 才发现显然错误的配置。
+`MethodologyV4Config` 必须使用 `model_validator(mode="after")` 校验各组 floor/cap、政策目标加总和基础字段关系；还必须校验 `gold_floor ≤ gold_policy_target ≤ gold_cap ≤ commodity_cap`、`gold_policy_target ≤ policy_bucket_targets["commodity"]`、`cash_hard_floor ≤ cash_policy_target ≤ cash_cap`。依赖 universe 的主风险源数量和剩余商品容量由求解前的结构预检校验。不要只依赖 CVXPY 才发现显然错误的配置。
 
 兼容纪律：
 
 - `methodology_v4 is None` 是唯一 legacy 开关；此时不得执行任何 V4 逻辑。
+- `policy_anchor_weight` 和 `policy_bucket_targets` 只供 `bounded_risk_parity`；`macro_factor_balanced` 不得把 `cn_bond=30%` 读入战略目标函数。
+- `stress_cov_weight` 只供 Phase A 的 price-based recent/stress 混合；`scenario_cov_weight` 只供 Phase B 的 factor/scenario 混合。两条路径不得先后套用两个权重，避免压力风险被重复计算。
+- `macro_factor_balanced` 的资本中性先验来自版本化独立风险源的等权分布，不来自资产数量、地区市值或历史最优权重。
 - `fingerprint_payload()` 使用 `model_dump(exclude_none=True)`；`pipeline.py` 写入 `DecisionRecord.config` 时必须复用 `fingerprint_payload()`，不能另调裸 `model_dump()`。
 - `/api/config/defaults`、`run_decision_cached` 和所有配置哈希调用点都要审计 `model_dump()` / `model_dump_json()`，确保 `methodology_v4=None` 不进入历史默认 payload。
 - V4 非空时，完整嵌套配置必须进入配置指纹、缓存键和 DecisionRecord。
@@ -421,6 +479,9 @@ Q_gold = P_gold · π + tilt_gold
 - `policy_bucket_targets` 的键与当前 universe 完全一致且加总误差小于 `1e-9`；
 - universe 中 `strategic_role=defensive_gold` 必须唯一，且黄金目标、上下限和商品剩余容量可行；
 - 基础货币现金资产唯一可识别；
+- `cash_hard_floor ≤ cash_policy_target ≤ cash_cap`，风险资本总额严格等于 `1-cash_policy_target`；
+- 每个风险资产在 `G` 中恰有一个主风险源，可投资主风险源数量不低于 `min_effective_capital_sources`；
+- `macro_factor_balanced` 所需债券均具备完整 DV01/CS01/情景版本，`B/G/V` 维度与资产顺序一致；
 - 资产级风险金额上限换算后仍能满足各类下限。
 
 之后先解一个零目标可行性问题，再解正式目标。若加入波动率上限后不可行，错误必须至少返回：
@@ -456,7 +517,7 @@ round_with_constraints(...)
 
 求解器状态只接受 `optimal`；`optimal_inaccurate` 只有在全部后验校验通过且误差低于独立严格容差时才允许，否则视为失败。
 
-### 4.9 当前 Demo universe 的可行性快照
+### 4.9 历史 Demo universe 的 Phase A 可行性快照
 
 在当前 27 资产 universe、2026-07-09 的现有收缩协方差上，对 V4.0 默认政策目标和 Phase A 约束做过只读原型求解，基线结果为：
 
@@ -474,7 +535,7 @@ target vol 7% / 8% / 15%   均为 optimal
 30% 压力协方差混合后       仍为 optimal，组合波动约 5.23%
 ```
 
-V4.1 新增黄金 3% 政策中枢和 1%—5% 边界后，政策权重的结构容量仍然可行：黄金 3%，其余五项商品各 1.4%，商品合计 10%，均低于单资产上限。但上面的 5.06%/5.23% 数字属于 V4.0 基线，不得冒充 V4.1 的数值验证；实现提交必须用 4.1 配置重新生成固定 fixture，并把黄金权重、组合波动和约束利用率写入测试。
+V4.1 新增黄金 3% 政策中枢和 1%—5% 边界后，政策权重的结构容量仍然可行：黄金 3%，其余五项商品各 1.4%，商品合计 10%，均低于单资产上限。但上面的 5.06%/5.23% 数字属于 V4.0 基线，不得冒充当前 V4.2 的数值验证；实现提交必须用 4.2 配置重新生成固定 fixture，并把黄金权重、风险源资本、组合波动和约束利用率写入测试。
 
 该快照只证明结构约束存在可行候选，不代表真实数据、压力协方差或未来资产池一定可行，也不构成收益表现证据。正式实现必须把同类检查写成自动测试，不能依赖此处静态数字。
 
@@ -491,68 +552,197 @@ V4.1 新增黄金 3% 政策中枢和 1%—5% 边界后，政策权重的结构�
 
 上述 6.21%/4.07% 是 2024 年事后、样本外观察，不是 2024-01-01 可知的预期收益和预期波动。V4 当前没有经过治理的长期收益预测器，因此决策日不得展示“预期年化收益”；BL 的 `π` 或 `μ_BL` 只用于权重融合，也不得直接包装成客户收益承诺。
 
-该历史导出明确写有“价格未做货币折算”，并混合 ETF、指数、商品/外汇价格和合成现金净值；上述组合收益未计交易成本、税费、期货展期、保证金和人民币汇兑，因此只可作为算法审计近似，不能作为 CNY 实盘业绩。V4.1 黄金子袖实现后必须重新生成同一时点 fixture，并同时报告 V4.0/V4.1 的黄金权重、收益、波动、最大回撤和成本后差异；禁止只展示黄金上涨带来的收益改善。
+该历史导出明确写有“价格未做货币折算”，并混合 ETF、指数、商品/外汇价格和合成现金净值；上述组合收益未计交易成本、税费、期货展期、保证金和人民币汇兑，因此只可作为算法审计近似，不能作为 CNY 实盘业绩。V4.2 实现后必须重新生成同一时点 fixture，并同时报告 V4.0/V4.2 的中国债权重、黄金权重、风险源资本、收益、波动、最大回撤和成本后差异；禁止只展示黄金上涨或债券下降带来的收益改善。
 
-## 5. Phase B：宏观环境平衡
+## 5. Phase B：Macro-Factor & Risk-Source Balance
 
-### 5.1 从资产桶风险预算改为环境组合风险预算
+### 5.1 先重建债券“真实风险”，再谈配置
+
+中国债券不能只用 ETF/估值净价的日波动率计风险。对每项债券至少维护 modified duration、关键期限 DV01、信用 CS01、币种、流动性等级和可执行载体。情景损失近似为：
+
+```text
+ΔP/P ≈ -D_mod × Δy + 0.5 × Convexity × (Δy)² - CS01 × Δspread + liquidity_loss
+```
+
+统计风险使用因子模型，而不是对每个债券价格序列单独算低波动：
+
+```text
+r = B f + ε
+Σ_stat = B F B' + D_HAC
+```
+
+- `B` 包含中国曲线 level/slope、海外曲线、信用利差、权益增长、工业通胀、黄金货币属性和外汇等暴露；
+- `F` 是 point-in-time 因子协方差；
+- `D_HAC` 使用带自相关修正的残差长期方差，不能让估值平滑把风险压到零；
+- 对连续零收益或显著正自相关的债券，普通样本方差只作诊断，不参与生产权重。
+
+把版本化利率、信用和流动性情景损失写成矩阵 `L`，情景概率对角矩阵为 `Π`；`Π` 的非负对角元素严格加总为 1：
+
+```text
+Σ_scenario = L' Π L
+Σ_method = (1 - ρ_scn) × Σ_stat + ρ_scn × Σ_scenario
+```
+
+这里的 `Σ_scenario` 是未中心化的压力损失二阶矩，不是历史收益的样本协方差；保留共同不利冲击是有意设计。该构造天然 PSD，并让“曲线突然上移、变陡、信用走阔、流动性折价”进入风险。不得通过给中国债手填更大波动率来压权重。若缺少 DV01/CS01/曲线历史或无法解释 `L`，`macro_factor_balanced` 必须保持影子失败，不能退回平滑价格协方差后继续生产。
+
+### 5.2 区分多重因子暴露与唯一资本风险源
+
+设 `B ∈ R^(n×k)` 为多重因子暴露，设 `G ∈ {0,1}^(g×n)` 为唯一主风险源映射，每列只允许一个 1。第一版主风险源建议为：
+
+```text
+cn_growth              中国权益增长
+global_growth          海外权益增长
+cn_duration            中国利率曲线
+global_duration        海外利率曲线
+credit                 信用利差
+industrial_inflation   工业品/能源通胀
+monetary_gold          黄金货币/危机分散
+currency               主动外汇风险
+```
+
+`credit_aaa` 可以在 `B` 中同时加载中国 duration 和 credit，但在 `G` 中只能选择一个主要资本风险源。`tbond_fut` 与 `cgb_1_3` 同属 `cn_duration`，增加第二只同类债券不会增加新的资本风险源，也不会自动获得第二份风险预算。
+
+主风险源由版本化 universe 元数据决定，层次聚类只做反证诊断：若经验相关簇长期与元数据严重冲突，触发人工复核；禁止每月根据聚类结果自动改标签，造成结构漂移。
+
+### 5.3 先按风险源构造四个环境 sleeve
 
 建立四个战略环境 sleeve：
 
-| 环境 | 主要受益资产 | 当前资产池的结构性缺口 |
+| 环境 | 主要受益风险源 | 当前结构性缺口 |
 |---|---|---|
-| 增长上行 | 中国/海外权益、部分商品、信用 | 信用与权益风险可能重复 |
-| 增长下行 | 高质量名义国债、现金、有限黄金 | 久期、现金和黄金不能视为同一风险 |
-| 通胀上行 | 商品、黄金、通胀挂钩债券 | 当前缺少通胀挂钩债券 |
-| 通胀下行 | 名义国债、部分高质量信用 | 与增长下行 sleeve 重叠 |
+| 增长上行 | 中国/海外增长、部分信用和工业品 | 信用与权益风险可能重复 |
+| 增长下行 | 中国/海外 duration、现金、有限黄金 | 久期和现金不能视为同一风险 |
+| 通胀上行 | 工业品、能源、黄金、通胀挂钩债券 | 当前缺少通胀挂钩债券 |
+| 通胀下行 | 中国/海外 duration、部分高质量信用 | 与增长下行 sleeve 重叠 |
 
-关键纪律：
+设四个 sleeve 组成 `V ∈ R^(n×4)`：
 
-- 资产可以服务多个环境，但重复暴露必须显式计算，不能按桶名去重。
-- 黄金可以同时服务增长下行和通胀上行 sleeve，但合成后的黄金资产权重必须先聚合，再统一受 `gold_cap` 约束；不得因跨 sleeve 重复出现而绕过上限。
-- 外汇不再作为固定 25% 风险类别；货币风险单独决定是否对冲。
-- 在缺少通胀挂钩债券时，系统必须显示“通胀上行保护不完整”，不能声称实现完整 All Weather。
-
-### 5.2 推荐的可实现版本
-
-第一版不直接拟合复杂非线性宏观因子模型，采用确定性 sleeve 矩阵。设资产数为 `n`，四个环境 sleeve 组成 `V ∈ R^(n×4)`：
-
-1. 为每个环境维护版本化的允许资产集合和经济方向。
-2. 每个 sleeve 内用压力波动率倒数分配，并应用单资产和重复风险来源上限。
-3. 每列 `vⱼ` 必须 long-only 且加总为 1；四列按固定顺序排列。
-4. 计算 sleeve 协方差 `Σ_sleeve = V' Σ_effective V`。
-5. 在四维 sleeve 空间复用现有 risk-budget log-barrier，预算固定为 `[0.25, 0.25, 0.25, 0.25]`，得到 `a`，且 `Σa=1`。
-6. 合成环境平衡资产权重 `w_env = V a`；即使同一资产出现在多个 sleeve，贡献也通过矩阵乘法自然相加，不做人工去重。
-7. 把 `w_env` 作为 Phase A 优化中的风险平衡候选，替代 `w_rp_raw`，再投影到政策资本区间。
-
-环境风险贡献按以下公式落库：
+1. 每个环境先选择允许的**主风险源**，再在风险源内部选择资产；不能直接把所有资产平铺后做逆波动率。
+2. 同一风险源内部才允许用 `Σ_method` 的压力波动率倒数分配，并叠加流动性/成本排序；多个同类载体共同分享一份 source allocation。
+3. 每列 `vⱼ` long-only 且加总为 1；黄金可以进入两个环境，但最终聚合后只算一次资本与风险。
+4. 计算 `Σ_sleeve = V' Σ_method V`。
+5. 在四维 sleeve 空间复用 risk-budget log-barrier，预算为 `[0.25, 0.25, 0.25, 0.25]`，得到 `a`。
+6. 合成未经资本正则的环境解 `w_env = V a`。
 
 ```text
 RC_envⱼ = aⱼ × (Σ_sleeve a)ⱼ / (a' Σ_sleeve a)
 ```
 
-必须保存 `V` 的版本、每列资产权重、`Σ_sleeve`、`a`、`RC_env` 和最终战略投影差异。这样四环境贡献能被独立复算，而不是只有一段叙事标签。
+必须保存 `B`、`G`、`V`、`Σ_method`、`Σ_sleeve`、`a`、`RC_env` 和 source-level 归因。Phase B 不再把 `w_env` 投影到 `cn_bond=30%` 的政策锚。
 
-四个 sleeve 可能因资产池不足而高度相似，使 `Σ_sleeve` 近奇异。实现必须：
+四个 sleeve 的任意非同义两列余弦相似度超过 0.98、任一 sleeve 少于两个独立主风险源，或缺少通胀上行保护时，抛 `MacroSleeveCoverageError`。在当前缺少通胀挂钩债券的 universe 中，模型必须明确显示覆盖缺口。
 
-- 报告每两列 sleeve 的余弦相似度；任意非同义环境超过 0.98 时抛 `MacroSleeveCoverageError`；
-- 每个 sleeve 至少包含两个可投资风险来源；
-- 用 `κ = 1e-6 × max(trace(Σ_sleeve) / 4, 1e-12)` 做固定对角正则，并记录正则前后的最小特征值；
-- 当前缺少通胀挂钩债券时，`macro_balanced` 只能运行影子诊断，不能切为生产默认。
+### 5.4 用资本分散软正则选解，不用中国债硬上限造结果
 
-Phase B v1 不允许 FX 资产直接进入四个 sleeve，因为货币对方向、基础币种和资产币种对冲是另一套问题。FX 只通过政策锚保留有限资本区间；后续若加入货币 overlay，必须使用独立账本和 gross/net exposure 约束。
+环境等风险解仍可能用大量低波动资本。无杠杆模式下，固定战略现金为 `cash_policy_target`，风险资本为 `1-cash_policy_target`。定义主风险源资本份额：
 
-后续只有在宏观 surprise 数据具备 point-in-time 历史后，才允许升级为估计型暴露矩阵 `B`。估计暴露必须向预设经济方向收缩，禁止完全由短窗回归决定符号。
+```text
+c = G w / (1 - cash_policy_target)
+q = 对当期可投资主风险源等权
+N_eff_capital = exp(-Σ c_g ln(c_g))
+```
 
-### 5.3 杠杆处理
+从所有贴近环境解的组合中，选择最接近等风险源资本分布的组合：
 
-Bridgewater 风格的风险平衡通常通过衍生品提高低波动 sleeve 的风险贡献。本项目当前是无杠杆资金权重模型，因此：
+```text
+min_w  D_KL(c || q) = Σ c_g ln(c_g / q_g)
 
-- V4 第一版不自动加杠杆；
-- `target_vol` 继续作为上限，不得伪装成已达到的目标；
-- 必须展示 `vol_budget_utilization = portfolio_vol / target_vol`；
-- 若未来支持杠杆，新增独立 `gross_exposure_cap`、保证金压力和去杠杆测试；
-- 在杠杆模块上线前，政策资本区间是防止债券资本权重失控的必要组成。
+s.t.
+    (w - w_env)' Σ_method (w - w_env) ≤ strategic_tracking_error²
+    sqrt(w' Σ_method w) ≤ target_vol
+    Σw = 1, w ≥ 0
+    cash = cash_policy_target
+    治理硬约束
+```
+
+这是凸优化：`c` 是 `w` 的仿射映射，KL 项可用 CVXPY `rel_entr`，tracking-error 和波动率约束是凸二次约束。`max_strategic_tracking_error` 建议初始为年化 1.5%，只能通过跨时期稳定性和压力风险治理调整，禁止按历史收益调参。
+
+该步骤不指定中国债目标。三只中国债中的两只 duration 工具共用一个 `cn_duration` 资本份额；若该风险源继续吞噬资本，KL 代价自然上升。只有在保持环境解所必需时，中国债才可以高于等风险源资本先验。
+
+`N_eff_capital` 建议至少为 5。该阈值衡量全局独立资本来源，不是中国债上限；若当前资产池无法达到，应报告 `InsufficientRiskSourceBreadthError`，而不是把同类债券拆成更多 ID 来凑数量。
+
+#### 中国债权重如何在没有目标上限时下降
+
+以当前三只中国债为例，方法链必须产生以下效果：
+
+1. `tbond_fut` 与 `cgb_1_3` 共享中国曲线 level/slope 风险，不能因为有两个资产 ID 获得两份环境预算；`credit_aaa` 的共同久期和额外信用风险通过 `B` 同时体现。
+2. 曲线、信用和流动性情景会把估值平滑遗漏的尾部损失补进 `Σ_method`，不再把“近期净值平稳”直接解释为“几乎无风险”。
+3. 四环境先在 source-level 分配风险；增长下行和通胀下行虽都可持有久期，但共享同一 `cn_duration` 来源，聚合时不会被重复计为两个独立机会。
+4. 在环境风险相近的可行解中，KL 目标会优先把资本转向尚未充分使用的增长、工业通胀、黄金、海外久期和货币来源，而不是继续堆叠中国久期。
+5. 最终仍可能得到高于或低于 30% 的中国债权重；合格标准不是某个整数，而是解除集中度上限后结果基本不变、来源资本和压力风险可解释。
+
+因此方法论降低的是中国债获得资本的三个错误理由——低估风险、重复计算来源、忽略资本机会成本；它不会为了得到预设的 30% 而反向调参。
+
+### 5.5 两种实现模式
+
+#### 无杠杆资本平衡
+
+`unlevered_capital_balanced` 直接以上述 `w` 作为资金权重。它接受四环境风险贡献相对 25% 有一定偏差，并同时报告：
+
+- `environment_risk_budget_error`；
+- `N_eff_capital`；
+- `strategic_tracking_error`；
+- `vol_budget_utilization`。
+
+#### 名义风险平衡
+
+`notional_risk_balanced` 在名义敞口 `x` 空间运行第 5.3 节的环境风险平衡，允许 `Σx > 1`，再通过合约乘数、DV01、保证金率和抵押币种转换为：
+
+```text
+target_exposure_weight
+capital_allocation
+initial_and_stress_margin
+collateral_cash
+gross_exposure
+```
+
+该模式更接近 Bridgewater 公开描述的风险平衡，但必须先实现 `gross_exposure_cap`、压力保证金、流动性折扣和去杠杆瀑布。在这些模块上线前，只能影子运行。
+
+### 5.6 证明不是硬约束在替模型做决定
+
+每个决策必须额外运行一次只读 `constraint_release_shadow`：保留 long-only、现金、数据可投资性和波动预算，但解除中国债、总债券和相关单资产集中度上限，重新求解方法组合 `w_release`。
+
+至少落库：
+
+```text
+cn_bond_constraint_release_delta = sum_cn_bond(w_release) - sum_cn_bond(w_final)
+guardrail_projection_distance = 0.5 × Σ|w_final - w_method|
+binding_constraint_count
+binding_frequency_rolling_24m
+```
+
+初始验收建议：
+
+- 中国债约束释放后权重变化不超过 2pp；
+- 风控投影单边距离不超过 5%；
+- 任一集中度上限在 24 个月内贴边比例不超过 10%；
+- `N_eff_capital ≥ 5`；
+- 四环境风险预算最大绝对误差和压力损失不劣于批准阈值。
+
+只要中国债长期等于 30%、约束释放后又跳回约 60%，就必须判定 `methodology_concentration_failure=true`；不得用“最终合规”掩盖方法失败。
+
+### 5.7 当前数据下的上线边界
+
+提供的历史 Excel 只有价格/净值，不包含中国债关键期限 DV01、收益率曲线、信用 CS01、可执行保证金和完整 point-in-time 宏观 surprise。它足以暴露现有方法的问题，但不足以让 `macro_factor_balanced` 成为生产默认。
+
+最低可运行数据契约：
+
+| 数据 | 最低要求 | 主要用途 |
+|---|---|---|
+| 中国国债曲线 | 1Y/3Y/5Y/7Y/10Y point-in-time 日变化 | level/slope 因子与关键期限冲击 |
+| 信用利差 | 与信用债久期匹配的 AAA/政策金融债利差 | CS01 与信用走阔情景 |
+| 债券载体 | duration、convexity、key-rate DV01、CS01、成交/估值属性 | 从曲线冲击映射到资产损失 |
+| 流动性 | 买卖价差、成交量或版本化保守折价 | liquidity loss 与执行优先级 |
+| 海外资产 | 基础币种总回报及对冲状态 | 避免把汇率重复算成独立收益 |
+| 期货 | 合约乘数、保证金、展期、抵押币种 | 区分名义风险和资金占用 |
+
+所有字段必须带 `effective_date`、`available_at` 和来源指纹，决策日只能消费当时已发布版本。
+
+在补齐上述数据前：
+
+- `bounded_risk_parity` 只作为受约束的过渡生产路径；
+- `macro_factor_balanced` 只做影子权重、来源归因和 constraint-release 诊断；
+- 不得用 ETF 平滑波动率替代 DV01 风险，也不得把 Phase A 的中国债 30% 结果称为 Phase B 输出。
 
 ## 6. 代码改造地图
 
@@ -562,46 +752,56 @@ Bridgewater 风格的风险平衡通常通过衍生品提高低波动 sleeve 的
    - 新增可选 `methodology_v4` 嵌套配置、校验器和稳定序列化入口。
    - 性格画像只能收紧治理上限。
 2. `data/demo/assets.json` 与真实 universe schema
-   - 增加 `instrument_type`、`currency`、`base_currency_cash`、`strategic_role`、交易日历、数据质量阈值、期货合约乘数和连续合约处理标识。
+   - 增加 `instrument_type`、`currency`、`base_currency_cash`、`strategic_role`、`primary_risk_source`、因子暴露先验、交易日历、数据质量阈值、期货合约乘数和连续合约处理标识。
+   - 债券增加 duration、key-rate DV01、CS01、流动性等级、估值/成交价属性和风险数据来源。
    - 黄金载体必须且只能有一个 `strategic_role=defensive_gold`；不得在算法中硬编码 `gold` 资产 ID。
 3. `backend/app/domain/market_data.py`
-   - 增加真实数据质量报告、类型化失败和 v1/v2 双版本输入指纹。
-4. `backend/app/domain/covariance.py`
-   - 新增 recent/stress 协方差组合、eigenvalue floor 和 PSD 检查。
-5. `backend/app/domain/guardrails.py`
+   - 增加真实数据质量报告、收益率曲线/信用利差输入、类型化失败和 v1/v2 双版本输入指纹。
+4. `backend/app/domain/fixed_income_risk.py`
+   - 新文件，计算 DV01/CS01、HAC 残差方差和版本化情景损失矩阵 `L`。
+5. `backend/app/domain/risk_sources.py`
+   - 新文件，构造并校验多重因子暴露 `B`、唯一主风险源映射 `G`、资本份额和 `N_eff_capital`。
+6. `backend/app/domain/covariance.py`
+   - 构造 `B F B' + D_HAC`、情景协方差、recent/stress 组合、eigenvalue floor 和 PSD 检查。
+7. `backend/app/domain/guardrails.py`
    - 新增共享 `ConstraintSet`、预检、可行性诊断、解修复和落库精度校验。
    - 增加中国债、总债券、权益、商品、外汇、现金与战术偏离约束。
    - 约束必须同时用于战略底仓投影和最终目标投影。
-6. `backend/app/domain/risk_parity.py`
+8. `backend/app/domain/risk_parity.py`
    - 保留 legacy 路径。
    - 新增政策目标构造、黄金子袖展开、可行政策锚和 bounded 路径。
-7. `backend/app/domain/signals.py`
-   - legacy TSMOM 保持逐字节不变；V4 把黄金分数作为独立子袖输出，并用排除黄金后的成员计算普通商品桶方向。
-8. `backend/app/domain/views.py`
-   - 从普通商品 TSMOM 观点中排除黄金，使用完全相同的 Q/Ω 规则构造独立黄金 P 行。
 9. `backend/app/domain/macro_balance.py`
-   - 新文件，承载版本化四环境 sleeve 矩阵；不得塞入 `signals.py`。
-10. `backend/app/domain/pipeline.py`
+   - 构造按独立风险源组织的四环境 `V`，输出 `w_env` 和环境/来源归因。
+10. `backend/app/domain/capital_diversification.py`
+    - 新文件，使用 `rel_entr` 完成风险源资本最大熵 tracking projection，并生成 constraint-release shadow。
+11. `backend/app/domain/signals.py`
+   - legacy TSMOM 保持逐字节不变；V4 把黄金分数作为独立子袖输出，并用排除黄金后的成员计算普通商品桶方向。
+12. `backend/app/domain/views.py`
+   - 从普通商品 TSMOM 观点中排除黄金，使用完全相同的 Q/Ω 规则构造独立黄金 P 行。
+13. `backend/app/domain/pipeline.py`
    - `methodology_v4 is None` 走原路径；非空时按嵌套 `strategic_model` 选择新模型。
-   - 使用同一配置序列化入口，保持归因闭合。
-11. `backend/app/schemas/decision.py`
-   - 新增战略模型版本、数据质量、黄金子袖归因、环境贡献和约束利用率字段。
-12. `frontend/src/pages/ConfigPage.tsx`
+   - 使用同一配置序列化入口，保持归因闭合；同时保存 method、release shadow 和最终 guardrail 三组权重。
+14. `backend/app/schemas/decision.py`
+   - 新增战略模型版本、`B/G/V` 版本、债券风险来源、黄金子袖归因、环境贡献、资本有效赌注数、constraint-release 和约束利用率字段。
+15. `frontend/src/pages/ConfigPage.tsx`
    - 分开展示风险偏好与治理红线；问卷不能覆盖治理字段。
-13. `frontend/src/pages/TracePage.tsx`
-    - 展示原始 RP、政策锚、黄金战略/战术贡献、环境贡献、战略投影、战术偏离和最终风控。
+16. `frontend/src/pages/TracePage.tsx`
+    - 展示真实债券风险、风险源资本、环境贡献、方法原始权重、constraint-release、黄金战略/战术贡献、最终风控和 cap 是否真正非绑定。
 
-### 6.1 建议拆成七个可独立回滚的提交
+### 6.1 建议拆成十个可独立回滚的提交
 
 1. **Config compatibility**：只加可选嵌套配置、序列化测试和问卷 cap 修复，不改变默认权重。
 2. **Constraint engine**：共享约束构造器、预检、债券/权益/现金边界和精度安全落库；仍由 legacy RP 提供目标。
 3. **Data quality report**：先通过独立诊断端点或影子结果报告真实数据质量，不写入 legacy DecisionRecord、不 fail-closed、不改变权重。
 4. **Bounded strategic model**：政策锚、标准化目标函数和压力协方差，通过 V4 feature flag 启用。
 5. **Gold defensive sleeve**：universe 角色、3% 政策展开、1%—5% 边界、独立 TSMOM P 行和确定性测试；不改 BL 数学。
-6. **Shadow comparison**：API/前端并列展示 legacy 与 bounded，不切默认。
-7. **Macro sleeves**：最后增加 `macro_balanced` 影子模型。
+6. **Fixed-income risk**：DV01/CS01、HAC、曲线/信用/流动性情景和因子协方差，只生成诊断。
+7. **Risk-source schema**：`B/G`、唯一主风险源、有效资本来源数量和冲突诊断。
+8. **Macro sleeves**：按风险源构造 `V` 和 `w_env`，启用 `macro_factor_balanced` 影子模型。
+9. **Capital diversification**：最大熵 tracking projection、constraint-release shadow 和方法失败标记。
+10. **Shadow comparison and UI**：并列展示 bounded 与 macro-factor，不切默认。
 
-禁止把上述七项压成一次提交，否则出现权重变化时无法区分是序列化、约束、协方差、黄金子袖还是战略模型导致。
+禁止把上述十项压成一次提交，否则出现权重变化时无法区分是序列化、债券风险、风险源映射、资本正则、约束还是战术观点导致。
 
 引擎行为改变后同步更新：
 
@@ -634,6 +834,9 @@ Bridgewater 风格的风险平衡通常通过衍生品提高低波动 sleeve 的
 - 中国/海外节假日错位不会因静默前值填充制造零波动。
 - 期货连续合约换月异常在进入协方差前被识别。
 - 美元黄金未转换为基础币种且没有独立 FX/抵押品账本时，不得报告基础币种组合收益。
+- 债券缺少 duration/key-rate DV01/CS01 或情景版本时，`macro_factor_balanced` 必须类型化失败，禁止回退到价格低波动率。
+- 对带正自相关的平滑债券 fixture，`D_HAC` 风险必须高于未修正样本残差风险。
+- `Σ_stat`、`Σ_scenario` 和 `Σ_method` 必须分别对称、PSD 且可复算。
 - 压力协方差必须对称、PSD、确定性可复现。
 - legacy `fingerprint_v1` 保持固定 fixture 不变；修改历史消费窗口中的任意一个价格值都会改变 V4 `fingerprint_v2`、V4 decision ID 和 V4 缓存键。
 
@@ -642,7 +845,10 @@ Bridgewater 风格的风险平衡通常通过衍生品提高低波动 sleeve 的
 - `methodology_v4=None` 时默认配置 payload、配置摘要、默认 decision ID、固定 API fixture 和目标权重保持逐字节兼容。
 - `methodology_v4` 非空时，其全部字段进入配置摘要，任一字段变化都会改变缓存键/decision ID。
 - `bounded_risk_parity` 保存 raw RP、policy anchor、strategic projection 三段且闭合。
-- `macro_balanced` 四环境贡献可加总回战略权重。
+- `macro_factor_balanced` 保存 `B/G/V` 版本，四环境贡献可加总回战略权重，每项资产在 `G` 中恰有一个主风险源。
+- 增加第二只完全相同的中国国债载体不会增加独立风险源数量，也不会获得一份新的 source allocation。
+- 资本最大熵投影满足 tracking-error，且 `N_eff_capital`、KL 值和来源资本份额可复算。
+- constraint-release shadow 解除集中度边界后不得改变其他数据、风险模型或战术观点。
 - 黄金政策中枢能从商品桶确定性展开；黄金 TSMOM 只生成一条 P 行，普通商品 P 行不再包含黄金。
 - 固定截至 2023-12-29 的 point-in-time fixture 应复算 `score_gold≈0.883`，并证明修改任意 2024 年价格不会改变 2024-01-01 决策。
 - 战术桶偏离和总偏离均不超过配置。
@@ -660,6 +866,8 @@ Bridgewater 风格的风险平衡通常通过衍生品提高低波动 sleeve 的
 - 换手和交易成本；
 - 参数微扰后的桶权重 L1 变化；
 - 相对旧模型的环境暴露集中度。
+- `N_eff_capital`、环境预算误差、方法权重到风控权重的投影距离；
+- 中国债约束释放变化、上限贴边频率，以及 `methodology_concentration_failure` 次数；
 - 黄金战略/战术权重、黄金对组合风险和压力窗口损失的边际贡献；不得只比较加入黄金后的历史收益。
 
 新模型只有在集中度显著改善、压力风险没有恶化、换手可控且确定性测试通过后，才允许成为默认值。历史收益更高不是必要条件，也不是充分条件。
@@ -674,7 +882,11 @@ tests/backend/test_data_quality_real_inputs.py
 tests/backend/test_stress_covariance.py
 tests/backend/test_bounded_risk_parity.py
 tests/backend/test_gold_defensive_sleeve.py
-tests/backend/test_macro_balance.py
+tests/backend/test_fixed_income_factor_risk.py
+tests/backend/test_risk_source_mapping.py
+tests/backend/test_macro_factor_balance.py
+tests/backend/test_capital_diversification.py
+tests/backend/test_constraint_release_shadow.py
 tests/backend/test_v4_walk_forward.py
 ```
 
@@ -713,7 +925,8 @@ git status --short
 3. 发布共享约束引擎；legacy 默认路径仍使用原配置，V4 路径才启用新增边界。
 4. 启用 `bounded_risk_parity` 影子计算；影子失败不得影响主决策，只记录类型化错误。
 5. 完成 walk-forward 与至少一个完整再平衡周期的真实数据并行观察后，由人工审批切换默认配置为非空 V4。
-6. 最后上线 `macro_balanced` 影子模型；不得与 bounded 同时切默认。
+6. 补齐 DV01/CS01、风险源元数据和情景风险后，上线 `macro_factor_balanced` 影子模型；不得与 bounded 同时切默认。
+7. constraint-release 指标和来源归因连续通过后，才允许人工审批把 `strategic_model` 从 bounded 切到 macro-factor。
 
 影子结果必须使用独立 `decision_id`/缓存命名空间，不得覆盖 legacy DecisionRecord，也不得进入实际日更、周报、结果账本或调仓提示。
 
@@ -727,6 +940,7 @@ git status --short
 - 同输入无法产生相同结果；
 - 实际换手显著超过配置；
 - 压力窗口损失显著恶化。
+- `N_eff_capital` 持续低于门槛、集中度边界频繁贴边，或 constraint-release 证明结果主要由 cap 生成。
 
 旧 DecisionRecord 永远按其记录的模型版本重放，不使用当前默认模型重算。
 
@@ -738,6 +952,8 @@ git status --short
 - 对权益下限和债券上限造成的风险变化知情；
 - 真实数据质量报告连续通过；
 - 影子模型没有不可解释的边界常驻；
+- 中国债、总债券和单资产 cap 的 release delta 与贴边频率通过第 5.6 节门禁；
+- DV01/CS01、`B/G/V`、情景矩阵和资本有效来源数量能够在 Trace 页面复算；
 - 压力协方差、政策锚和硬约束的归因能够在 Trace 页面复算；
 - 回滚只需把 `methodology_v4` 设回 `None`，不需要迁移或删除历史记录。
 
@@ -754,6 +970,8 @@ git status --short
 7. 不得保留求解后的无条件归一化或无约束最大余数修复。
 8. 每个提交都运行后端测试、API 测试和适用的 walk-forward 稳定性比较。
 9. 若投资授权参数不明确，只允许在显式 V4 Demo/影子配置中使用本文候选值；生产默认仍保持 legacy，参数不得表述为普适最优值。
+10. 不得把 Phase A 的政策锚传入 `macro_factor_balanced`；Phase B 的中国债资本权重只能来自真实风险、环境 sleeve 和资本分散步骤。
+11. 若真实 DV01/CS01 和曲线历史尚未接入，停止在 Phase B 影子失败状态，不得用价格协方差补洞。
 
 Phase A 最小完成定义：
 
@@ -772,6 +990,20 @@ methodology_v4=None 时历史默认 payload/ID/权重不变
 全部闭合、确定性、不可行约束和回测测试通过
 ```
 
+Phase B 方法完成定义：
+
+```text
+债券风险由 B F B' + D_HAC 与版本化情景协方差共同生成
+每项资产具有多重因子暴露 B 和唯一主风险源 G
+同类中国债载体不会增加独立风险源数量
+四环境 sleeve 在风险源层构造并保存可复算贡献
+资本最大熵投影满足 strategic tracking-error 和 N_eff_capital ≥ 5
+macro_factor_balanced 不读取 cn_bond=30% 政策锚
+constraint-release 后中国债变化 ≤ 2pp
+风控投影单边距离 ≤ 5%，集中度边界 24 月贴边频率 ≤ 10%
+未满足上述条件时 methodology_concentration_failure=true，禁止切默认
+```
+
 ## 10. 交付前检查表
 
 交付这份规格或后续实现补丁前逐项确认：
@@ -779,6 +1011,11 @@ methodology_v4=None 时历史默认 payload/ID/权重不变
 - [ ] `methodology_v4=None` 是唯一且可测试的 legacy 路径。
 - [ ] 所有 V4 默认值都在嵌套对象内，没有污染旧配置 payload。
 - [ ] 政策桶目标加总为 1，并能在当前 universe 下投影为可行资产权重。
+- [ ] `macro_factor_balanced` 不读取 fallback policy 的中国债 30% 中枢。
+- [ ] 债券 DV01/CS01、HAC 修正和曲线/信用/流动性情景均有版本与输入血缘。
+- [ ] `B/G/V` 可复算，同类债券不会因为资产 ID 数量增加而取得更多风险预算。
+- [ ] `N_eff_capital`、环境预算误差、tracking-error 和 KL 目标均进入 DecisionRecord。
+- [ ] constraint-release shadow 证明中国债结果不是由 cap 生成。
 - [ ] 黄金角色唯一，3% 政策中枢从商品桶内扣除，普通商品剩余目标仍可行。
 - [ ] 共享约束构造器同时服务战略和最终投影。
 - [ ] V4 不会通过问卷、个性画像或风险金额配置放宽治理上限。
