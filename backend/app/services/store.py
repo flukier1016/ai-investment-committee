@@ -15,6 +15,8 @@ from ..schemas.decision import DecisionRecord
 
 ROOT = Path(__file__).resolve().parents[3]
 RUNS = ROOT / "data" / "runs"
+# 存储上限：公网演示时防止有人换着参数反复运行把磁盘写满；超出后淘汰最早写入的记录
+MAX_RECORDS = int(os.getenv("AIC_MAX_DECISION_RECORDS", "1000"))
 
 
 def _path(decision_id: str) -> Path:
@@ -29,12 +31,23 @@ def save(record: DecisionRecord) -> DecisionRecord:
             return DecisionRecord.model_validate_json(path.read_text(encoding="utf-8"))
         except Exception:
             pass  # 并发半写残留：用本次（确定性相同的）记录原子覆盖
+    _evict_oldest()
     # 原子写（唯一临时名 + os.replace）：并发请求写同一决策时，
     # 读者永远只能看到完整文件，不会读到半写状态（CI 并发曾暴露此竞态）
     tmp = path.with_name(f"{path.name}.{os.getpid()}.{uuid.uuid4().hex[:6]}.tmp")
     tmp.write_text(record.model_dump_json(indent=2), encoding="utf-8")
     os.replace(tmp, path)
     return record
+
+
+def _evict_oldest() -> None:
+    """写入新记录前，若已达到存储上限，按写入时间淘汰最早的记录，给新记录腾出位置。"""
+    files = list(RUNS.glob("dec_*.json"))
+    excess = len(files) - MAX_RECORDS + 1
+    if excess <= 0:
+        return
+    for p in sorted(files, key=lambda f: f.stat().st_mtime)[:excess]:
+        p.unlink(missing_ok=True)
 
 
 def get(decision_id: str) -> DecisionRecord | None:

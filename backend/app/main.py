@@ -8,13 +8,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from starlette.responses import Response
+from starlette.responses import JSONResponse, Response
 from starlette.types import Scope
 
+from .api.guard import client_id, compute_gate
 from .api.routes import router
 
 
@@ -50,6 +51,16 @@ app.add_middleware(
     allow_methods=["*"], allow_headers=["*"],
 )
 app.include_router(router)
+
+
+@app.middleware("http")
+async def limit_compute_posts(request: Request, call_next):
+    """计算类 POST（决策运行、回测）限流：公网演示时防止被反复触发占满算力。"""
+    if request.method == "POST" and request.url.path.startswith("/api/"):
+        why = compute_gate.take(client_id(request.headers, request.client.host if request.client else None))
+        if why:
+            return JSONResponse({"detail": why}, status_code=429, headers={"Retry-After": "60"})
+    return await call_next(request)
 
 _dist = Path(__file__).resolve().parents[2] / "frontend" / "dist"
 if _dist.exists():
