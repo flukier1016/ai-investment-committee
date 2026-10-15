@@ -51,7 +51,7 @@ RUN mkdir -p /app/data/runs \
     && chmod 0770 /app/data/runs
 
 EXPOSE 8000
-VOLUME ["/app/data/runs"]
+# 不在镜像里声明 VOLUME（Railway 构建器不支持）：持久化由 compose 的命名卷或平台卷挂到 /app/data/runs
 USER 10001:10001
 
 HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=3 \

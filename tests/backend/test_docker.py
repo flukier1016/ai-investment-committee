@@ -100,7 +100,8 @@ def test_dockerfile_multistage_paths_non_root_and_health_contract():
     users = [line.split(maxsplit=1)[1] for line in runtime if line.startswith("USER ")]
     assert users and users[-1] == "10001:10001"
     assert "EXPOSE 8000" in runtime
-    assert 'VOLUME ["/app/data/runs"]' in runtime
+    # 镜像不声明 VOLUME：Railway 构建器会拒绝；compose 用命名卷、平台用自己的卷挂到 /app/data/runs
+    assert not any(line.startswith("VOLUME") for line in runtime)
     health = next(line for line in runtime if line.startswith("HEALTHCHECK "))
     assert "/api/health" in health
     assert "root/'data/runs'" in health

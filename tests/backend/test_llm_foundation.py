@@ -871,4 +871,7 @@ def test_trace_directory_is_inside_ignored_persistent_runs_volume():
     assert ignored.returncode == 0
     assert tracked.stdout == ""
     assert "target: /app/data/runs" in (ROOT / "compose.yaml").read_text(encoding="utf-8")
-    assert 'VOLUME ["/app/data/runs"]' in (ROOT / "Dockerfile").read_text(encoding="utf-8")
+    # 镜像预建可写的 /app/data/runs；持久化由 compose 命名卷或平台卷挂载（镜像不声明 VOLUME，Railway 不支持）
+    dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
+    assert "chown 10001:10001 /app/data/runs" in dockerfile
+    assert "VOLUME" not in "".join(line for line in dockerfile.splitlines() if not line.lstrip().startswith("#"))
